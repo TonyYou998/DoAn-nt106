@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DoAn.Modal;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -49,9 +50,26 @@ namespace DoAn
 
         private void btn_Connect_Click(object sender, EventArgs e)
         {
-            this.Hide();
+            
+
             Player_Choose choose = new Player_Choose();
-            choose.Show();
+            NguoiChoi p = new NguoiChoi();
+            if (p.nhapThongTin(UserName, Port))
+            {
+                this.Hide();
+                choose.Show();
+            }
+               
+        }
+
+        private void IpServer_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Info_Player_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }
