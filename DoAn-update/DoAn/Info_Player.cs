@@ -7,6 +7,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Net;
 using System.Windows.Forms;
 
 namespace DoAn
@@ -47,19 +48,24 @@ namespace DoAn
 
 
         }
+        private void connect(string userName,int port,IPAddress ip)
+        {
 
+        }
         private void btn_Connect_Click(object sender, EventArgs e)
         {
             
 
             Player_Choose choose = new Player_Choose();
             NguoiChoi p = new NguoiChoi();
-            if (p.nhapThongTin(UserName, Port))
+          
+
+           if (p.nhapThongTin(UserName, Port, IpServer))
             {
                 this.Hide();
                 choose.Show();
             }
-               
+
         }
 
         private void IpServer_TextChanged(object sender, EventArgs e)
