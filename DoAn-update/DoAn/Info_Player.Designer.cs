@@ -59,6 +59,7 @@ namespace DoAn
             this.lbIP.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
             this.lbIP.Location = new System.Drawing.Point(394, 298);
             this.lbIP.Name = "lbIP";
+            this.lbIP.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.lbIP.Size = new System.Drawing.Size(133, 41);
             this.lbIP.TabIndex = 6;
             this.lbIP.Text = "IP Server";

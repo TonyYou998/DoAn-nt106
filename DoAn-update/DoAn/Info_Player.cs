@@ -25,6 +25,26 @@ namespace DoAn
             btn_Connect.BackgroundImageLayout = ImageLayout.Zoom;
             btn_Connect.Location = new Point(550, 470);
             btn_Connect.BackColor = Color.Transparent;
+            //Gio dien khac
+            lbName.Size = new Size(157, 41);
+            lbName.Location = new Point(394, 194);
+            UserName.Size = new Size(325, 38);
+            UserName.Font = new Font("Arial", 22, FontStyle.Bold);
+            UserName.Location = new Point(578, 197);
+
+            lbIP.Size = new Size(157, 41);
+            lbIP.Location = new Point(394, 298);
+            IpServer.Size = new Size(325, 38);
+            IpServer.Font = new Font("Arial", 22, FontStyle.Bold);
+            IpServer.Location = new Point(578, 301);
+
+            lbPort.Size = new Size(157, 41);
+            lbPort.Location = new Point(394, 413);
+            Port.Size = new Size(325, 38);
+            Port.Font = new Font("Arial", 22, FontStyle.Bold);
+            Port.Location = new Point(578, 410);
+
+
         }
 
         private void btn_Connect_Click(object sender, EventArgs e)
