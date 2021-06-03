@@ -37,13 +37,13 @@ namespace DoAn
             lbName.Location = new Point(394, 194);
             PlayerName.Size = new Size(325, 38);
             PlayerName.Font = new Font("Arial", 22, FontStyle.Bold);
-            PlayerName.Location = new Point(578, 197);
+            PlayerName.Location = new Point(580, 197);
 
             lbRoomName.Size = new Size(157, 41);
-            lbRoomName.Location = new Point(391, 312);
+            lbRoomName.Location = new Point(370, 312);
             RoomName.Size = new Size(325, 38);
             RoomName.Font = new Font("Arial", 22, FontStyle.Bold);
-            RoomName.Location = new Point(566, 315);
+            RoomName.Location = new Point(595, 315);
         }
 
         private void btn_Create_Room_Click(object sender, EventArgs e)

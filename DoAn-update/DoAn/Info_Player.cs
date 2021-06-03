@@ -28,7 +28,7 @@ namespace DoAn
             btn_Connect.BackColor = Color.Transparent;
             //Gio dien khac
             lbName.Size = new Size(157, 41);
-            lbName.Location = new Point(394, 194);
+            lbName.Location = new Point(385, 194);
             UserName.Size = new Size(325, 38);
             UserName.Font = new Font("Arial", 22, FontStyle.Bold);
             UserName.Location = new Point(578, 197);
