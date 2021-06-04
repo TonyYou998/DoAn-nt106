@@ -10,25 +10,10 @@ namespace Client.Modal
 {
     class NguoiChoi
     {
-        private string userName="";
-        private int port=-1;
-        private IPAddress serverIP=null;
+        public string userName { get; set; }
+        public int port { get; set; }
+        public IPAddress serverIP { get; set; }
 
-
-
-       public String getUserName()
-        {
-            return userName;
-        }
-        public int getPort()
-        {
-            return port;
-
-        }
-        public IPAddress getIp()
-        {
-            return serverIP;
-        }
         public bool nhapThongTin(RichTextBox userName,RichTextBox port,RichTextBox Ip)
         {
            

@@ -5,6 +5,7 @@ using System.Net;
 using System.Windows.Forms;
 using System.Net.Sockets;
 using System.Threading;
+using System.Text;
 
 namespace Client
 {
@@ -12,8 +13,6 @@ namespace Client
     {
         private static readonly Socket ClientSocket = new Socket
            (AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-        private int PORT_SERVER = 8000;
-        private IPAddress IP = IPAddress.Parse("127.0.0.1");
         private Thread clientThread;
         public Info_Player()
         {
@@ -59,15 +58,64 @@ namespace Client
 
             Player_Choose choose = new Player_Choose();
             NguoiChoi p = new NguoiChoi();
-          
 
-           if (p.nhapThongTin(UserName, Port, IpServer))
+            
+
+            if (p.nhapThongTin(UserName, Port, IpServer))
             {
                 this.Hide();
+                while (!ClientSocket.Connected)
+                {
+                    try
+                    {
+                        ClientSocket.Connect(p.serverIP, p.port);
+                    }
+                    catch (SocketException)
+                    {
+                        MessageBox.Show("Lỗi : Không thể connect tới server !");
+                    }
+                }
                 choose.Show();
             }
 
         }
+
+        private void ReceiveResponse()
+        {
+            try
+            {
+                while (ClientSocket.Connected)
+                {
+                    var buffer = new byte[2048];
+                    int received = ClientSocket.Receive(buffer, SocketFlags.None);
+                    if (received == 0) return;
+                    var data = new byte[received];
+                    Array.Copy(buffer, data, received);
+                    string text = Encoding.UTF8.GetString(data);
+                    UpdateEventQC($"{text}\n");
+                }
+            }
+            catch (Exception)
+            {
+                ClientSocket.Close();
+            }
+        }
+
+        private delegate void SafeCallDelegate(string text);
+
+        private void UpdateEventQC(string text)
+        {
+            //if (Chatbox.InvokeRequired)
+            //{
+            //    var d = new SafeCallDelegate(UpdateChatHistoryThreadSafe);
+            //    Chatbox.Invoke(d, new object[] { text });
+            //}
+            //else
+            //{
+            //    Chatbox.Text += text;
+            //}
+        }
+
 
         private void IpServer_TextChanged(object sender, EventArgs e)
         {
