@@ -41,6 +41,10 @@ namespace Client
             // Roll_number
             // 
             this.Roll_number.BackColor = System.Drawing.Color.Transparent;
+<<<<<<< Updated upstream
+=======
+            this.Roll_number.BackgroundImage = global::DoAn.Properties.Resources.loading1;
+>>>>>>> Stashed changes
             this.Roll_number.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.Roll_number.Location = new System.Drawing.Point(913, 47);
             this.Roll_number.Name = "Roll_number";
@@ -52,7 +56,10 @@ namespace Client
             // 
             this.btn_exit.BackColor = System.Drawing.Color.Transparent;
             this.btn_exit.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+<<<<<<< Updated upstream
             this.btn_exit.Cursor = System.Windows.Forms.Cursors.Hand;
+=======
+>>>>>>> Stashed changes
             this.btn_exit.Location = new System.Drawing.Point(983, 469);
             this.btn_exit.Name = "btn_exit";
             this.btn_exit.Size = new System.Drawing.Size(174, 70);
@@ -63,7 +70,10 @@ namespace Client
             // 
             this.btn_Roll.BackColor = System.Drawing.Color.Transparent;
             this.btn_Roll.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+<<<<<<< Updated upstream
             this.btn_Roll.Cursor = System.Windows.Forms.Cursors.Hand;
+=======
+>>>>>>> Stashed changes
             this.btn_Roll.Location = new System.Drawing.Point(983, 378);
             this.btn_Roll.Name = "btn_Roll";
             this.btn_Roll.Size = new System.Drawing.Size(174, 70);
@@ -73,7 +83,10 @@ namespace Client
             // 
             // btn_test
             // 
+<<<<<<< Updated upstream
             this.btn_test.Cursor = System.Windows.Forms.Cursors.Hand;
+=======
+>>>>>>> Stashed changes
             this.btn_test.Location = new System.Drawing.Point(983, 569);
             this.btn_test.Name = "btn_test";
             this.btn_test.Size = new System.Drawing.Size(183, 62);
