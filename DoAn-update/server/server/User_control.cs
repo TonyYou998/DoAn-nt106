@@ -22,7 +22,7 @@ namespace Cờ_cá_ngựa
         private void SetDataToListView()
         {
             Box_listview.Items.Clear();
-            List<UserModel> L = Database_control.GetUserData();
+            List<UserModel> L = Database_control.ReadUserData();
             int i = 0;
             while(i < L.Count)
             {
