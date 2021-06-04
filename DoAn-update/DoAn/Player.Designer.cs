@@ -43,7 +43,7 @@ namespace DoAn
             this.btn_Exit.BackgroundImage = global::DoAn.Properties.Resources.exit;
             this.btn_Exit.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.btn_Exit.InitialImage = null;
-            this.btn_Exit.Location = new System.Drawing.Point(704, 559);
+            this.btn_Exit.Location = new System.Drawing.Point(705, 560);
             this.btn_Exit.Name = "btn_Exit";
             this.btn_Exit.Size = new System.Drawing.Size(141, 58);
             this.btn_Exit.TabIndex = 5;
@@ -56,7 +56,7 @@ namespace DoAn
             this.btn_Contact.BackgroundImage = global::DoAn.Properties.Resources.contact;
             this.btn_Contact.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.btn_Contact.InitialImage = null;
-            this.btn_Contact.Location = new System.Drawing.Point(392, 559);
+            this.btn_Contact.Location = new System.Drawing.Point(390, 560);
             this.btn_Contact.Name = "btn_Contact";
             this.btn_Contact.Size = new System.Drawing.Size(141, 58);
             this.btn_Contact.TabIndex = 4;
@@ -66,11 +66,11 @@ namespace DoAn
             // 
             this.btn_Start.BackColor = System.Drawing.Color.Transparent;
             this.btn_Start.BackgroundImage = global::DoAn.Properties.Resources.START;
-            this.btn_Start.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btn_Start.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.btn_Start.InitialImage = null;
-            this.btn_Start.Location = new System.Drawing.Point(548, 473);
+            this.btn_Start.Location = new System.Drawing.Point(550, 470);
             this.btn_Start.Name = "btn_Start";
-            this.btn_Start.Size = new System.Drawing.Size(147, 65);
+            this.btn_Start.Size = new System.Drawing.Size(150, 70);
             this.btn_Start.TabIndex = 3;
             this.btn_Start.TabStop = false;
             this.btn_Start.Click += new System.EventHandler(this.btn_Start_Click);

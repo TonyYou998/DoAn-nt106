@@ -45,6 +45,7 @@ namespace Cờ_cá_ngựa
             this.logs.Size = new System.Drawing.Size(626, 823);
             this.logs.TabIndex = 0;
             this.logs.Text = "";
+            this.logs.TextChanged += new System.EventHandler(this.logs_TextChanged);
             // 
             // ListenButton
             // 

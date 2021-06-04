@@ -183,5 +183,10 @@ namespace Cờ_cá_ngựa
 
             serverSockets.Close();
         }
+
+        private void logs_TextChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }
