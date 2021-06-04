@@ -117,68 +117,31 @@ namespace Client
         {
             Random random = new Random();
             temp = random.Next(1, 6);
-            switch (temp)
-            {
-                case 1:
-                    Roll_number.BackgroundImage = Properties.Resources._1;
-                    break;
-                case 2:
-                    Roll_number.BackgroundImage = Properties.Resources._2;
-                    break;
-                case 3:
-                    Roll_number.BackgroundImage = Properties.Resources._3;
-                    break;
-                case 4:
-                    Roll_number.BackgroundImage = Properties.Resources._4;
-                    break;
-                case 5:
-                    Roll_number.BackgroundImage = Properties.Resources._5;
-                    break;
-                case 6:
-                    Roll_number.BackgroundImage = Properties.Resources._6;
-                    break;
-            }
         }
-       
         public void Moving(object sender, EventArgs e)
         {
             //MessageBox.Show(sender.ToString());
-            if (temp > 0 && temp < 7)
+            PictureBox a = (PictureBox)sender;
+            if (a.Name == "Green0")
             {
-                PictureBox a = (PictureBox)sender;
-                if (a.Name == "Green0")
-                {
-                    a.Location = Green[g1 + temp];
-                    g1 += temp;
-                    temp = 0;
-                    MessageBox.Show(g1.ToString());
-                }
-                if (a.Name == "Green1")
-                {
-                    a.Location = Green[g2 + temp];
-                    g2 += temp;
-                    temp = 0;
-                    MessageBox.Show(g2.ToString());
-
-                }
-                if (a.Name == "Green2")
-                {
-                    a.Location = Green[g3 + temp];
-                    g3 += temp;
-                    temp = 0;
-                    MessageBox.Show(g3.ToString());
-
-                }
-                if (a.Name == "Green3")
-                {
-                    a.Location = Green[g4 + temp];
-                    g4 += temp;
-                    temp = 0;
-                    MessageBox.Show(g4.ToString());
-
-                }
+                a.Location = Green[g1 + temp];
+                g1 += temp;
             }
-            
+            if (a.Name == "Green1")
+            {
+                a.Location = Green[g2 + temp];
+                g2 += temp;
+            }
+            if (a.Name == "Green2")
+            {
+                a.Location = Green[g2 + temp];
+                g3 += temp;
+            }
+            if (a.Name == "Green3")
+            {
+                a.Location = Green[g3 + temp];
+                g4 += temp;
+            }
 
         }
 
