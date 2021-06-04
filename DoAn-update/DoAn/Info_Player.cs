@@ -1,19 +1,20 @@
-﻿using DoAn.Modal;
+﻿using Client.Modal;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Net;
 using System.Windows.Forms;
+using System.Net.Sockets;
+using System.Threading;
 
-namespace DoAn
+namespace Client
 {
     public partial class Info_Player : Form
     {
+        private static readonly Socket ClientSocket = new Socket
+           (AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+        private int PORT_SERVER = 8000;
+        private IPAddress IP = IPAddress.Parse("127.0.0.1");
+        private Thread clientThread;
         public Info_Player()
         {
             InitializeComponent();

@@ -1,5 +1,5 @@
 ﻿
-namespace DoAn
+namespace Client
 {
     partial class Player
     {
@@ -40,8 +40,8 @@ namespace DoAn
             // btn_Exit
             // 
             this.btn_Exit.BackColor = System.Drawing.Color.Transparent;
-            this.btn_Exit.BackgroundImage = global::DoAn.Properties.Resources.exit;
             this.btn_Exit.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btn_Exit.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btn_Exit.InitialImage = null;
             this.btn_Exit.Location = new System.Drawing.Point(705, 560);
             this.btn_Exit.Name = "btn_Exit";
@@ -53,8 +53,8 @@ namespace DoAn
             // btn_Contact
             // 
             this.btn_Contact.BackColor = System.Drawing.Color.Transparent;
-            this.btn_Contact.BackgroundImage = global::DoAn.Properties.Resources.contact;
             this.btn_Contact.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btn_Contact.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btn_Contact.InitialImage = null;
             this.btn_Contact.Location = new System.Drawing.Point(390, 560);
             this.btn_Contact.Name = "btn_Contact";
@@ -65,8 +65,8 @@ namespace DoAn
             // btn_Start
             // 
             this.btn_Start.BackColor = System.Drawing.Color.Transparent;
-            this.btn_Start.BackgroundImage = global::DoAn.Properties.Resources.START;
             this.btn_Start.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btn_Start.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btn_Start.InitialImage = null;
             this.btn_Start.Location = new System.Drawing.Point(550, 470);
             this.btn_Start.Name = "btn_Start";
@@ -79,7 +79,6 @@ namespace DoAn
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackgroundImage = global::DoAn.Properties.Resources.MainMenu;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.ClientSize = new System.Drawing.Size(1270, 712);
             this.Controls.Add(this.btn_Exit);

@@ -1,5 +1,5 @@
 ﻿
-namespace DoAn
+namespace Client
 {
     partial class Player_Create
     {
@@ -42,7 +42,7 @@ namespace DoAn
             // Roll_number
             // 
             this.Roll_number.BackColor = System.Drawing.Color.Transparent;
-            this.Roll_number.BackgroundImage = global::DoAn.Properties.Resources._1;
+            this.Roll_number.BackgroundImage = global::Client.Properties.Resources._1;
             this.Roll_number.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.Roll_number.Location = new System.Drawing.Point(910, 50);
             this.Roll_number.Name = "Roll_number";
@@ -53,7 +53,7 @@ namespace DoAn
             // btn_exit
             // 
             this.btn_exit.BackColor = System.Drawing.Color.Transparent;
-            this.btn_exit.BackgroundImage = global::DoAn.Properties.Resources.exit;
+            this.btn_exit.BackgroundImage = global::Client.Properties.Resources.exit;
             this.btn_exit.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.btn_exit.Location = new System.Drawing.Point(983, 577);
             this.btn_exit.Name = "btn_exit";
@@ -64,7 +64,7 @@ namespace DoAn
             // btn_Roll
             // 
             this.btn_Roll.BackColor = System.Drawing.Color.Transparent;
-            this.btn_Roll.BackgroundImage = global::DoAn.Properties.Resources.roll;
+            this.btn_Roll.BackgroundImage = global::Client.Properties.Resources.roll;
             this.btn_Roll.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.btn_Roll.Location = new System.Drawing.Point(980, 380);
             this.btn_Roll.Name = "btn_Roll";
@@ -76,7 +76,7 @@ namespace DoAn
             // btn_Start
             // 
             this.btn_Start.BackColor = System.Drawing.Color.Transparent;
-            this.btn_Start.BackgroundImage = global::DoAn.Properties.Resources.START_2;
+            this.btn_Start.BackgroundImage = global::Client.Properties.Resources.START_2;
             this.btn_Start.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.btn_Start.Location = new System.Drawing.Point(983, 473);
             this.btn_Start.Name = "btn_Start";
@@ -88,7 +88,7 @@ namespace DoAn
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackgroundImage = global::DoAn.Properties.Resources.BANCO__1_2;
+            this.BackgroundImage = global::Client.Properties.Resources.BANCO__1_2;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.ClientSize = new System.Drawing.Size(1270, 712);
             this.Controls.Add(this.Roll_number);

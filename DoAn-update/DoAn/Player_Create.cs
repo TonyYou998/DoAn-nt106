@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace DoAn
+namespace Client
 {
     public partial class Player_Create : Form
     {
