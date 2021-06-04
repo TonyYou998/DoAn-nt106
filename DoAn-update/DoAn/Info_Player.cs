@@ -6,13 +6,14 @@ using System.Windows.Forms;
 using System.Net.Sockets;
 using System.Threading;
 using System.Text;
+using System.Xml.Serialization;
+using Newtonsoft.Json;
 
 namespace Client
 {
     public partial class Info_Player : Form
     {
-        private static readonly Socket ClientSocket = new Socket
-           (AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+        private Socket ClientSocket;
         private Thread clientThread;
         public Info_Player()
         {
@@ -64,6 +65,7 @@ namespace Client
             if (p.nhapThongTin(UserName, Port, IpServer))
             {
                 this.Hide();
+                ClientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
                 while (!ClientSocket.Connected)
                 {
                     try
@@ -99,6 +101,16 @@ namespace Client
             {
                 ClientSocket.Close();
             }
+        }
+
+
+        private void Sendmsg(string type,string content, string time)
+        {
+
+            var MSG = new ManagePacket(type, content, time);
+            string json = JsonConvert.SerializeObject(MSG);
+            byte[] buffer = Encoding.UTF8.GetBytes(json);
+            ClientSocket.Send(buffer, 0, buffer.Length, SocketFlags.None);
         }
 
         private delegate void SafeCallDelegate(string text);
