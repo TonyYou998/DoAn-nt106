@@ -10,18 +10,18 @@ namespace Client.Modal
         public int port { get; set; }
         public IPAddress serverIP { get; set; }
 
-        public bool nhapThongTin(RichTextBox userName,RichTextBox port,RichTextBox Ip)
+        public bool nhapThongTin(RichTextBox userName,RichTextBox Ip)
         {
-           
+            this.port = 1234;
 
-            while(this.userName=="" || this.port == -1 || this.serverIP==null  )
+            while(this.userName=="" || this.serverIP==null  )
             {
                 this.userName = userName.Text;
                
                 try
                 {
                     this.serverIP = IPAddress.Parse(Ip.Text);
-                    this.port = Int32.Parse(port.Text);
+                    
                 }
                 catch
                 {
@@ -30,9 +30,9 @@ namespace Client.Modal
 
                 if(this.userName=="" || this.port==-1 || this.serverIP==null)
                 {
-                    MessageBox.Show("nhập lại username và port");
+                    MessageBox.Show("nhập lại username và ip");
                     userName.Text = "";
-                    port.Text = "";
+                    
                     Ip.Text = "";
 
                     return false;

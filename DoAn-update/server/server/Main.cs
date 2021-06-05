@@ -12,12 +12,13 @@ namespace Cờ_cá_ngựa
         private readonly List<Socket> clientSockets = new List<Socket>();
         private readonly byte[] buffer = new byte[2048];
         private Socket serverSockets = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+       
         private IPAddress serverIP = IPAddress.Parse("127.0.0.1");
-        private int serverPort = 8000;
+        private int serverPort = 1234;
         public Server()
         {
             InitializeComponent();
-            
+                
         }
         
         private void UserFormClick(object sender, EventArgs e)

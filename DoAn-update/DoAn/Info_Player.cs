@@ -62,9 +62,9 @@ namespace Client
 
             
 
-            if (p.nhapThongTin(UserName, Port, IpServer))
+            if (p.nhapThongTin(UserName, IpServer))
             {
-                this.Hide();
+                
                 ClientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
                 while (!ClientSocket.Connected)
                 {
@@ -77,6 +77,7 @@ namespace Client
                         MessageBox.Show("Lỗi : Không thể connect tới server !");
                     }
                 }
+                this.Hide();
                 choose.Show();
             }
 
