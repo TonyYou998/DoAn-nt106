@@ -21,7 +21,7 @@ namespace Cờ_cá_ngựa
         private void SetDataToListView()
         {
             Box_listview.Items.Clear();
-            List<RoomModel> L = Database_control.GetRoomData();
+            List<RoomModel> L = Database_control.ReadRoomData();
             int i = 0;
             while (i < L.Count)
             {

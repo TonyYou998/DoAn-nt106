@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
@@ -14,7 +15,8 @@ namespace Cờ_cá_ngựa
         private Socket serverSockets = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
        
         private IPAddress serverIP = IPAddress.Parse("127.0.0.1");
-        private int serverPort = 1234;
+        private int serverPort = 8000;
+        Sqlite_control sql = new Sqlite_control();
         public Server()
         {
             InitializeComponent();
@@ -102,27 +104,28 @@ namespace Cờ_cá_ngựa
             byte[] recBuf = new byte[received]; // Cấp phát mảng động
             Array.Copy(buffer, recBuf, received);
             string text = Encoding.UTF8.GetString(recBuf);
+            var Jsonmsg = JsonConvert.DeserializeObject<ManagePacket>(text);
 
-            var Packet = new ManagePacket();
-            resolve(Packet,current);
+            resolve(Jsonmsg, current);
 
             current.BeginReceive(buffer, 0, 2048, SocketFlags.None, ReceiveCallback, current);
         }
 
         private void resolve(ManagePacket packet, Socket current )
         {
-
             switch (packet.msgtype)
             {
                 case "User":
-                    string[] data = packet.msgcontent.Split(':');
-                    string name = "";
-                    if (data.Length == 2)
+                    string[] data = packet.msgcontent.Split(':'); // VD: connect:Duy:1002
+                    if (data.Length == 3)
                     {
                         if(data[0] == "connect")
                         {
-                            name = data[1];
-                        } 
+                            logs.BeginInvoke((Action)(() => 
+                            { logs.AppendText($"\r\nĐã kết nối với {data[1]}, phòng {data[2]}"); }));
+                            sql.Adduser(data[1], data[2]);
+                            //sql.GetRoomData();
+                        }
                     }
 
                     break;

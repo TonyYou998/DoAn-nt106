@@ -12,7 +12,7 @@ namespace Client.Modal
 
         public bool nhapThongTin(RichTextBox userName,RichTextBox Ip)
         {
-            this.port = 1234;
+            this.port = 8000;
 
             while(this.userName=="" || this.serverIP==null  )
             {

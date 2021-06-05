@@ -96,7 +96,7 @@ namespace Client
             this.UserName.Name = "UserName";
             this.UserName.Size = new System.Drawing.Size(325, 38);
             this.UserName.TabIndex = 3;
-            this.UserName.Text = "";
+            this.UserName.Text = "Duy";
             // 
             // Port
             // 
@@ -106,7 +106,7 @@ namespace Client
             this.Port.Name = "Port";
             this.Port.Size = new System.Drawing.Size(325, 38);
             this.Port.TabIndex = 4;
-            this.Port.Text = "";
+            this.Port.Text = "8000";
             // 
             // IpServer
             // 
@@ -116,7 +116,7 @@ namespace Client
             this.IpServer.Name = "IpServer";
             this.IpServer.Size = new System.Drawing.Size(325, 38);
             this.IpServer.TabIndex = 5;
-            this.IpServer.Text = "";
+            this.IpServer.Text = "127.0.0.1";
             this.IpServer.TextChanged += new System.EventHandler(this.IpServer_TextChanged);
             // 
             // Info_Player

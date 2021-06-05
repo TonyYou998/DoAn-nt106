@@ -40,9 +40,10 @@ namespace Cờ_cá_ngựa
             // 
             this.logs.Font = new System.Drawing.Font("Times New Roman", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.logs.ForeColor = System.Drawing.Color.Teal;
-            this.logs.Location = new System.Drawing.Point(23, 57);
+            this.logs.Location = new System.Drawing.Point(17, 46);
+            this.logs.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.logs.Name = "logs";
-            this.logs.Size = new System.Drawing.Size(626, 823);
+            this.logs.Size = new System.Drawing.Size(470, 669);
             this.logs.TabIndex = 0;
             this.logs.Text = "";
             this.logs.TextChanged += new System.EventHandler(this.logs_TextChanged);
@@ -50,20 +51,22 @@ namespace Cờ_cá_ngựa
             // ListenButton
             // 
             this.ListenButton.Font = new System.Drawing.Font("Consolas", 16.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ListenButton.Location = new System.Drawing.Point(693, 57);
+            this.ListenButton.Location = new System.Drawing.Point(520, 46);
+            this.ListenButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.ListenButton.Name = "ListenButton";
-            this.ListenButton.Size = new System.Drawing.Size(194, 68);
+            this.ListenButton.Size = new System.Drawing.Size(146, 55);
             this.ListenButton.TabIndex = 1;
-            this.ListenButton.Text = "Listen";
+            this.ListenButton.Text = "LISTEN";
             this.ListenButton.UseVisualStyleBackColor = true;
             this.ListenButton.Click += new System.EventHandler(this.ListenButtonClick);
             // 
             // button2
             // 
             this.button2.Font = new System.Drawing.Font("Consolas", 16.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button2.Location = new System.Drawing.Point(693, 185);
+            this.button2.Location = new System.Drawing.Point(520, 150);
+            this.button2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(194, 68);
+            this.button2.Size = new System.Drawing.Size(146, 55);
             this.button2.TabIndex = 2;
             this.button2.Text = "List room";
             this.button2.UseVisualStyleBackColor = true;
@@ -72,9 +75,10 @@ namespace Cờ_cá_ngựa
             // button3
             // 
             this.button3.Font = new System.Drawing.Font("Consolas", 16.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button3.Location = new System.Drawing.Point(693, 321);
+            this.button3.Location = new System.Drawing.Point(520, 261);
+            this.button3.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(194, 68);
+            this.button3.Size = new System.Drawing.Size(146, 55);
             this.button3.TabIndex = 3;
             this.button3.Text = "List users";
             this.button3.UseVisualStyleBackColor = true;
@@ -84,22 +88,24 @@ namespace Cờ_cá_ngựa
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 16.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(17, 9);
+            this.label1.Location = new System.Drawing.Point(13, 7);
+            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(98, 32);
+            this.label1.Size = new System.Drawing.Size(77, 26);
             this.label1.TabIndex = 4;
             this.label1.Text = "LOGS";
             // 
             // Server
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(911, 904);
+            this.ClientSize = new System.Drawing.Size(683, 734);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.button3);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.ListenButton);
             this.Controls.Add(this.logs);
+            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.Name = "Server";
             this.Text = "Server";
             this.ResumeLayout(false);

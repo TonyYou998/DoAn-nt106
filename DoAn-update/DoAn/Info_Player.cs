@@ -6,7 +6,7 @@ using System.Windows.Forms;
 using System.Net.Sockets;
 using System.Threading;
 using System.Text;
-using System.Xml.Serialization;
+using System.Globalization;
 using Newtonsoft.Json;
 
 namespace Client
@@ -15,6 +15,7 @@ namespace Client
     {
         private Socket ClientSocket;
         private Thread clientThread;
+        private NguoiChoi p = new NguoiChoi();
         public Info_Player()
         {
             InitializeComponent();
@@ -49,18 +50,14 @@ namespace Client
 
 
         }
-        private void connect(string userName,int port,IPAddress ip)
+        private void connect(string userName, int port, IPAddress ip)
         {
 
         }
         private void btn_Connect_Click(object sender, EventArgs e)
         {
-            
 
             Player_Choose choose = new Player_Choose();
-            NguoiChoi p = new NguoiChoi();
-
-            
 
             if (p.nhapThongTin(UserName, IpServer))
             {
@@ -71,11 +68,14 @@ namespace Client
                     try
                     {
                         ClientSocket.Connect(p.serverIP, p.port);
+                        Sendmsg("User", $"connect:{p.userName}:1", DateTime.Now.ToString()); 
                     }
                     catch (SocketException)
                     {
                         MessageBox.Show("Lỗi : Không thể connect tới server !");
                     }
+                    clientThread = new Thread(ReceiveResponse);
+                    clientThread.Start();
                 }
                 this.Hide();
                 choose.Show();
@@ -105,9 +105,8 @@ namespace Client
         }
 
 
-        private void Sendmsg(string type,string content, string time)
+        private void Sendmsg(string type, string content, string time)
         {
-
             var MSG = new ManagePacket(type, content, time);
             string json = JsonConvert.SerializeObject(MSG);
             byte[] buffer = Encoding.UTF8.GetBytes(json);
@@ -120,7 +119,7 @@ namespace Client
         {
             //if (Chatbox.InvokeRequired)
             //{
-            //    var d = new SafeCallDelegate(UpdateChatHistoryThreadSafe);
+            //    var d = new SafeCallDelegate(UpdateEventQC);
             //    Chatbox.Invoke(d, new object[] { text });
             //}
             //else
