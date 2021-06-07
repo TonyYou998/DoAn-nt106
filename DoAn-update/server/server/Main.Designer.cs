@@ -29,85 +29,123 @@ namespace Cờ_cá_ngựa
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Server));
             this.logs = new System.Windows.Forms.RichTextBox();
-            this.ListenButton = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
+            this.listenbtn = new System.Windows.Forms.PictureBox();
+            this.listroombtn = new System.Windows.Forms.PictureBox();
+            this.listuserbtn = new System.Windows.Forms.PictureBox();
+            this.contactbtn = new System.Windows.Forms.PictureBox();
+            ((System.ComponentModel.ISupportInitialize)(this.listenbtn)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.listroombtn)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.listuserbtn)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.contactbtn)).BeginInit();
             this.SuspendLayout();
             // 
             // logs
             // 
+            this.logs.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(179)))), ((int)(((byte)(96)))), ((int)(((byte)(50)))));
+            this.logs.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.logs.Font = new System.Drawing.Font("Times New Roman", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.logs.ForeColor = System.Drawing.Color.Teal;
-            this.logs.Location = new System.Drawing.Point(17, 46);
+            this.logs.ForeColor = System.Drawing.Color.White;
+            this.logs.Location = new System.Drawing.Point(130, 141);
             this.logs.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.logs.Name = "logs";
-            this.logs.Size = new System.Drawing.Size(470, 669);
+            this.logs.ReadOnly = true;
+            this.logs.Size = new System.Drawing.Size(339, 545);
             this.logs.TabIndex = 0;
             this.logs.Text = "";
             this.logs.TextChanged += new System.EventHandler(this.logs_TextChanged);
             // 
-            // ListenButton
-            // 
-            this.ListenButton.Font = new System.Drawing.Font("Consolas", 16.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ListenButton.Location = new System.Drawing.Point(520, 46);
-            this.ListenButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.ListenButton.Name = "ListenButton";
-            this.ListenButton.Size = new System.Drawing.Size(146, 55);
-            this.ListenButton.TabIndex = 1;
-            this.ListenButton.Text = "LISTEN";
-            this.ListenButton.UseVisualStyleBackColor = true;
-            this.ListenButton.Click += new System.EventHandler(this.ListenButtonClick);
-            // 
-            // button2
-            // 
-            this.button2.Font = new System.Drawing.Font("Consolas", 16.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button2.Location = new System.Drawing.Point(520, 150);
-            this.button2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(146, 55);
-            this.button2.TabIndex = 2;
-            this.button2.Text = "List room";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.RoomFormClick);
-            // 
-            // button3
-            // 
-            this.button3.Font = new System.Drawing.Font("Consolas", 16.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button3.Location = new System.Drawing.Point(520, 261);
-            this.button3.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(146, 55);
-            this.button3.TabIndex = 3;
-            this.button3.Text = "List users";
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.UserFormClick);
-            // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 16.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(13, 7);
+            this.label1.BackColor = System.Drawing.Color.Transparent;
+            this.label1.Font = new System.Drawing.Font("Cooper Black", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(58, 141);
             this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(77, 26);
+            this.label1.Size = new System.Drawing.Size(60, 25);
             this.label1.TabIndex = 4;
-            this.label1.Text = "LOGS";
+            this.label1.Text = "LOG";
+            // 
+            // listenbtn
+            // 
+            this.listenbtn.BackColor = System.Drawing.Color.Transparent;
+            this.listenbtn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.listenbtn.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.listenbtn.Image = ((System.Drawing.Image)(resources.GetObject("listenbtn.Image")));
+            this.listenbtn.Location = new System.Drawing.Point(496, 152);
+            this.listenbtn.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.listenbtn.Name = "listenbtn";
+            this.listenbtn.Size = new System.Drawing.Size(288, 66);
+            this.listenbtn.TabIndex = 5;
+            this.listenbtn.TabStop = false;
+            this.listenbtn.Click += new System.EventHandler(this.listenbtn_Click);
+            // 
+            // listroombtn
+            // 
+            this.listroombtn.BackColor = System.Drawing.Color.Transparent;
+            this.listroombtn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.listroombtn.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.listroombtn.Image = ((System.Drawing.Image)(resources.GetObject("listroombtn.Image")));
+            this.listroombtn.Location = new System.Drawing.Point(496, 265);
+            this.listroombtn.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.listroombtn.Name = "listroombtn";
+            this.listroombtn.Size = new System.Drawing.Size(276, 76);
+            this.listroombtn.TabIndex = 6;
+            this.listroombtn.TabStop = false;
+            this.listroombtn.Click += new System.EventHandler(this.listroombtn_Click);
+            // 
+            // listuserbtn
+            // 
+            this.listuserbtn.BackColor = System.Drawing.Color.Transparent;
+            this.listuserbtn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.listuserbtn.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.listuserbtn.Image = ((System.Drawing.Image)(resources.GetObject("listuserbtn.Image")));
+            this.listuserbtn.Location = new System.Drawing.Point(496, 382);
+            this.listuserbtn.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.listuserbtn.Name = "listuserbtn";
+            this.listuserbtn.Size = new System.Drawing.Size(276, 70);
+            this.listuserbtn.TabIndex = 7;
+            this.listuserbtn.TabStop = false;
+            this.listuserbtn.Click += new System.EventHandler(this.listuserbtn_Click);
+            // 
+            // contactbtn
+            // 
+            this.contactbtn.BackColor = System.Drawing.Color.Transparent;
+            this.contactbtn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.contactbtn.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.contactbtn.Image = ((System.Drawing.Image)(resources.GetObject("contactbtn.Image")));
+            this.contactbtn.Location = new System.Drawing.Point(536, 601);
+            this.contactbtn.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.contactbtn.Name = "contactbtn";
+            this.contactbtn.Size = new System.Drawing.Size(210, 85);
+            this.contactbtn.TabIndex = 8;
+            this.contactbtn.TabStop = false;
+            this.contactbtn.Click += new System.EventHandler(this.contactbtn_Click);
             // 
             // Server
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(683, 734);
+            this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
+            this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.ClientSize = new System.Drawing.Size(795, 764);
+            this.Controls.Add(this.contactbtn);
+            this.Controls.Add(this.listuserbtn);
+            this.Controls.Add(this.listroombtn);
+            this.Controls.Add(this.listenbtn);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.button3);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.ListenButton);
             this.Controls.Add(this.logs);
+            this.DoubleBuffered = true;
             this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.Name = "Server";
             this.Text = "Server";
+            ((System.ComponentModel.ISupportInitialize)(this.listenbtn)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.listroombtn)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.listuserbtn)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.contactbtn)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -116,10 +154,11 @@ namespace Cờ_cá_ngựa
         #endregion
 
         private System.Windows.Forms.RichTextBox logs;
-        private System.Windows.Forms.Button ListenButton;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.PictureBox listenbtn;
+        private System.Windows.Forms.PictureBox listroombtn;
+        private System.Windows.Forms.PictureBox listuserbtn;
+        private System.Windows.Forms.PictureBox contactbtn;
     }
 }
 

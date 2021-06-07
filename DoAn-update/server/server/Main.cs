@@ -20,37 +20,11 @@ namespace Cờ_cá_ngựa
         public Server()
         {
             InitializeComponent();
-                
         }
         
-        private void UserFormClick(object sender, EventArgs e)
-        {
-            User_control gui = new User_control();
-            gui.Show();
-        }
-
-        private void RoomFormClick(object sender, EventArgs e)
-        {
-            Room_control gui = new Room_control();
-            gui.Show();
-        }
-
-        private void ListenButtonClick(object sender, EventArgs e)
-        {
-            if (ListenButton.Text == "LISTEN")
-                start();
-            else
-                stop();
-        }
-
-        private void stop()
-        {
-            ListenButton.Text = "LISTEN"; 
-            CloseAllSockets();
-        }
         private void start()
         {
-
+            
             var msg = "Server đang khởi động ...";
             logs.Text = msg + "\n";
             try
@@ -60,9 +34,9 @@ namespace Cờ_cá_ngựa
             catch
             {
                 MessageBox.Show("PORT " + serverPort + " đang được sử dụng!!!", "Lỗi");
-                System.Environment.Exit(1);
+                return;
             }
-            ListenButton.Text = "STOP";
+            listenbtn.Enabled = false;
             serverSockets.Listen(50);
             serverSockets.BeginAccept(AcceptCallBack, null);
             logs.Text += "Server đang chạy ở cổng " + serverPort + "\n";
@@ -94,7 +68,7 @@ namespace Cờ_cá_ngựa
             {
                 received = current.EndReceive(AR);
             }
-            catch (SocketException)
+            catch
             {
                 current.Close();
                 clientSockets.Remove(current);
@@ -192,6 +166,28 @@ namespace Cờ_cá_ngựa
         }
 
         private void logs_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void listenbtn_Click(object sender, EventArgs e)
+        {
+            start();
+        }
+
+        private void listroombtn_Click(object sender, EventArgs e)
+        {
+            Room_control gui = new Room_control();
+            gui.Show();
+        }
+
+        private void listuserbtn_Click(object sender, EventArgs e)
+        {
+            User_control gui = new User_control();
+            gui.Show();
+        }
+
+        private void contactbtn_Click(object sender, EventArgs e)
         {
 
         }

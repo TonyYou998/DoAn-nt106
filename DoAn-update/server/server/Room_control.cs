@@ -25,7 +25,7 @@ namespace Cờ_cá_ngựa
             int i = 0;
             while (i < L.Count)
             {
-                string[] row = { L[i].RoomID.ToString(), L[i].Title, L[i].StartTime};
+                string[] row = { L[i].RoomID.ToString(), L[i].RoomName, L[i].StartTime, L[i].Members_num.ToString() } ;
                 var lvi = new ListViewItem(row);
                 Box_listview.Items.Add(lvi);
                 i++;

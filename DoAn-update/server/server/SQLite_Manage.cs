@@ -25,7 +25,7 @@ namespace Cờ_cá_ngựa
                 InsertData();
             }            
         }
-        List<UserModel> infos = new List<UserModel>();
+        List<UserModel> Users = new List<UserModel>();
         List<RoomModel> Rooms = new List<RoomModel>();
         private SQLiteConnection CreateConnection()
         {
@@ -45,7 +45,7 @@ namespace Cờ_cá_ngựa
         {
             SQLiteCommand sqlite_cmd;
             string Createsql = "CREATE TABLE Users (ID INTEGER PRIMARY KEY AUTOINCREMENT, Name TEXT NOT NULL, RoomID int)";
-            string Createsql2 = "CREATE TABLE Room  (RoomID int, Title TEXT NOT NULL, StartTime TEXT NOT NULL)";
+            string Createsql2 = "CREATE TABLE Room  (RoomID int, RoomName TEXT NOT NULL, StartTime TEXT NOT NULL)";
             sqlite_cmd = sqlite_conn.CreateCommand();
             sqlite_cmd.CommandText = Createsql;
             sqlite_cmd.ExecuteNonQuery();
@@ -79,42 +79,96 @@ namespace Cờ_cá_ngựa
             SQLiteCommand sqlite_cmd;
             sqlite_cmd = sqlite_conn.CreateCommand();
             sqlite_cmd.CommandText = "SELECT * FROM Users";
-
+            Users.Clear();
             using (var reader = sqlite_cmd.ExecuteReader())
             {
                 while (reader.Read())
                 {
-                    var info = new UserModel();
-                    info.ID = int.Parse(reader["ID"].ToString());
-                    info.Name = reader["Name"].ToString();
-                    info.RoomID = int.Parse(reader["RoomID"].ToString());
-                    infos.Add(info);
+                    var User = new UserModel();
+                    User.ID = int.Parse(reader["ID"].ToString());
+                    User.Name = reader["Name"].ToString();
+                    User.RoomID = int.Parse(reader["RoomID"].ToString());
+                    Users.Add(User);
                 }
             }
 
-            return infos;
+            return Users;
         }
 
         public List<RoomModel> ReadRoomData()
         {
-            SQLiteCommand sqlite_cmd;
-            sqlite_cmd = sqlite_conn.CreateCommand();
-            sqlite_cmd.CommandText = "SELECT * FROM Room";
+            SQLiteCommand sql1;
+            SQLiteCommand sql2;
 
-            using (var reader = sqlite_cmd.ExecuteReader())
+            sql1 = sqlite_conn.CreateCommand();
+            sql2 = sqlite_conn.CreateCommand();
+
+            sql1.CommandText = "SELECT * FROM Room";
+            Rooms.Clear();
+
+            using (var reader = sql1.ExecuteReader())
             {
                 while (reader.Read())
                 {
                     var room = new RoomModel();
                     room.RoomID = int.Parse(reader["RoomID"].ToString());
-                    room.Title = reader["Title"].ToString();
+                    room.RoomName = reader["Title"].ToString();
                     room.StartTime = reader["StartTime"].ToString();
+
+                    sql2.CommandText = $"SELECT COUNT(Name) from Users where RoomID = {room.RoomID }";
+
+                    using (var read2 = sql2.ExecuteReader())
+                    {
+                        if (read2.Read())
+                        {
+                            room.Members_num = int.Parse(read2[0].ToString());
+                        }
+                    }
+
                     Rooms.Add(room);
                 }
                 sqlite_conn.Close();
             }
 
+            
+
+
             return Rooms;
+        }
+
+        private int checkUserExist(string username, string roomname)
+        {
+            SQLiteCommand sql1, sql2;
+            sql1 = sqlite_conn.CreateCommand();
+            sql2 = sqlite_conn.CreateCommand();
+
+            sql1.CommandText = $"SELECT RoomName from Room where RoomName = {roomname}";
+            sql2.CommandText = $"SELECT u.Name" +
+                  $"From Users u, Room r" +
+                  $"where u.RoomID = r.RoomID" +
+                  $"and u.Name = {username}";
+
+            using (var reader = sql1.ExecuteReader())
+            {
+                if (reader.Read())
+                {
+                    if (reader[0].ToString() == "-1")
+                    {
+                        return -1; // Phòng không tồn tại
+                    }
+                }
+                else
+                {
+                    using (var reader2 = sql2.ExecuteReader())
+
+                        if (reader2[0].ToString() != null)
+                        {
+                            return 0;
+                        }
+                }
+            }
+
+            return 1;
         }
     }
 }
