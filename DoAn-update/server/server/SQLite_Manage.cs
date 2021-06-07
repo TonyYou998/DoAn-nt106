@@ -96,7 +96,7 @@ namespace Cờ_cá_ngựa
                     var User = new UserModel();
                     User.ID = int.Parse(reader["ID"].ToString());
                     User.Name = reader["Name"].ToString();
-                    User.RoomID = int.Parse(reader["RoomID"].ToString());
+                   // User.RoomID = int.Parse(reader["RoomID"].ToString());
                     Users.Add(User);
                 }
             }

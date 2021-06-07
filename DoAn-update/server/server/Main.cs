@@ -97,7 +97,7 @@ namespace Cờ_cá_ngựa
                         {
                             logs.BeginInvoke((Action)(() => 
                             { logs.AppendText($"\r\nĐã kết nối với {data[1]}"); }));
-                            sql.Adduser(data[1], data[2]);
+                            sql.Adduser(data[1]);
                             //sql.GetRoomData();
                         }
                     }

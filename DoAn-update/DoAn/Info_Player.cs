@@ -65,7 +65,7 @@ namespace Client
                         try
                         {
                             ClientSocket.Connect(p.serverIP, p.port);
-                            Sendmsg("User", $"connect:{p.userName}", DateTime.Now.ToString());
+                            Sendmsg("User", $"connect:{p.userName}");
                             loop = false;
                         }
                         catch (SocketException)

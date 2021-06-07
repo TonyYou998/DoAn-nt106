@@ -73,7 +73,7 @@ namespace Client
                     try
                     {
                         ClientSocket.Connect(p.serverIP, p.port);
-                        Sendmsg("Room", $"created by:{p.userName}", $"room name:{r.getRoomName()}");
+                        Sendmsg("Room", $"room name:{r.getRoomName()}");
                         
                     }
                     catch (SocketException)
@@ -92,9 +92,9 @@ namespace Client
             
         }
 
-        private void Sendmsg(string type, string content, string time)
+        private void Sendmsg(string type, string content)
         {
-            var MSG = new ManagePacket(type, content, time);
+            var MSG = new ManagePacket(type, content);
             string json = JsonConvert.SerializeObject(MSG);
             byte[] buffer = Encoding.UTF8.GetBytes(json);
             ClientSocket.Send(buffer, 0, buffer.Length, SocketFlags.None);
