@@ -89,6 +89,7 @@ namespace Client
             this.PlayerName.Size = new System.Drawing.Size(372, 50);
             this.PlayerName.TabIndex = 9;
             this.PlayerName.Text = "Tên đã nhập trước đó";
+            this.PlayerName.Click += new System.EventHandler(this.PlayerName_Click);
             // 
             // lbName
             // 

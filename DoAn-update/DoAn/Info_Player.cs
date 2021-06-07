@@ -42,11 +42,7 @@ namespace Client
             IpServer.Font = new Font("Arial", 22, FontStyle.Bold);
             IpServer.Location = new Point(578, 301);
 
-            lbPort.Size = new Size(157, 41);
-            lbPort.Location = new Point(394, 413);
-            Port.Size = new Size(325, 38);
-            Port.Font = new Font("Arial", 22, FontStyle.Bold);
-            Port.Location = new Point(578, 410);
+            
 
 
         }
@@ -57,29 +53,37 @@ namespace Client
         private void btn_Connect_Click(object sender, EventArgs e)
         {
 
-            Player_Choose choose = new Player_Choose();
+           
 
-            if (p.nhapThongTin(UserName, IpServer))
+            bool loop = true;
+            while (loop)
             {
-                
-                ClientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                while (!ClientSocket.Connected)
+                if (p.nhapThongTin(UserName, IpServer))
                 {
-                    try
+
+                    ClientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                    while (!ClientSocket.Connected)
                     {
-                        ClientSocket.Connect(p.serverIP, p.port);
-                        Sendmsg("User", $"connect:{p.userName}:1", DateTime.Now.ToString()); 
+                        try
+                        {
+                            ClientSocket.Connect(p.serverIP, p.port);
+                            Sendmsg("User", $"connect:{p.userName}:1", DateTime.Now.ToString());
+                            loop = false;
+                        }
+                        catch (SocketException)
+                        {
+                            MessageBox.Show("Lỗi : Không thể connect tới server !");
+                        }
+                        clientThread = new Thread(ReceiveResponse);
+                        clientThread.Start();
                     }
-                    catch (SocketException)
-                    {
-                        MessageBox.Show("Lỗi : Không thể connect tới server !");
-                    }
-                    clientThread = new Thread(ReceiveResponse);
-                    clientThread.Start();
+                    this.Hide();
+                    Player_Choose choose = new Player_Choose(p);
+                    choose.Show();
                 }
-                this.Hide();
-                choose.Show();
             }
+
+           
 
         }
 

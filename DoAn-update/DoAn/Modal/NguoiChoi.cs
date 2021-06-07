@@ -4,11 +4,27 @@ using System.Windows.Forms;
 
 namespace Client.Modal
 {
-    class NguoiChoi
+    public class NguoiChoi
     {
-        public string userName { get; set; }
+        public string userName {
+            get;
+       set;
+        }
+
+        public String getUserName()
+        {
+            return userName;
+        }
         public int port { get; set; }
+        public int getPort()
+        {
+            return this.port;
+        }
         public IPAddress serverIP { get; set; }
+        public IPAddress getIP()
+        {
+            return this.serverIP;
+        }
 
         public bool nhapThongTin(RichTextBox userName,RichTextBox Ip)
         {
@@ -25,21 +41,19 @@ namespace Client.Modal
                 }
                 catch
                 {
-                    MessageBox.Show("sai định dạng port Hoặc ip ");
-                }
-
-                if(this.userName=="" || this.port==-1 || this.serverIP==null)
-                {
-                    MessageBox.Show("nhập lại username và ip");
+                    MessageBox.Show("sai định dạng ip\nmởi nhập lại ");
+                  
                     userName.Text = "";
-                    
+
                     Ip.Text = "";
 
                     return false;
-
                 }
+
+              
                
             }
+
             return true;
 
 

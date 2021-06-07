@@ -130,7 +130,10 @@ namespace Cờ_cá_ngựa
 
                     break;
                 case "Room":
-
+                   
+                    string[] roomData = packet.msgcontent.Split(':');
+                    MessageBox.Show("nhan");
+                    MessageBox.Show(roomData[1]);
                     break;
                 case "Action":
                     switch (packet.msgcontent)

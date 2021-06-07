@@ -31,5 +31,10 @@ namespace Cờ_cá_ngựa
                 i++;
             }
         }
+
+        private void Box_listview_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }

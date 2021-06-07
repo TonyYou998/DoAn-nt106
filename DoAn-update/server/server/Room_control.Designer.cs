@@ -45,13 +45,14 @@ namespace Cờ_cá_ngựa
             this.Box_listview.GridLines = true;
             this.Box_listview.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.Box_listview.HideSelection = false;
-            this.Box_listview.Location = new System.Drawing.Point(9, 10);
-            this.Box_listview.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Box_listview.Location = new System.Drawing.Point(12, 12);
+            this.Box_listview.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Box_listview.Name = "Box_listview";
-            this.Box_listview.Size = new System.Drawing.Size(851, 551);
+            this.Box_listview.Size = new System.Drawing.Size(1133, 677);
             this.Box_listview.TabIndex = 0;
             this.Box_listview.UseCompatibleStateImageBehavior = false;
             this.Box_listview.View = System.Windows.Forms.View.Details;
+            this.Box_listview.SelectedIndexChanged += new System.EventHandler(this.Box_listview_SelectedIndexChanged);
             // 
             // RoomID
             // 
@@ -70,11 +71,11 @@ namespace Cờ_cá_ngựa
             // 
             // Room_control
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(871, 570);
+            this.ClientSize = new System.Drawing.Size(1161, 702);
             this.Controls.Add(this.Box_listview);
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "Room_control";
             this.Text = "Room_control";
             this.ResumeLayout(false);

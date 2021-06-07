@@ -1,10 +1,14 @@
-﻿using System;
+﻿using Client.Modal;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Net.Sockets;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -12,9 +16,19 @@ namespace Client
 {
     public partial class Player_Choose : Form
     {
-        public Player_Choose()
+
+        private NguoiChoi p;
+
+        private Socket ClientSocket;
+        private Thread clientThread;
+        public Player_Choose(NguoiChoi nguoiChoi)
         {
+
             InitializeComponent();
+             p = nguoiChoi;
+            
+            PlayerName.Text = nguoiChoi.getUserName();
+
             //FORM GIAO DIEN
             this.Size = new Size(1286, 751);
             this.BackgroundImage = Properties.Resources.Client__1_;
@@ -48,16 +62,76 @@ namespace Client
 
         private void btn_Create_Room_Click(object sender, EventArgs e)
         {
-            this.Hide();
-            Player_Create create = new Player_Create();
-            create.Show();
+            Room r = new Room();
+
+            if (r.setRoomName(RoomName))
+            {
+                Player_Create create = new Player_Create();
+                ClientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                while (!ClientSocket.Connected)
+                {
+                    try
+                    {
+                        ClientSocket.Connect(p.serverIP, p.port);
+                        Sendmsg("Room", $"created by:{p.userName}", $"room name:{r.getRoomName()}");
+                        
+                    }
+                    catch (SocketException)
+                    {
+                        MessageBox.Show("Lỗi : Không thể connect tới server !");
+                    }
+                    clientThread = new Thread(ReceiveResponse);
+                    clientThread.Start();
+                }
+                create.Show();
+                this.Hide();
+               
+            }
+            else
+                MessageBox.Show("chưa nhập tên phòng");
+            
+        }
+
+        private void Sendmsg(string type, string content, string time)
+        {
+            var MSG = new ManagePacket(type, content, time);
+            string json = JsonConvert.SerializeObject(MSG);
+            byte[] buffer = Encoding.UTF8.GetBytes(json);
+            ClientSocket.Send(buffer, 0, buffer.Length, SocketFlags.None);
+        }
+
+        private void ReceiveResponse()
+        {
+            try
+            {
+                while (ClientSocket.Connected)
+                {
+                    var buffer = new byte[2048];
+                    int received = ClientSocket.Receive(buffer, SocketFlags.None);
+                    if (received == 0) return;
+                    var data = new byte[received];
+                    Array.Copy(buffer, data, received);
+                    string text = Encoding.UTF8.GetString(data);
+                    //UpdateEventQC($"{text}\n");
+                }
+            }
+            catch (Exception)
+            {
+                ClientSocket.Close();
+            }
         }
 
         private void btn_Join_Room_Click(object sender, EventArgs e)
         {
             this.Hide();
             Player_Join join = new Player_Join();
+
             join.Show();
+        }
+
+        private void PlayerName_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
