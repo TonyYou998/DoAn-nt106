@@ -56,6 +56,15 @@ namespace Cờ_cá_ngựa
         private void InsertData()
         {
         }
+        public void Adduser(string username)
+        {
+            SQLiteCommand sqlite_cmd;
+            sqlite_cmd = sqlite_conn.CreateCommand();
+            sqlite_cmd.CommandText = "INSERT INTO Users " +
+                $"(Name) VALUES('{username}'); ";
+            sqlite_cmd.ExecuteNonQuery();
+        }
+
         public void Adduser(string username, string roomID)
         {
             SQLiteCommand sqlite_cmd;

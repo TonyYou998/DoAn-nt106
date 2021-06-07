@@ -53,8 +53,6 @@ namespace Client
         private void btn_Connect_Click(object sender, EventArgs e)
         {
 
-           
-
             bool loop = true;
             while (loop)
             {
@@ -67,7 +65,7 @@ namespace Client
                         try
                         {
                             ClientSocket.Connect(p.serverIP, p.port);
-                            Sendmsg("User", $"connect:{p.userName}:1", DateTime.Now.ToString());
+                            Sendmsg("User", $"connect:{p.userName}", DateTime.Now.ToString());
                             loop = false;
                         }
                         catch (SocketException)

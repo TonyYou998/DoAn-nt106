@@ -4,18 +4,25 @@
     {
         public string msgtype { get; set; }// user room action 
         public string msgcontent { get; set; }
-        public string msgtime { get; set; }
+        public List<RoomModel> msgRoom { get; set; }
 
-        public ManagePacket() {
+        public ManagePacket()
+        {
             msgcontent = "";
             msgtype = "";
-            msgtime = "";
+            msgRoom = null;
         }
-        public ManagePacket(string type,string msg,string time)
+        public ManagePacket(string type, string msg)
         {
             this.msgtype = type;
             this.msgcontent = msg;
-            this.msgtime = time;
+        }
+
+        public ManagePacket(List<RoomModel> Arr)
+        {
+            this.msgtype = "Room";
+            this.msgcontent = null;
+            this.msgRoom = Arr;
         }
     }
 }

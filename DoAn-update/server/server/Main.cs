@@ -90,13 +90,13 @@ namespace Cờ_cá_ngựa
             switch (packet.msgtype)
             {
                 case "User":
-                    string[] data = packet.msgcontent.Split(':'); // VD: connect:Duy:1002
-                    if (data.Length == 3)
+                    string[] data = packet.msgcontent.Split(':'); // VD: connect:Duy
+                    if (data.Length == 2)
                     {
                         if(data[0] == "connect")
                         {
                             logs.BeginInvoke((Action)(() => 
-                            { logs.AppendText($"\r\nĐã kết nối với {data[1]}, phòng {data[2]}"); }));
+                            { logs.AppendText($"\r\nĐã kết nối với {data[1]}"); }));
                             sql.Adduser(data[1], data[2]);
                             //sql.GetRoomData();
                         }
@@ -106,18 +106,17 @@ namespace Cờ_cá_ngựa
                 case "Room":
                    
                     string[] roomData = packet.msgcontent.Split(':');
-                    MessageBox.Show("nhan");
-                    MessageBox.Show(roomData[1]);
+                    var MSG = new ManagePacket("Room", "InfoRoom", DateTime.Now.ToString());
+
                     break;
+
                 case "Action":
                     switch (packet.msgcontent)
                     {
                         case "Connect":
 
                             break;
-                        case "Disconnect":
-
-                            break;
+               
                     }
                     break;
             }
