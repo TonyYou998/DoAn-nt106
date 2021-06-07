@@ -106,7 +106,10 @@ namespace Cờ_cá_ngựa
                 case "Room":
                    
                     string[] roomData = packet.msgcontent.Split(':');
-                    var MSG = new ManagePacket("Room", "InfoRoom", DateTime.Now.ToString());
+                    var MSG = new ManagePacket(sql.ReadRoomData());
+                    string json = JsonConvert.SerializeObject(MSG);
+                    byte[] buffer = Encoding.UTF8.GetBytes(json);
+                    current.Send(buffer, 0, buffer.Length, SocketFlags.None);
 
                     break;
 

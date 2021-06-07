@@ -1,4 +1,6 @@
-﻿namespace Client
+﻿using System.Collections.Generic;
+
+namespace Client
 {
     class ManagePacket
     {
