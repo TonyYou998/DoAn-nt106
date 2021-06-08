@@ -84,12 +84,12 @@ namespace Server
             sqlite_cmd.ExecuteNonQuery();
         }
 
-        public void AddRoom(string RoomID ,string Title , string StartTime)
+        public void AddRoom(string RoomID ,string Title)
         {
             SQLiteCommand sqlite_cmd;
             sqlite_cmd = sqlite_conn.CreateCommand();
             sqlite_cmd.CommandText = "INSERT INTO Room " +
-                $"(RoomID, Title, StartTime) VALUES('{RoomID}','{Title}','{StartTime}'); ";
+                $"(RoomID, Title) VALUES('{RoomID}','{Title}'); ";
             sqlite_cmd.ExecuteNonQuery();
         }
 
@@ -132,7 +132,6 @@ namespace Server
                     var room = new RoomModel();
                     room.RoomID = int.Parse(reader["RoomID"].ToString());
                     room.RoomName = reader["Title"].ToString();
-                    room.StartTime = reader["StartTime"].ToString();
 
                     sql2.CommandText = $"SELECT COUNT(Name) from Users where RoomID = {room.RoomID }";
 

@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Client.Modal;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,7 +25,7 @@ namespace Client
         {
             try
             {
-                while (s.Connected)
+                while (!s.Connected)
                 {
                     var buffer = new byte[2048];
                     int received = s.Receive(buffer, SocketFlags.None);
@@ -44,21 +45,13 @@ namespace Client
                         else if (msg.msgtype == "User" && msg.msgcontent == "Success")
                         {
                             MessageBox.Show("Đã kết nối thành công đến server");
+                           
                             return;
                         }
                     }
                     else if(mode == "CreateRoom")
                     {
-                        if(msg.msgtype == "Room" && msg.msgcontent == "Create:Exist")
-                        {
-                            MessageBox.Show("Phòng đã tồn tại, vui lòng đặt tên khác");
-                            return;
-                        }
-                        else if (msg.msgtype == "Room" && msg.msgcontent == "Create:Success")
-                        {
-                            // ABCXYZ() nhảy vào form mới
-                            return;
-                        }
+                        
                     }
                     else if(mode == "JoinRoom")
                     { 
@@ -81,5 +74,40 @@ namespace Client
                 s.Close();
             }
         }
+
+        public void ReceiveResponse(Socket s, NguoiChoi p)
+        {
+            try
+            {
+                while (!s.Connected)
+                {
+                    var buffer = new byte[2048];
+                    int received = s.Receive(buffer, SocketFlags.None);
+                    if (received == 0) return;
+                    var data = new byte[received];
+                    Array.Copy(buffer, data, received);
+                    string text = Encoding.UTF8.GetString(data);
+                    var msg = JsonConvert.DeserializeObject<ManagePacket>(text);
+
+                    if (msg.msgtype == "Room" && msg.msgcontent == "Create:Exist")
+                    {
+                        MessageBox.Show("Phòng đã tồn tại, vui lòng đặt tên khác");
+                        return;
+                    }
+                    else if (msg.msgtype == "Room" && msg.msgcontent == "Create:Success")
+                    {
+                        Player_Choose choose = new Player_Choose(s, p);
+                        choose.Show();
+                        return;
+                    }
+
+                }
+            }
+            catch (Exception)
+            {
+                s.Close();
+            }
+        }
+
     }
 }
