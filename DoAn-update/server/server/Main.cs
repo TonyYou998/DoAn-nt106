@@ -17,6 +17,7 @@ namespace Server
         private IPAddress serverIP = IPAddress.Parse("127.0.0.1");
         private int serverPort = 8000;
         Sqlite_control sql = new Sqlite_control();
+        int roomID = 0;
         public Server()
         {
             InitializeComponent();
@@ -102,7 +103,7 @@ namespace Server
                                  MSG = new ManagePacket("User", "Success");
                                 sendPacketToClient(current, MSG);
 
-                              //  MSG = new ManagePacket(sql.ReadRoomData());
+                              
                                 //sendPacketToClient(current, MSG);
                                 logs.BeginInvoke((Action)(() =>
                                 { logs.AppendText($"\r\nĐã kết nối với {data[1]}"); }));
@@ -118,14 +119,19 @@ namespace Server
 
                     break;
                 case "Room":
-                    int roomID = 0;
+                 
                     string[] roomData = packet.msgcontent.Split(':');
                     roomID++;
                     
                     sql.AddRoom(roomID.ToString(), roomData[1]);
-                    MSG = new ManagePacket(sql.ReadRoomData());
-                    sendPacketToClient(current,MSG);
+                  
 
+                    break;
+
+                case "JoinRoom":
+                     MSG = new ManagePacket(sql.ReadRoomData());
+                   
+                    sendPacketToClient(current, MSG);
                     break;
 
                 case "Action":

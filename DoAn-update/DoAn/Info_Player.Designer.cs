@@ -42,7 +42,7 @@ namespace Client
             this.btn_Connect.BackColor = System.Drawing.Color.Transparent;
             this.btn_Connect.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.btn_Connect.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btn_Connect.Location = new System.Drawing.Point(646, 667);
+            this.btn_Connect.Location = new System.Drawing.Point(650, 675);
             this.btn_Connect.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btn_Connect.Name = "btn_Connect";
             this.btn_Connect.Size = new System.Drawing.Size(206, 100);

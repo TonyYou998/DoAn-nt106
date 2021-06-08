@@ -47,6 +47,7 @@ namespace Server
             this.Box_listview.HideSelection = false;
             this.Box_listview.Location = new System.Drawing.Point(12, 12);
             this.Box_listview.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.Box_listview.MultiSelect = false;
             this.Box_listview.Name = "Box_listview";
             this.Box_listview.Size = new System.Drawing.Size(1323, 730);
             this.Box_listview.TabIndex = 0;

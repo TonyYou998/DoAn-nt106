@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Client
 {
-    class RoomModel
+  public  class RoomModel
     {
         public string RoomName { get; set; }
         public int RoomID { get; set; }

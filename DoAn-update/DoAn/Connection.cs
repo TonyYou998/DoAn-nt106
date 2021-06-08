@@ -13,6 +13,7 @@ namespace Client
     class Connection
     {
         bool Running = true;
+      
         public void Sendmsg(Socket s,  string type, string content)
         {
             var MSG = new ManagePacket(type, content);

@@ -19,7 +19,7 @@ namespace Client
 
         private NguoiChoi p;
 
-        private Socket ClientSocket;
+        private Socket ClientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
         private Thread clientThread;
         private Connection _connect = new Connection();
         public Player_Choose(Socket ClientSocket , NguoiChoi nguoiChoi)
@@ -68,12 +68,12 @@ namespace Client
             if (r.setRoomName(RoomName))
             {
                 Player_Create create = new Player_Create();
-                ClientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                while (!ClientSocket.Connected)
-                {
+               
+                if(ClientSocket.Connected)
+                {   
                     try
                     {
-                        ClientSocket.Connect(p.serverIP, p.port);
+                     
                         _connect.Sendmsg(ClientSocket,"Room", $"room name:{r.getRoomName()}");
                         
                     }
@@ -85,6 +85,8 @@ namespace Client
                     clientThread.Start();
                 }
                 create.Show();
+
+              
                 this.Hide();
                
             }
@@ -92,18 +94,26 @@ namespace Client
                 MessageBox.Show("chưa nhập tên phòng");
             
         }
-
+       
         private void btn_Join_Room_Click(object sender, EventArgs e)
         {
-            this.Hide();
-            Player_Join join = new Player_Join();
+           // ClientSocket.Connect(p.serverIP, p.port);
+            _connect.Sendmsg(ClientSocket, "JoinRoom", "null");
+            byte[] bytes = new byte[256];
 
-            join.Show();
+            ClientSocket.Receive(bytes);
+            string listRoom = Encoding.UTF8.GetString(bytes);
+            var Jsonmsg = JsonConvert.DeserializeObject<ManagePacket>(listRoom);
+           
+
+            this.Hide();
+            ListRoom ls = new ListRoom(Jsonmsg.msgRoom);
+            ls.Show();
         }
 
         private void PlayerName_Click(object sender, EventArgs e)
         {
-
+           
         }
     }
 }
