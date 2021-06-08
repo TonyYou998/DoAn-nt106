@@ -146,11 +146,7 @@ namespace Server
 
                     Rooms.Add(room);
                 }
-                sqlite_conn.Close();
             }
-
-            
-
 
             return Rooms;
         }
