@@ -4,7 +4,7 @@ using System.Data.SQLite;
 using System.IO;
 using System.Windows.Forms;
 
-namespace Cờ_cá_ngựa
+namespace Server
 {
     class Sqlite_control
     {
@@ -56,13 +56,23 @@ namespace Cờ_cá_ngựa
         private void InsertData()
         {
         }
-        public void Adduser(string username)
+        public bool Adduser(string username)
         {
+
+            ReadUserData();
+            foreach(var u in Users)
+            {
+                if(u.Name == username)
+                {
+                    return false;
+                }
+            }
             SQLiteCommand sqlite_cmd;
             sqlite_cmd = sqlite_conn.CreateCommand();
             sqlite_cmd.CommandText = "INSERT INTO Users " +
                 $"(Name) VALUES('{username}'); ";
             sqlite_cmd.ExecuteNonQuery();
+            return true;
         }
 
         public void Adduser(string username, string roomID)

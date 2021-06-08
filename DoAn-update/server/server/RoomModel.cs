@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Cờ_cá_ngựa
+namespace Server
 {
     class RoomModel
     {

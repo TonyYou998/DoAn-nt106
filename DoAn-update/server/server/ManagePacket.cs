@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Cờ_cá_ngựa
+namespace Server
 {
     class ManagePacket
     {

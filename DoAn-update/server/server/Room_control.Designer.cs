@@ -1,5 +1,5 @@
 ﻿
-namespace Cờ_cá_ngựa
+namespace Server
 {
     partial class Room_control
     {

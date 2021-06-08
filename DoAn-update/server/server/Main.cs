@@ -6,7 +6,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Windows.Forms;
 
-namespace Cờ_cá_ngựa
+namespace Server
 {
     public partial class Server : Form
     {
@@ -87,6 +87,8 @@ namespace Cờ_cá_ngựa
 
         private void resolve(ManagePacket packet, Socket current )
         {
+            ManagePacket MSG;
+
             switch (packet.msgtype)
             {
                 case "User":
@@ -95,10 +97,20 @@ namespace Cờ_cá_ngựa
                     {
                         if(data[0] == "connect")
                         {
-                            logs.BeginInvoke((Action)(() => 
-                            { logs.AppendText($"\r\nĐã kết nối với {data[1]}"); }));
-                            sql.Adduser(data[1]);
-                            //sql.GetRoomData();
+                            if (sql.Adduser(data[1])) // Adduser thành công return true, nếu user đã tồn tại return false;
+                            {
+                                MSG = new ManagePacket("User", "Success");
+                                sendPacketToClient(current, MSG);
+
+                                logs.BeginInvoke((Action)(() =>
+                                { logs.AppendText($"\r\nĐã kết nối với {data[1]}"); }));
+                            }
+                            else
+                            {
+                                MSG =  new ManagePacket("User","Exist");
+                                sendPacketToClient(current, MSG);
+                            }
+
                         }
                     }
 
@@ -106,10 +118,8 @@ namespace Cờ_cá_ngựa
                 case "Room":
                    
                     string[] roomData = packet.msgcontent.Split(':');
-                    var MSG = new ManagePacket(sql.ReadRoomData());
-                    string json = JsonConvert.SerializeObject(MSG);
-                    byte[] buffer = Encoding.UTF8.GetBytes(json);
-                    current.Send(buffer, 0, buffer.Length, SocketFlags.None);
+                    MSG = new ManagePacket(sql.ReadRoomData());
+                    sendPacketToClient(current,MSG);
 
                     break;
 
@@ -156,6 +166,14 @@ namespace Cờ_cá_ngựa
         //    }
 
         //}
+
+        private void sendPacketToClient(Socket current, ManagePacket MSG ) 
+        {
+            string json = JsonConvert.SerializeObject(MSG);
+            byte[] buffer = Encoding.UTF8.GetBytes(json);
+            current.Send(buffer, 0, buffer.Length, SocketFlags.None);
+        }
+
         private void CloseAllSockets()
         {
             foreach (Socket socket in clientSockets)

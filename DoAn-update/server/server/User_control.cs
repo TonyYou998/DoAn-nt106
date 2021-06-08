@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Cờ_cá_ngựa
+namespace Server
 {
     public partial class User_control : Form
     {

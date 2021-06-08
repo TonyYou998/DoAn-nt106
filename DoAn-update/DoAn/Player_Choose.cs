@@ -21,12 +21,12 @@ namespace Client
 
         private Socket ClientSocket;
         private Thread clientThread;
-        public Player_Choose(NguoiChoi nguoiChoi)
+        public Player_Choose(Socket ClientSocket , NguoiChoi nguoiChoi)
         {
 
             InitializeComponent();
              p = nguoiChoi;
-            
+            this.ClientSocket = ClientSocket;
             PlayerName.Text = nguoiChoi.getUserName();
 
             //FORM GIAO DIEN
@@ -90,35 +90,6 @@ namespace Client
             else
                 MessageBox.Show("chưa nhập tên phòng");
             
-        }
-
-        private void Sendmsg(string type, string content)
-        {
-            var MSG = new ManagePacket(type, content);
-            string json = JsonConvert.SerializeObject(MSG);
-            byte[] buffer = Encoding.UTF8.GetBytes(json);
-            ClientSocket.Send(buffer, 0, buffer.Length, SocketFlags.None);
-        }
-
-        private void ReceiveResponse()
-        {
-            try
-            {
-                while (ClientSocket.Connected)
-                {
-                    var buffer = new byte[2048];
-                    int received = ClientSocket.Receive(buffer, SocketFlags.None);
-                    if (received == 0) return;
-                    var data = new byte[received];
-                    Array.Copy(buffer, data, received);
-                    string text = Encoding.UTF8.GetString(data);
-                    //UpdateEventQC($"{text}\n");
-                }
-            }
-            catch (Exception)
-            {
-                ClientSocket.Close();
-            }
         }
 
         private void btn_Join_Room_Click(object sender, EventArgs e)
