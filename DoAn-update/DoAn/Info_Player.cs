@@ -67,7 +67,7 @@ namespace Client
                         {
                             ClientSocket.Connect(p.serverIP, p.port);
                             _connect.Sendmsg(ClientSocket,"User", $"connect:{p.userName}");
-                            clientThread = new Thread(() => _connect.ReceiveResponse(ClientSocket, "connect"));
+                            clientThread = new Thread(() => _connect.ReceiveResponse(ClientSocket, "Connect"));
                             clientThread.Start();
                             loop = false;
                         }
