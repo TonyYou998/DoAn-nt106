@@ -14,8 +14,9 @@ namespace Client
     public partial class Info_Player : Form
     {
         private Socket ClientSocket;
-        private Thread clientThread;
         private NguoiChoi p = new NguoiChoi();
+        private Connection _connect = new Connection();
+        private Thread clientThread;
         public Info_Player()
         {
             InitializeComponent();
@@ -65,18 +66,20 @@ namespace Client
                         try
                         {
                             ClientSocket.Connect(p.serverIP, p.port);
-                            Sendmsg("User", $"connect:{p.userName}");
+                            _connect.Sendmsg(ClientSocket,"User", $"connect:{p.userName}");
+                            clientThread = new Thread(() => _connect.ReceiveResponse(ClientSocket, "connect"));
+                            clientThread.Start();
                             loop = false;
                         }
                         catch (SocketException)
                         {
                             MessageBox.Show("Lỗi : Không thể connect tới server !");
+                            return;
                         }
-                        clientThread = new Thread(ReceiveResponse);
-                        clientThread.Start();
+                        
                     }
                     this.Hide();
-                    Player_Choose choose = new Player_Choose(p);
+                    Player_Choose choose = new Player_Choose(ClientSocket, p);
                     choose.Show();
                 }
             }
@@ -85,36 +88,7 @@ namespace Client
 
         }
 
-        private void ReceiveResponse()
-        {
-            try
-            {
-                while (ClientSocket.Connected)
-                {
-                    var buffer = new byte[2048];
-                    int received = ClientSocket.Receive(buffer, SocketFlags.None);
-                    if (received == 0) return;
-                    var data = new byte[received];
-                    Array.Copy(buffer, data, received);
-                    string text = Encoding.UTF8.GetString(data);
-                    UpdateEventQC($"{text}\n");
-                }
-            }
-            catch (Exception)
-            {
-                ClientSocket.Close();
-            }
-        }
-
-
-        private void Sendmsg(string type, string content)
-        {
-            var MSG = new ManagePacket(type, content);
-            string json = JsonConvert.SerializeObject(MSG);
-            byte[] buffer = Encoding.UTF8.GetBytes(json);
-            ClientSocket.Send(buffer, 0, buffer.Length, SocketFlags.None);
-        }
-
+      
         private delegate void SafeCallDelegate(string text);
 
         private void UpdateEventQC(string text)

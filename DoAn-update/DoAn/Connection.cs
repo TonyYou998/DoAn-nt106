@@ -12,7 +12,7 @@ namespace Client
     class Connection
     {
         bool Running = true;
-        private void Sendmsg(Socket s,  string type, string content)
+        public void Sendmsg(Socket s,  string type, string content)
         {
             var MSG = new ManagePacket(type, content);
             string json = JsonConvert.SerializeObject(MSG);
@@ -20,7 +20,7 @@ namespace Client
             s.Send(buffer, 0, buffer.Length, SocketFlags.None);
         }
 
-        private void ReceiveResponse(Socket s, string mode = "")
+        public void ReceiveResponse(Socket s, string mode = "")
         {
             try
             {
@@ -41,7 +41,7 @@ namespace Client
                             MessageBox.Show("Tên đã tồn tại, vui lòng đặt tên khác");
                             return;
                         }
-                        if (msg.msgtype == "User" && msg.msgcontent == "Success")
+                        else if (msg.msgtype == "User" && msg.msgcontent == "Success")
                         {
                             MessageBox.Show("Đã kết nối thành công đến server");
                             return;
@@ -49,17 +49,26 @@ namespace Client
                     }
                     else if(mode == "CreateRoom")
                     {
-                        if(msg.msgtype == "Room" && msg.msgcontent == "Exist")
+                        if(msg.msgtype == "Room" && msg.msgcontent == "Create:Exist")
                         {
                             MessageBox.Show("Phòng đã tồn tại, vui lòng đặt tên khác");
                             return;
                         }
+                        else if (msg.msgtype == "Room" && msg.msgcontent == "Create:Success")
+                        {
+                            // ABCXYZ() nhảy vào form mới
+                            return;
+                        }
                     }
                     else if(mode == "JoinRoom")
-                    {
-
+                    { 
+                        if (msg.msgtype == "Room" && msg.msgcontent == "Join:Success")
+                        {
+                            // ABCXYZ() nhảy vào form mới
+                            return;
+                        }
                     }
-                    else if(mode == "")
+                    else
                     {
 
                     }

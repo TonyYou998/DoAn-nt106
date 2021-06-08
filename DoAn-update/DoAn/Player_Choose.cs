@@ -21,6 +21,7 @@ namespace Client
 
         private Socket ClientSocket;
         private Thread clientThread;
+        private Connection _connect = new Connection();
         public Player_Choose(Socket ClientSocket , NguoiChoi nguoiChoi)
         {
 
@@ -73,14 +74,14 @@ namespace Client
                     try
                     {
                         ClientSocket.Connect(p.serverIP, p.port);
-                        Sendmsg("Room", $"room name:{r.getRoomName()}");
+                        _connect.Sendmsg(ClientSocket,"Room", $"room name:{r.getRoomName()}");
                         
                     }
                     catch (SocketException)
                     {
                         MessageBox.Show("Lỗi : Không thể connect tới server !");
                     }
-                    clientThread = new Thread(ReceiveResponse);
+                    clientThread = new Thread(() => _connect.ReceiveResponse(ClientSocket,"CreateRoom"));
                     clientThread.Start();
                 }
                 create.Show();
