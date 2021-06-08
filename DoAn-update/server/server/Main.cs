@@ -84,7 +84,14 @@ namespace Cờ_cá_ngựa
 
             current.BeginReceive(buffer, 0, 2048, SocketFlags.None, ReceiveCallback, current);
         }
-
+        private void sendListRoom(ManagePacket packet, Socket current)
+        {
+            string[] roomData = packet.msgcontent.Split(':');
+            var MSG = new ManagePacket(sql.ReadRoomData());
+            string json = JsonConvert.SerializeObject(MSG);
+            byte[] buffer = Encoding.UTF8.GetBytes(json);
+            current.Send(buffer, 0, buffer.Length, SocketFlags.None);
+        }
         private void resolve(ManagePacket packet, Socket current )
         {
             switch (packet.msgtype)
@@ -98,18 +105,15 @@ namespace Cờ_cá_ngựa
                             logs.BeginInvoke((Action)(() => 
                             { logs.AppendText($"\r\nĐã kết nối với {data[1]}"); }));
                             sql.Adduser(data[1]);
+                          
                             //sql.GetRoomData();
                         }
                     }
-
+                    sendListRoom(packet, current);
                     break;
                 case "Room":
-                   
-                    string[] roomData = packet.msgcontent.Split(':');
-                    var MSG = new ManagePacket(sql.ReadRoomData());
-                    string json = JsonConvert.SerializeObject(MSG);
-                    byte[] buffer = Encoding.UTF8.GetBytes(json);
-                    current.Send(buffer, 0, buffer.Length, SocketFlags.None);
+                    MessageBox.Show("created");
+                    //sendListRoom(packet, current);
 
                     break;
 

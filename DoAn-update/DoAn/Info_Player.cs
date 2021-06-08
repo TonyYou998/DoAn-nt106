@@ -75,12 +75,18 @@ namespace Client
                         clientThread = new Thread(ReceiveResponse);
                         clientThread.Start();
                     }
+                   // byte[] bytes = new byte[256];
+
+                    //ClientSocket.Receive(bytes);
+                    //string str = Encoding.UTF8.GetString(bytes);
+                 //   var Jsonmsg = JsonConvert.DeserializeObject<ManagePacket>(str);
+
                     this.Hide();
                     Player_Choose choose = new Player_Choose(p);
                     choose.Show();
                 }
             }
-
+            
            
 
         }
