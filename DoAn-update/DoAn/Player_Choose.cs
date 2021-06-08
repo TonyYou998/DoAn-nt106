@@ -99,7 +99,7 @@ namespace Client
         {
            // ClientSocket.Connect(p.serverIP, p.port);
             _connect.Sendmsg(ClientSocket, "JoinRoom", "null");
-            byte[] bytes = new byte[256];
+            byte[] bytes = new byte[1024];
 
             ClientSocket.Receive(bytes);
             string listRoom = Encoding.UTF8.GetString(bytes);
