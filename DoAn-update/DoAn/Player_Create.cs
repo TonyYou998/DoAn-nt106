@@ -165,16 +165,16 @@ namespace Client
             new Point { X = 385, Y = 185 },
             new Point { X = 385, Y = 225 }
        };
-        public int StartMoving (int roll, int temp)
+        public bool StartMoving (int roll, int temp)
         {
             if (temp == -1)
             {
                 if (roll == 1 || roll == 6)
                 {
-                    temp = 0;
+                    return true;
                 }
             }
-            return temp;
+            return false;
            
         }
         public int NormalMoving(int roll, int temp)
@@ -194,23 +194,21 @@ namespace Client
         {
             //MessageBox.Show(sender.ToString());
             PictureBox a = (PictureBox)sender;
-            if (temp != 0)
+            if (temp != -1)
             {
                 if (a.Name == "Red0")
                 {
-                    MessageBox.Show(a.Location.X.ToString()+ " " +a.Location.Y.ToString());
                     if (red1._top == false)
                     {
-                        
                         if (red1._index == -1)
                         {
-                            if (StartMoving(temp, red1._index) == 0) 
+                            if (StartMoving(temp, red1._index) == true) 
                             {
-                                red1._index = 0;
-                                temp = 0;
-                            };
+                                red1._index =0;
+                            }
+                            temp = 0;
                         }
-                        if (CheckLocation(temp + red1._index, red2._index, red3._index, red4._index, temp) == false && red1._index + temp <= 55&& temp!=0)
+                        if (CheckLocation(temp + red1._index, red2._index, red3._index, red4._index, temp) == false && red1._index + temp <= 55 && temp!=0)
                         {
                             red1._index = NormalMoving(temp, red1._index);
                             temp = 0;
@@ -219,13 +217,10 @@ namespace Client
                         {
                             red1._top = true;
                         }
-                        if (red1._index != -1)
+                        if (red1._index != -1&&temp==0)
                         {
                             a.Location = Red[red1._index];
                         }
-
-                        
-                        
                     }
                     if (red1._top == true)
                     {
@@ -239,24 +234,32 @@ namespace Client
                             }
                         }
                     }
-                }/*
+                }
                 if (a.Name == "Red1")
                 {
                     if (red2._top == false)
                     {
                         if (red2._index == -1)
                         {
-                            red2._index = StartMoving(temp, red2._index);
+                            if (StartMoving(temp, red2._index) == true)
+                            {
+                                red2._index = 0;
+                            }
+                            temp = 0;
                         }
-                        if (CheckLocation(temp + red2._index, red1._index, red3._index, red4._index, temp) == false && red2._index + temp <= 55)
+                        if (CheckLocation(temp + red2._index, red1._index, red3._index, red4._index, temp) == false && red2._index + temp <= 55 && temp != 0)
                         {
                             red2._index = NormalMoving(temp, red2._index);
+                            temp = 0;
                         }
                         if (red2._index == 55)
                         {
                             red2._top = true;
                         }
-                        a.Location = Red[red2._index];
+                        if (red2._index != -1 && temp == 0)
+                        {
+                            a.Location = Red[red2._index];
+                        }
                     }
                     if (red2._top == true)
                     {
@@ -277,17 +280,25 @@ namespace Client
                     {
                         if (red3._index == -1)
                         {
-                            red3._index = StartMoving(temp, red3._index);
+                            if (StartMoving(temp, red3._index) == true)
+                            {
+                                red3._index = 0;
+                            }
+                            temp = 0;
                         }
-                        if (CheckLocation(temp + red3._index, red1._index, red2._index, red4._index, temp) == false && red3._index + temp <= 55)
+                        if (CheckLocation(temp + red3._index, red1._index, red2._index, red4._index, temp) == false && red3._index + temp <= 55 && temp != 0)
                         {
                             red3._index = NormalMoving(temp, red3._index);
+                            temp = 0;
                         }
                         if (red3._index == 55)
                         {
                             red3._top = true;
                         }
-                        a.Location = Red[red3._index];
+                        if (red3._index != -1 && temp == 0)
+                        {
+                            a.Location = Red[red3._index];
+                        }
                     }
                     if (red3._top == true)
                     {
@@ -308,17 +319,25 @@ namespace Client
                     {
                         if (red4._index == -1)
                         {
-                            red4._index = StartMoving(temp, red4._index);
+                            if (StartMoving(temp, red4._index) == true)
+                            {
+                                red4._index = 0;
+                            }
+                            temp = 0;
                         }
-                        if (CheckLocation(temp + red4._index, red1._index, red2._index, red3._index, temp) == false && red4._index + temp <= 55)
+                        if (CheckLocation(temp + red4._index, red1._index, red2._index, red3._index, temp) == false && red4._index + temp <= 55 && temp != 0)
                         {
                             red4._index = NormalMoving(temp, red4._index);
+                            temp = 0;
                         }
                         if (red4._index == 55)
                         {
                             red4._top = true;
                         }
-                        a.Location = Red[red4._index];
+                        if (red4._index != -1 && temp == 0)
+                        {
+                            a.Location = Red[red4._index];
+                        }
                     }
                     if (red4._top == true)
                     {
@@ -332,13 +351,12 @@ namespace Client
                             }
                         }
                     }
-                }*/
-            
+                }
             }
            
           
         }
-        private int temp=0;
+        private int temp=-1;
         public struct Redsoldier
         {
            public int _index;
@@ -348,7 +366,7 @@ namespace Client
         private void btn_roll_Click(object sender, EventArgs e)
         {
            
-            if (temp == 0)
+            if (temp == -1)
             {
                 Random random = new Random();
                 temp = random.Next(1, 6);
