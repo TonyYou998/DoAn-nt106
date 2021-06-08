@@ -45,7 +45,8 @@ namespace Server
         {
             SQLiteCommand sqlite_cmd;
             string Createsql = "CREATE TABLE Users (ID INTEGER PRIMARY KEY AUTOINCREMENT, Name TEXT NOT NULL, RoomID int)";
-            string Createsql2 = "CREATE TABLE Room  (RoomID int, RoomName TEXT NOT NULL, StartTime TEXT NOT NULL)";
+            string Createsql2 = "CREATE TABLE Room  (RoomID int, RoomName TEXT NOT NULL)";
+            string Createsql3 = "CREATE TABLE QC()";
             sqlite_cmd = sqlite_conn.CreateCommand();
             sqlite_cmd.CommandText = Createsql;
             sqlite_cmd.ExecuteNonQuery();
@@ -84,12 +85,12 @@ namespace Server
             sqlite_cmd.ExecuteNonQuery();
         }
 
-        public void AddRoom(string RoomID ,string Title)
+        public void AddRoom(string RoomID ,string Title , string StartTime)
         {
             SQLiteCommand sqlite_cmd;
             sqlite_cmd = sqlite_conn.CreateCommand();
             sqlite_cmd.CommandText = "INSERT INTO Room " +
-                $"(RoomID, Title) VALUES('{RoomID}','{Title}'); ";
+                $"(RoomID, Title) VALUES('{RoomID}','{Title}','); ";
             sqlite_cmd.ExecuteNonQuery();
         }
 
