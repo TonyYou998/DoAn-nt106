@@ -42,7 +42,7 @@ namespace Server
             this.Username_LB,
             this.RoomID_LB});
             this.Box_listview.Font = new System.Drawing.Font("Microsoft Sans Serif", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Box_listview.ForeColor = System.Drawing.SystemColors.MenuBar;
+            this.Box_listview.ForeColor = System.Drawing.SystemColors.HotTrack;
             this.Box_listview.GridLines = true;
             this.Box_listview.HideSelection = false;
             this.Box_listview.Location = new System.Drawing.Point(25, 23);

@@ -24,6 +24,7 @@ namespace Server
             this.msgtype = "Room";
             this.msgcontent = null;
             this.msgRoom = Arr;
+
         }
     }
 }

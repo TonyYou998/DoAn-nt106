@@ -8,6 +8,7 @@ using System.Threading;
 using System.Text;
 using System.Globalization;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace Client
 {
@@ -78,9 +79,28 @@ namespace Client
                         }
                         
                     }
-                    this.Hide();
-                    Player_Choose choose = new Player_Choose(ClientSocket, p);
-                    choose.Show();
+
+                    byte[] bytes = new byte[256];
+
+                    ClientSocket.Receive(bytes);
+                  string acceptedUser = Encoding.UTF8.GetString(bytes);
+                    var Jsonmsg = JsonConvert.DeserializeObject<ManagePacket>(acceptedUser);
+                    
+                    //foreach(RoomModel listRoom in Jsonmsg.msgRoom)
+                    //{
+                      //  MessageBox.Show(listRoom.Members_num.ToString());
+                    //}
+                    if(Jsonmsg.msgcontent== "Success")
+                    {
+                        this.Hide();
+                        Player_Choose choose = new Player_Choose(ClientSocket, p);
+                        choose.Show();
+                    }
+                    else
+                    {
+                        MessageBox.Show("chưa kết nối được với server");
+                    }
+                  
                 }
             }
 

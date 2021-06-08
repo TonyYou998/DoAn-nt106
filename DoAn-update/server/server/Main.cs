@@ -99,16 +99,18 @@ namespace Server
                         {
                             if (sql.Adduser(data[1])) // Adduser thành công return true, nếu user đã tồn tại return false;
                             {
-                                MSG = new ManagePacket("User", "Success");
+                                 MSG = new ManagePacket("User", "Success");
                                 sendPacketToClient(current, MSG);
 
+                              //  MSG = new ManagePacket(sql.ReadRoomData());
+                                //sendPacketToClient(current, MSG);
                                 logs.BeginInvoke((Action)(() =>
                                 { logs.AppendText($"\r\nĐã kết nối với {data[1]}"); }));
                             }
                             else
                             {
                                 MSG =  new ManagePacket("User","Exist");
-                                sendPacketToClient(current, MSG);
+                               sendPacketToClient(current, MSG);
                             }
 
                         }
@@ -116,8 +118,11 @@ namespace Server
 
                     break;
                 case "Room":
-                   
+                    int roomID = 0;
                     string[] roomData = packet.msgcontent.Split(':');
+                    roomID++;
+                    
+                    sql.AddRoom(roomID.ToString(), roomData[1]);
                     MSG = new ManagePacket(sql.ReadRoomData());
                     sendPacketToClient(current,MSG);
 
