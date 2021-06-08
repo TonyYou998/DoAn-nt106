@@ -190,6 +190,15 @@ namespace Client
             if (a - b < t||a-c<t||a-d<t) return true;
             else return false;
         }
+        public int checkContiue (int temp)
+        {
+            if(temp==6||temp == 1)
+            {
+                return -1;
+            }
+            return 0;
+        }
+        private int k;
         public void Moving(object sender, EventArgs e)
         {
             //MessageBox.Show(sender.ToString());
@@ -206,12 +215,13 @@ namespace Client
                             {
                                 red1._index =0;
                             }
-                            temp = 0;
+                            k = 0;
+                            temp = -1;
                         }
-                        if (CheckLocation(temp + red1._index, red2._index, red3._index, red4._index, temp) == false && red1._index + temp <= 55 && temp!=0)
+                        if (CheckLocation(temp + red1._index, red2._index, red3._index, red4._index, temp) == false && red1._index + temp <= 55 && k!=0)
                         {
                             red1._index = NormalMoving(temp, red1._index);
-                            temp = 0;
+                            temp = checkContiue(temp);
                         }
                         if (red1._index == 55)
                         {
@@ -232,6 +242,7 @@ namespace Client
                                 NormalMoving(temp, red1._index);
                                 a.Location = RedTop[t];
                             }
+                            temp = checkContiue(temp);
                         }
                     }
                 }
@@ -245,12 +256,13 @@ namespace Client
                             {
                                 red2._index = 0;
                             }
-                            temp = 0;
+                            k = 0;
+                            temp = -1;
                         }
-                        if (CheckLocation(temp + red2._index, red1._index, red3._index, red4._index, temp) == false && red2._index + temp <= 55 && temp != 0)
+                        if (CheckLocation(temp + red2._index, red1._index, red3._index, red4._index, temp) == false && red2._index + temp <= 55 && k != 0)
                         {
                             red2._index = NormalMoving(temp, red2._index);
-                            temp = 0;
+                            temp = checkContiue(temp);
                         }
                         if (red2._index == 55)
                         {
@@ -271,6 +283,7 @@ namespace Client
                                 NormalMoving(temp, red2._index);
                                 a.Location = RedTop[t];
                             }
+                            temp = checkContiue(temp);
                         }
                     }
                 }
@@ -284,12 +297,13 @@ namespace Client
                             {
                                 red3._index = 0;
                             }
-                            temp = 0;
+                            temp = -1;
+                            k = 0;
                         }
-                        if (CheckLocation(temp + red3._index, red1._index, red2._index, red4._index, temp) == false && red3._index + temp <= 55 && temp != 0)
+                        if (CheckLocation(temp + red3._index, red1._index, red2._index, red4._index, temp) == false && red3._index + temp <= 55 && k != 0)
                         {
                             red3._index = NormalMoving(temp, red3._index);
-                            temp = 0;
+                            temp = checkContiue(temp);
                         }
                         if (red3._index == 55)
                         {
@@ -310,6 +324,7 @@ namespace Client
                                 NormalMoving(temp, red3._index);
                                 a.Location = RedTop[t];
                             }
+                            temp = checkContiue(temp);
                         }
                     }
                 }
@@ -323,12 +338,13 @@ namespace Client
                             {
                                 red4._index = 0;
                             }
-                            temp = 0;
+                            temp = -1;
+                            k = 0;
                         }
-                        if (CheckLocation(temp + red4._index, red1._index, red2._index, red3._index, temp) == false && red4._index + temp <= 55 && temp != 0)
+                        if (CheckLocation(temp + red4._index, red1._index, red2._index, red3._index, temp) == false && red4._index + temp <= 55 && k != 0)
                         {
                             red4._index = NormalMoving(temp, red4._index);
-                            temp = 0;
+                            temp = checkContiue(temp);
                         }
                         if (red4._index == 55)
                         {
@@ -349,6 +365,7 @@ namespace Client
                                 NormalMoving(temp, red4._index);
                                 a.Location = RedTop[t];
                             }
+                            temp = checkContiue(temp);
                         }
                     }
                 }
