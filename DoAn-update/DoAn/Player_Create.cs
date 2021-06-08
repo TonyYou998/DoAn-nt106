@@ -201,7 +201,6 @@ namespace Client
         private int k;
         public void Moving(object sender, EventArgs e)
         {
-            //MessageBox.Show(sender.ToString());
             PictureBox a = (PictureBox)sender;
             if (temp != -1)
             {
