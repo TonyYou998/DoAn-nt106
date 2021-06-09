@@ -81,6 +81,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Horse.cs" />
+    <Compile Include="HorseControl.cs" />
     <Compile Include="ManagePacket.cs" />
     <Compile Include="Room_control.cs">
       <SubType>Form</SubType>

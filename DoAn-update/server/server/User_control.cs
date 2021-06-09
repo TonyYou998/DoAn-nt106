@@ -36,5 +36,10 @@ namespace Server
         {
             //Box_listview.Items.Add(Users);
         }
+
+        private void Box_listview_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Client.Modal;
+using System.Collections.Generic;
 
 namespace Client
 {
@@ -6,13 +7,21 @@ namespace Client
     {
         public string msgtype { get; set; }// user room action 
         public string msgcontent { get; set; }
+        public string msgPlayer { get; set; }
         public List<RoomModel> msgRoom { get; set; }
+        public List<Horse> msgHorse { get; set; }
 
         public ManagePacket()
         {
             msgcontent = "";
             msgtype = "";
             msgRoom = null;
+        }
+        public ManagePacket(string type,string msgRoom,List<Horse> listHorse)
+        {
+            this.msgtype = type;
+            this.msgHorse = listHorse;
+            this.msgcontent = msgRoom;
         }
         public ManagePacket(string type, string msg)
         {

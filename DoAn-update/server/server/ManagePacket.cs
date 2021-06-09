@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Cờ_cá_ngựa;
+using System.Collections.Generic;
 
 namespace Server
 {
@@ -7,6 +8,7 @@ namespace Server
         public string msgtype { get; set; }// user room action 
         public string msgcontent { get; set; }
         public List<RoomModel> msgRoom { get; set; }
+        public List<Horse> msgHorse { get; set; }
 
         public ManagePacket() {
             msgcontent = "";

@@ -64,6 +64,21 @@ namespace Client
         private void btn_Create_Room_Click(object sender, EventArgs e)
         {
             Room r = new Room();
+           Point p1 = new Point(150,80);
+            Point p2 = new Point(240, 85);
+            Point p3 = new Point(150, 170);
+            Point p4 = new Point(240, 170);
+            Horse h1 = new Horse(p1, "Red", 1);
+            Horse h2 = new Horse(p2, "Red", 2);
+            Horse h3 = new Horse(p3, "Red", 3);
+            Horse h4 = new Horse(p4, "Red", 4);
+            List<Horse> listHorse=new List<Horse>();
+            listHorse.Add(h1);
+            listHorse.Add(h2);
+            listHorse.Add(h3);
+            listHorse.Add(h4);
+           
+
 
             if (r.setRoomName(RoomName))
             {
@@ -74,7 +89,7 @@ namespace Client
                     try
                     {
                      
-                        _connect.Sendmsg(ClientSocket,"Room", $"room name:{r.getRoomName()}");
+                        _connect.Sendmsg(ClientSocket,"Room", $"room name:{r.getRoomName()}:user name:{p.getUserName()}",listHorse);
                         
                     }
                     catch (SocketException)

@@ -52,6 +52,7 @@ namespace Server
             this.Box_listview.TabIndex = 0;
             this.Box_listview.UseCompatibleStateImageBehavior = false;
             this.Box_listview.View = System.Windows.Forms.View.Details;
+            this.Box_listview.SelectedIndexChanged += new System.EventHandler(this.Box_listview_SelectedIndexChanged);
             // 
             // ID_LB
             // 

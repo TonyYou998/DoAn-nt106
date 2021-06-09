@@ -1,6 +1,8 @@
-﻿using Newtonsoft.Json;
+﻿using Cờ_cá_ngựa;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -18,6 +20,7 @@ namespace Server
         private int serverPort = 8000;
         Sqlite_control sql = new Sqlite_control();
         int roomID = 0;
+        HorseControl HC = new HorseControl();
         public Server()
         {
             InitializeComponent();
@@ -123,8 +126,12 @@ namespace Server
                     string[] roomData = packet.msgcontent.Split(':');
                     roomID++;
                     
-                    sql.AddRoom(roomID.ToString(), roomData[1]);
-                  
+                    
+                   sql.AddRoom(roomID.ToString(), roomData[1]);
+                    HC.listRedHorse = packet.msgHorse;
+                    
+                   
+
 
                     break;
 
@@ -222,5 +229,21 @@ namespace Server
         {
 
         }
+       /* private void createListHorse(List<Horse> listHorse)
+        {
+            Point p1 = new Point(150,85); ;
+            Point p2 = new Point(240, 85);
+            Point p3 = new Point(150, 170);
+            Point p4 = new Point(240, 170);
+            Horse h1 = new Horse(p1, "red", 1);
+            Horse h2 = new Horse(p2, "red", 2);
+            Horse h3 = new Horse(p3, "red", 3);
+            Horse h4 = new Horse(p4, "red", 4);
+            listHorse.Add(h1);
+            listHorse.Add(h2);
+            listHorse.Add(h3);
+            listHorse.Add(h4);
+
+        }*/
     }
 }
