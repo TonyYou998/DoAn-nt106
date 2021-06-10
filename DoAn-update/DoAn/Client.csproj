@@ -16,21 +16,12 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Update="Room_control.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Update="Room_control.Designer.cs">
-      <DependentUpon>Room_control.cs</DependentUpon>
-    </Compile>
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Update="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Room_control.resx">
-      <DependentUpon>Room_control.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
 
