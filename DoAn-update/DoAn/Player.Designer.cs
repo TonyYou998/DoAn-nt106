@@ -65,7 +65,7 @@ namespace Client
             // btn_Start
             // 
             this.btn_Start.BackColor = System.Drawing.Color.Transparent;
-            this.btn_Start.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btn_Start.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.btn_Start.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btn_Start.InitialImage = null;
             this.btn_Start.Location = new System.Drawing.Point(550, 470);
@@ -79,7 +79,7 @@ namespace Client
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(1270, 712);
             this.Controls.Add(this.btn_Exit);
             this.Controls.Add(this.btn_Contact);

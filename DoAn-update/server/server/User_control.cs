@@ -1,28 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Server
 {
     public partial class User_control : Form
     {
-        Sqlite_control Database_control = new Sqlite_control();
-
-        public User_control()
+        public User_control(List<UserModel> L)
         {
             InitializeComponent();
-            SetDataToListView();
+            SetDataToListView(L);
         }
-        private void SetDataToListView()
+        private void SetDataToListView(List<UserModel> L)
         {
             Box_listview.Items.Clear();
-            List<UserModel> L = Database_control.ReadUserData();
             int i = 0;
             while(i < L.Count)
             {
@@ -32,11 +23,6 @@ namespace Server
                 i++;
             }
         }
-        private void WireUp()
-        {
-            //Box_listview.Items.Add(Users);
-        }
-
         private void Box_listview_SelectedIndexChanged(object sender, EventArgs e)
         {
 

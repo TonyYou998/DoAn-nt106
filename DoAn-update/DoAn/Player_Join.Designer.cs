@@ -41,7 +41,7 @@ namespace Client
             // Roll_number
             // 
             this.Roll_number.BackColor = System.Drawing.Color.Transparent;
-            this.Roll_number.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.Roll_number.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.Roll_number.Location = new System.Drawing.Point(913, 47);
             this.Roll_number.Name = "Roll_number";
             this.Roll_number.Size = new System.Drawing.Size(297, 287);
@@ -51,7 +51,7 @@ namespace Client
             // btn_exit
             // 
             this.btn_exit.BackColor = System.Drawing.Color.Transparent;
-            this.btn_exit.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btn_exit.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.btn_exit.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btn_exit.Location = new System.Drawing.Point(983, 469);
             this.btn_exit.Name = "btn_exit";
@@ -62,7 +62,7 @@ namespace Client
             // btn_Roll
             // 
             this.btn_Roll.BackColor = System.Drawing.Color.Transparent;
-            this.btn_Roll.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btn_Roll.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.btn_Roll.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btn_Roll.Location = new System.Drawing.Point(983, 378);
             this.btn_Roll.Name = "btn_Roll";
@@ -87,7 +87,7 @@ namespace Client
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImage = global::Client.Properties.Resources.BANCO__1_3;
-            this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(1270, 712);
             this.Controls.Add(this.btn_test);
             this.Controls.Add(this.Roll_number);

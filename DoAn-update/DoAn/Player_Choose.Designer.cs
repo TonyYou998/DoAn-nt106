@@ -43,7 +43,7 @@ namespace Client
             // 
             this.btn_Join_Room.BackColor = System.Drawing.Color.Transparent;
             this.btn_Join_Room.BackgroundImage = global::Client.Properties.Resources.JOIN;
-            this.btn_Join_Room.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btn_Join_Room.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.btn_Join_Room.Location = new System.Drawing.Point(783, 580);
             this.btn_Join_Room.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btn_Join_Room.Name = "btn_Join_Room";
@@ -56,7 +56,7 @@ namespace Client
             // 
             this.btn_Create_Room.BackColor = System.Drawing.Color.Transparent;
             this.btn_Create_Room.BackgroundImage = global::Client.Properties.Resources.CREATE;
-            this.btn_Create_Room.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btn_Create_Room.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.btn_Create_Room.ErrorImage = null;
             this.btn_Create_Room.Location = new System.Drawing.Point(491, 580);
             this.btn_Create_Room.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
@@ -119,7 +119,7 @@ namespace Client
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImage = global::Client.Properties.Resources.Client__1_;
-            this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(1451, 949);
             this.Controls.Add(this.btn_Join_Room);
             this.Controls.Add(this.btn_Create_Room);

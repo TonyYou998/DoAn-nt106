@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -18,12 +19,18 @@ namespace Server
        
         private IPAddress serverIP = IPAddress.Parse("127.0.0.1");
         private int serverPort = 8000;
-        Sqlite_control sql = new Sqlite_control();
+
+        Sqlite_control sql;
         int roomID = 0;
         HorseControl HC = new HorseControl();
         public Server()
         {
             InitializeComponent();
+            if (File.Exists("Database.db"))
+            {
+                File.Delete("Database.db");
+            }
+            sql = new Sqlite_control();
         }
         
         private void start()
@@ -101,12 +108,13 @@ namespace Server
                     {
                         if(data[0] == "connect")
                         {
-                            if (sql.Adduser(data[1])) // Adduser thành công return true, nếu user đã tồn tại return false;
+                            if (!sql.checkUserExist(data[1]) || !sql.IsUserOnline(data[1])) 
                             {
-                                 MSG = new ManagePacket("User", "Success");
+                                MSG = new ManagePacket("User", "Success");
                                 sendPacketToClient(current, MSG);
+                                sql.Adduser(data[1]);
+                                sql.SetUserOnline(data[1], 1);
 
-                              
                                 //sendPacketToClient(current, MSG);
                                 logs.BeginInvoke((Action)(() =>
                                 { logs.AppendText($"\r\nĐã kết nối với {data[1]}"); }));
@@ -117,6 +125,10 @@ namespace Server
                                sendPacketToClient(current, MSG);
                             }
 
+                        }
+                        else if(data[0] == "disconnect")
+                        {
+                            sql.SetUserOnline(data[1], 0);
                         }
                     }
 
@@ -215,13 +227,13 @@ namespace Server
 
         private void listroombtn_Click(object sender, EventArgs e)
         {
-            Room_control gui = new Room_control();
+            Room_control gui = new Room_control(sql.ReadRoomData());
             gui.Show();
         }
 
         private void listuserbtn_Click(object sender, EventArgs e)
         {
-            User_control gui = new User_control();
+            User_control gui = new User_control(sql.ReadUserData());
             gui.Show();
         }
 

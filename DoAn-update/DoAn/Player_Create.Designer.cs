@@ -43,7 +43,7 @@ namespace Client
             // 
             this.Roll_number.BackColor = System.Drawing.Color.Transparent;
             this.Roll_number.BackgroundImage = global::Client.Properties.Resources._1;
-            this.Roll_number.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.Roll_number.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.Roll_number.Location = new System.Drawing.Point(910, 50);
             this.Roll_number.Name = "Roll_number";
             this.Roll_number.Size = new System.Drawing.Size(300, 300);
@@ -54,7 +54,7 @@ namespace Client
             // 
             this.btn_exit.BackColor = System.Drawing.Color.Transparent;
             this.btn_exit.BackgroundImage = global::Client.Properties.Resources.exit;
-            this.btn_exit.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btn_exit.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.btn_exit.Location = new System.Drawing.Point(983, 577);
             this.btn_exit.Name = "btn_exit";
             this.btn_exit.Size = new System.Drawing.Size(174, 70);
@@ -65,7 +65,7 @@ namespace Client
             // 
             this.btn_Roll.BackColor = System.Drawing.Color.Transparent;
             this.btn_Roll.BackgroundImage = global::Client.Properties.Resources.roll;
-            this.btn_Roll.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btn_Roll.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.btn_Roll.Location = new System.Drawing.Point(980, 380);
             this.btn_Roll.Name = "btn_Roll";
             this.btn_Roll.Size = new System.Drawing.Size(174, 70);
@@ -77,7 +77,7 @@ namespace Client
             // 
             this.btn_Start.BackColor = System.Drawing.Color.Transparent;
             this.btn_Start.BackgroundImage = global::Client.Properties.Resources.START_2;
-            this.btn_Start.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btn_Start.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.btn_Start.Location = new System.Drawing.Point(983, 473);
             this.btn_Start.Name = "btn_Start";
             this.btn_Start.Size = new System.Drawing.Size(174, 70);
@@ -89,7 +89,7 @@ namespace Client
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImage = global::Client.Properties.Resources.BANCO__1_2;
-            this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(1270, 712);
             this.Controls.Add(this.Roll_number);
             this.Controls.Add(this.btn_exit);

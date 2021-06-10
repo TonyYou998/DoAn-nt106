@@ -12,16 +12,14 @@ namespace Server
 {
     public partial class Room_control : Form
     {
-        Sqlite_control Database_control = new Sqlite_control();
-        public Room_control()
+        public Room_control(List<RoomModel> L)
         {
             InitializeComponent();
-            SetDataToListView();
+            SetDataToListView(L);
         }
-        private void SetDataToListView()
+        private void SetDataToListView(List<RoomModel> L)
         {
             Box_listview.Items.Clear();
-            List<RoomModel> L = Database_control.ReadRoomData();
             int i = 0;
             while (i < L.Count)
             {

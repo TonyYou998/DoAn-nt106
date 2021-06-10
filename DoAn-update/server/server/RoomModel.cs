@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Server
+﻿namespace Server
 {
-    class RoomModel
+    public class RoomModel
     {
         public string RoomName { get; set; }
         public int RoomID { get; set; }

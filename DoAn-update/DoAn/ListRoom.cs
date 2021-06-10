@@ -1,19 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace Client
 {
     public partial class ListRoom : Form
     {
-
-
+        public int ID_select = 0;
         public void drawListRoom(List<RoomModel> L)
         {
             int i = 0;
@@ -25,16 +17,18 @@ namespace Client
                 i++;
             }
         }
-        public ListRoom(List<RoomModel> ListRoom)
+        public ListRoom( List<RoomModel> ListRoom)
         {
             InitializeComponent();
             drawListRoom(ListRoom);
 
         }
 
-        private void listView1_SelectedIndexChanged(object sender, EventArgs e)
+        private void Double_click(object sender, MouseEventArgs e)
         {
-
+            var id = listView1.SelectedItems[0].Text;
+            ID_select = int.Parse(id);
+            this.Dispose();
         }
     }
 }

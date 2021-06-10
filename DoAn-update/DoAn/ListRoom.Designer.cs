@@ -30,18 +30,44 @@ namespace Client
         private void InitializeComponent()
         {
             this.listView1 = new System.Windows.Forms.ListView();
+            this.RoomID = new System.Windows.Forms.ColumnHeader();
+            this.Title = new System.Windows.Forms.ColumnHeader();
+            this.columnHeader1 = new System.Windows.Forms.ColumnHeader();
             this.SuspendLayout();
             // 
             // listView1
             // 
+            this.listView1.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.RoomID,
+            this.Title,
+            this.columnHeader1});
+            this.listView1.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.listView1.HideSelection = false;
             this.listView1.Location = new System.Drawing.Point(12, 12);
             this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(758, 404);
+            this.listView1.Size = new System.Drawing.Size(776, 426);
             this.listView1.TabIndex = 0;
             this.listView1.UseCompatibleStateImageBehavior = false;
-            this.listView1.View = System.Windows.Forms.View.List;
-            this.listView1.SelectedIndexChanged += new System.EventHandler(this.listView1_SelectedIndexChanged);
+            this.listView1.View = System.Windows.Forms.View.Details;
+            this.listView1.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.Double_click);
+            // 
+            // RoomID
+            // 
+            this.RoomID.Name = "RoomID";
+            this.RoomID.Text = "ID";
+            // 
+            // Title
+            // 
+            this.Title.Name = "Title";
+            this.Title.Text = "Tên Phòng";
+            this.Title.Width = 120;
+            // 
+            // columnHeader1
+            // 
+            this.columnHeader1.Name = "columnHeader1";
+            this.columnHeader1.Text = "Số người trong phòng";
+            this.columnHeader1.Width = 200;
             // 
             // ListRoom
             // 
@@ -58,5 +84,9 @@ namespace Client
         #endregion
 
         private System.Windows.Forms.ListView listView1;
+        private System.Windows.Forms.ColumnHeader RoomID;
+        private System.Windows.Forms.ColumnHeader Title;
+        private System.Windows.Forms.ColumnHeader num;
+        private System.Windows.Forms.ColumnHeader columnHeader1;
     }
 }

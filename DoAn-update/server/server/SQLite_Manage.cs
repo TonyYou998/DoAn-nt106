@@ -13,17 +13,7 @@ namespace Server
         public Sqlite_control()
         {
             sqlite_conn = CreateConnection();
-            try // check exist database
-            {
-                var cmd = sqlite_conn.CreateCommand();
-                cmd.CommandText = "SELECT * FROM Users";
-                cmd.ExecuteNonQuery();
-            }
-            catch(Exception)
-            {
-                CreateTable();
-                InsertData();
-            }            
+            CreateTable();
         }
         List<UserModel> Users = new List<UserModel>();
         List<RoomModel> Rooms = new List<RoomModel>();
@@ -44,7 +34,7 @@ namespace Server
         private void CreateTable()
         {
             SQLiteCommand sqlite_cmd;
-            string Createsql = "CREATE TABLE Users (ID INTEGER PRIMARY KEY AUTOINCREMENT, Name TEXT NOT NULL, RoomID int)";
+            string Createsql = "CREATE TABLE Users (ID INTEGER PRIMARY KEY AUTOINCREMENT, Name TEXT NOT NULL, RoomID int, Online int)";
             string Createsql2 = "CREATE TABLE Room  (RoomID int, RoomName TEXT NOT NULL)";
             string Createsql3 = "CREATE TABLE QC()";
             sqlite_cmd = sqlite_conn.CreateCommand();
@@ -57,23 +47,55 @@ namespace Server
         private void InsertData()
         {
         }
-        public bool Adduser(string username)
+        
+        public void SetUserOnline(string username, int mode=0) // mode = 0 : offline, = 1 : online
         {
+            SQLiteCommand sqlite_cmd;
+            sqlite_cmd = sqlite_conn.CreateCommand();
+            sqlite_cmd.CommandText = $"UPDATE Users SET Online = {mode.ToString()} where Name = '{username}'";
+            sqlite_cmd.ExecuteNonQuery();        
+        }
 
-            ReadUserData();
-            foreach(var u in Users)
+        public bool IsUserOnline(string username)
+        {
+            SQLiteCommand sqlite_cmd;
+            sqlite_cmd = sqlite_conn.CreateCommand();
+            sqlite_cmd.CommandText = $"SELECT Online from Users where Name = '{username}'";
+
+            using (var reader = sqlite_cmd.ExecuteReader())
             {
-                if(u.Name == username)
+                if (reader.Read())
                 {
-                    return false;
+                    int status = int.Parse(reader[0].ToString());
+                    if (status == 1)
+                        return true;
+                    else
+                        return false;
                 }
             }
+            return false;
+        }
+
+
+        public bool checkUserExist(string username)
+        {
+            ReadUserData();
+            foreach (var u in Users)
+            {
+                if (u.Name == username)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+        public void Adduser(string username)
+        {
             SQLiteCommand sqlite_cmd;
             sqlite_cmd = sqlite_conn.CreateCommand();
             sqlite_cmd.CommandText = "INSERT INTO Users " +
                 $"(Name) VALUES('{username}'); ";
             sqlite_cmd.ExecuteNonQuery();
-            return true;
         }
 
         public void Adduser(string username, string roomID)
@@ -149,41 +171,6 @@ namespace Server
             }
 
             return Rooms;
-        }
-
-        private int checkUserExist(string username, string roomname)
-        {
-            SQLiteCommand sql1, sql2;
-            sql1 = sqlite_conn.CreateCommand();
-            sql2 = sqlite_conn.CreateCommand();
-
-            sql1.CommandText = $"SELECT RoomName from Room where RoomName = {roomname}";
-            sql2.CommandText = $"SELECT u.Name" +
-                  $"From Users u, Room r" +
-                  $"where u.RoomID = r.RoomID" +
-                  $"and u.Name = {username}";
-
-            using (var reader = sql1.ExecuteReader())
-            {
-                if (reader.Read())
-                {
-                    if (reader[0].ToString() == "-1")
-                    {
-                        return -1; // Phòng không tồn tại
-                    }
-                }
-                else
-                {
-                    using (var reader2 = sql2.ExecuteReader())
-
-                        if (reader2[0].ToString() != null)
-                        {
-                            return 0;
-                        }
-                }
-            }
-
-            return 1;
         }
     }
 }

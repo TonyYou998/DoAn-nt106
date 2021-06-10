@@ -40,7 +40,7 @@ namespace Client
             // btn_Connect
             // 
             this.btn_Connect.BackColor = System.Drawing.Color.Transparent;
-            this.btn_Connect.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btn_Connect.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.btn_Connect.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btn_Connect.Location = new System.Drawing.Point(650, 675);
             this.btn_Connect.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
@@ -102,7 +102,7 @@ namespace Client
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(1451, 949);
             this.Controls.Add(this.btn_Connect);
             this.Controls.Add(this.lbIP);
