@@ -18,6 +18,12 @@ namespace Client
         public NguoiChoi p = new NguoiChoi();
         private Connection _connect = new Connection();
         private Thread clientThread;
+        private int toggleForm=0;
+
+        public void setToggle()
+        {
+            this.toggleForm = 1;
+        }
         public Info_Player()
         {
             InitializeComponent();
@@ -46,7 +52,7 @@ namespace Client
 
             this.Disposed += delegate
             {
-                if(ClientSocket.Connected)
+                if (ClientSocket.Connected)
                     _connect.Sendmsg(ClientSocket, "User", $"disconnect:{p.userName}");
             };
         }
@@ -71,11 +77,13 @@ namespace Client
                         try
                         {
                             ClientSocket.Connect(p.serverIP, p.port);
-                            _connect.Sendmsg(ClientSocket,"User", $"connect:{p.userName}");
+                            _connect.Sendmsg(ClientSocket, "User", $"connect:{p.userName}");
                             Thread A = new Thread(ReceiveResponse);
                             A.Start();
 
                             loop = false;
+                            break;
+
                         }
                         catch (SocketException)
                         {
@@ -85,16 +93,34 @@ namespace Client
                     }
                 }
             }
+            byte[] bytes = new byte[2048];
 
-           
+            ClientSocket.Receive(bytes);
+            string acceptedUser = Encoding.UTF8.GetString(bytes);
+            var msg = JsonConvert.DeserializeObject<ManagePacket>(acceptedUser);
+            if (msg.msgtype == "User" && msg.msgcontent == "Success")
+            {
+                // Player_Choose choose = new Player_Choose(ClientSocket, p);
+                //choose.Show();
+                Player_Choose PY = new Player_Choose(ClientSocket,p);
+                PY.Show();
+                Hide();
+            }
+
+
+
+
+
+
 
         }
 
         public void ReceiveResponse()
         {
+            bool loop = false;
             try
             {
-                while (!ClientSocket.Connected)
+                while (!loop)
                 {
                     var buffer = new byte[2048];
                     int received = ClientSocket.Receive(buffer, SocketFlags.None);
@@ -111,9 +137,10 @@ namespace Client
                     }
                     else if (msg.msgtype == "User" && msg.msgcontent == "Success")
                     {
-                        Player_Choose choose = new Player_Choose(ClientSocket, p);
-                        choose.Show();
-                        return;
+                        // Player_Choose choose = new Player_Choose(ClientSocket, p);
+                        //choose.Show();
+                        setToggle();
+                        loop = true;
                     }
 
                 }

@@ -30,5 +30,10 @@ namespace Client
             ID_select = int.Parse(id);
             this.Dispose();
         }
+
+        private void listView1_SelectedIndexChanged(object sender, System.EventArgs e)
+        {
+
+        }
     }
 }

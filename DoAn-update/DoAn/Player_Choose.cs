@@ -15,7 +15,7 @@ namespace Client
 
         private NguoiChoi p;
 
-        private Socket ClientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+        private Socket ClientSocket;
         private Thread clientThread;
         private Connection _connect = new Connection();
         public Player_Choose(Socket ClientSocket , NguoiChoi nguoiChoi)
