@@ -129,6 +129,8 @@ namespace Server
                         else if(data[0] == "disconnect")
                         {
                             sql.SetUserOnline(data[1], 0);
+                            logs.BeginInvoke((Action)(() =>
+                            { logs.AppendText($"\r\nĐã ngắt kết nối với {data[1]}"); }));
                         }
                     }
 

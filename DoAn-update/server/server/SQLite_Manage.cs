@@ -129,7 +129,6 @@ namespace Server
                     var User = new UserModel();
                     User.ID = int.Parse(reader["ID"].ToString());
                     User.Name = reader["Name"].ToString();
-                   // User.RoomID = int.Parse(reader["RoomID"].ToString());
                     Users.Add(User);
                 }
             }
