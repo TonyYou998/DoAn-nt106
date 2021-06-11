@@ -30,17 +30,17 @@ namespace Server
         private void InitializeComponent()
         {
             this.Box_listview = new System.Windows.Forms.ListView();
-            this.ID_LB = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.Username_LB = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.RoomID_LB = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.user = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.RoomID = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.Online = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.SuspendLayout();
             // 
             // Box_listview
             // 
             this.Box_listview.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.ID_LB,
-            this.Username_LB,
-            this.RoomID_LB});
+            this.user,
+            this.RoomID,
+            this.Online});
             this.Box_listview.Font = new System.Drawing.Font("Microsoft Sans Serif", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Box_listview.ForeColor = System.Drawing.SystemColors.HotTrack;
             this.Box_listview.GridLines = true;
@@ -54,20 +54,20 @@ namespace Server
             this.Box_listview.View = System.Windows.Forms.View.Details;
             this.Box_listview.SelectedIndexChanged += new System.EventHandler(this.Box_listview_SelectedIndexChanged);
             // 
-            // ID_LB
+            // user
             // 
-            this.ID_LB.Text = "ID";
-            this.ID_LB.Width = 150;
+            this.user.Text = "Username";
+            this.user.Width = 150;
             // 
-            // Username_LB
+            // RoomID
             // 
-            this.Username_LB.Text = "Username";
-            this.Username_LB.Width = 165;
+            this.RoomID.Text = "RoomID";
+            this.RoomID.Width = 165;
             // 
-            // RoomID_LB
+            // Online
             // 
-            this.RoomID_LB.Text = "RoomID";
-            this.RoomID_LB.Width = 186;
+            this.Online.Text = "Online";
+            this.Online.Width = 186;
             // 
             // User_control
             // 
@@ -85,8 +85,8 @@ namespace Server
         #endregion
 
         private System.Windows.Forms.ListView Box_listview;
-        private System.Windows.Forms.ColumnHeader ID_LB;
-        private System.Windows.Forms.ColumnHeader Username_LB;
-        private System.Windows.Forms.ColumnHeader RoomID_LB;
+        private System.Windows.Forms.ColumnHeader user;
+        private System.Windows.Forms.ColumnHeader RoomID;
+        private System.Windows.Forms.ColumnHeader Online;
     }
 }

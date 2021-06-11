@@ -34,13 +34,18 @@ namespace Server
         private void CreateTable()
         {
             SQLiteCommand sqlite_cmd;
-            string Createsql = "CREATE TABLE Users (ID INTEGER PRIMARY KEY AUTOINCREMENT, Name TEXT NOT NULL, RoomID int, Online int)";
-            string Createsql2 = "CREATE TABLE Room  (RoomID int, RoomName TEXT NOT NULL)";
-            string Createsql3 = "CREATE TABLE QC()";
+            string Createsql = "CREATE TABLE Users  (Username TEXT NOT NULL PRIMARY KEY, RoomID int, Online int)";
+            string Createsql2 = "CREATE TABLE Room  (RoomID INTEGER PRIMARY KEY AUTOINCREMENT, Roomname TEXT NOT NULL)";
+            string Createsql3 = "CREATE TABLE Horse (" +
+                "Username TEXT, RoomID int, color TEXT, x int, y int," +
+                "FOREIGN KEY (Username) REFERENCES Users(Username)" +
+                ")";
             sqlite_cmd = sqlite_conn.CreateCommand();
             sqlite_cmd.CommandText = Createsql;
             sqlite_cmd.ExecuteNonQuery();
             sqlite_cmd.CommandText = Createsql2;
+            sqlite_cmd.ExecuteNonQuery();
+            sqlite_cmd.CommandText = Createsql3;
             sqlite_cmd.ExecuteNonQuery();
         }
 
@@ -52,7 +57,7 @@ namespace Server
         {
             SQLiteCommand sqlite_cmd;
             sqlite_cmd = sqlite_conn.CreateCommand();
-            sqlite_cmd.CommandText = $"UPDATE Users SET Online = {mode.ToString()} where Name = '{username}'";
+            sqlite_cmd.CommandText = $"UPDATE Users SET Online = {mode.ToString()} where Username = '{username}'";
             sqlite_cmd.ExecuteNonQuery();        
         }
 
@@ -60,7 +65,7 @@ namespace Server
         {
             SQLiteCommand sqlite_cmd;
             sqlite_cmd = sqlite_conn.CreateCommand();
-            sqlite_cmd.CommandText = $"SELECT Online from Users where Name = '{username}'";
+            sqlite_cmd.CommandText = $"SELECT Online from Users where Username = '{username}'";
 
             using (var reader = sqlite_cmd.ExecuteReader())
             {
@@ -94,7 +99,7 @@ namespace Server
             SQLiteCommand sqlite_cmd;
             sqlite_cmd = sqlite_conn.CreateCommand();
             sqlite_cmd.CommandText = "INSERT INTO Users " +
-                $"(Name) VALUES('{username}'); ";
+                $"(Username) VALUES('{username}'); ";
             sqlite_cmd.ExecuteNonQuery();
         }
 
@@ -103,7 +108,7 @@ namespace Server
             SQLiteCommand sqlite_cmd;
             sqlite_cmd = sqlite_conn.CreateCommand();
             sqlite_cmd.CommandText = "INSERT INTO Users " +
-                $"(Name, RoomID) VALUES('{username}','{roomID}'); ";
+                $"(Username, RoomID) VALUES('{username}','{roomID}'); ";
             sqlite_cmd.ExecuteNonQuery();
         }
 
@@ -112,7 +117,7 @@ namespace Server
             SQLiteCommand sqlite_cmd;
             sqlite_cmd = sqlite_conn.CreateCommand();
             sqlite_cmd.CommandText = "INSERT INTO Room " +
-                $"(RoomID, RoomName) VALUES('{RoomID}','{Title}'); ";
+                $"(RoomID, Roomname) VALUES('{RoomID}','{Title}'); ";
             sqlite_cmd.ExecuteNonQuery();
         }
 
@@ -126,9 +131,14 @@ namespace Server
             {
                 while (reader.Read())
                 {
+                    bool res; int id;
+
                     var User = new UserModel();
-                    User.ID = int.Parse(reader["ID"].ToString());
-                    User.Name = reader["Name"].ToString();
+                    res = int.TryParse(reader["RoomID"].ToString(), out id);
+                    User.RoomID = res ? id : 0;
+
+                    User.Name = reader["Username"].ToString();
+                    User.Online = int.Parse(reader["Online"].ToString());
                     Users.Add(User);
                 }
             }
@@ -153,9 +163,9 @@ namespace Server
                 {
                     var room = new RoomModel();
                     room.RoomID = int.Parse(reader["RoomID"].ToString());
-                    room.RoomName = reader["RoomName"].ToString();
+                    room.RoomName = reader["Roomname"].ToString();
 
-                    sql2.CommandText = $"SELECT COUNT(Name) from Users where RoomID = {room.RoomID }";
+                    sql2.CommandText = $"SELECT COUNT(Username) from Users where RoomID = {room.RoomID }";
 
                     using (var read2 = sql2.ExecuteReader())
                     {

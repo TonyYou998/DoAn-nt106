@@ -17,7 +17,7 @@ namespace Server
             int i = 0;
             while(i < L.Count)
             {
-                string [] row = { L[i].ID.ToString(), L[i].Name, L[i].RoomID.ToString() };
+                string [] row = { L[i].Name, L[i].RoomID.ToString(), L[i].Online.ToString() };
                 var lvi = new ListViewItem(row);
                 Box_listview.Items.Add(lvi);
                 i++;
