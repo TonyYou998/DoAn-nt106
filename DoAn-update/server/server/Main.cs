@@ -1,4 +1,4 @@
-﻿using Cờ_cá_ngựa;
+﻿using Server;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -135,7 +135,7 @@ namespace Server
                     }
 
                     break;
-                case "Room":
+                case "CreateRoom":
                  
                     string[] roomData = packet.msgcontent.Split(':');
                     roomID++;
@@ -148,6 +148,7 @@ namespace Server
 
 
                     break;
+
 
                 case "JoinRoom":
                      MSG = new ManagePacket(sql.ReadRoomData());

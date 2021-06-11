@@ -15,7 +15,7 @@ namespace Client
 
         private NguoiChoi p;
 
-        private Socket ClientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+        private Socket ClientSocket;
         private Thread clientThread;
         private Connection _connect = new Connection();
         public Player_Choose(Socket ClientSocket , NguoiChoi nguoiChoi)
@@ -89,8 +89,7 @@ namespace Client
                 {   
                     try
                     {
-                     
-                        _connect.Sendmsg(ClientSocket,"Room", $"room name:{r.getRoomName()}:user name:{p.getUserName()}",listHorse);
+                        _connect.Sendmsg(ClientSocket,"CreateRoom", $"room name:{r.getRoomName()}:user name:{p.getUserName()}",listHorse);
                         
                     }
                     catch (SocketException)

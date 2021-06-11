@@ -18,6 +18,12 @@ namespace Client
         public NguoiChoi p = new NguoiChoi();
         private Connection _connect = new Connection();
         private Thread clientThread;
+        private int toggleForm=0;
+
+        public void setToggle()
+        {
+            this.toggleForm = 1;
+        }
         public Info_Player()
         {
             InitializeComponent();
@@ -46,7 +52,7 @@ namespace Client
 
             this.Disposed += delegate
             {
-                if(ClientSocket.Connected)
+                if (ClientSocket.Connected)
                     _connect.Sendmsg(ClientSocket, "User", $"disconnect:{p.userName}");
             };
         }
@@ -59,85 +65,63 @@ namespace Client
         private void btn_Connect_Click(object sender, EventArgs e)
         {
 
-            bool loop = true;
-            while (loop)
+
+            if (p.nhapThongTin(UserName, IpServer))
             {
-                if (p.nhapThongTin(UserName, IpServer))
-                {
 
-                    ClientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                    while (!ClientSocket.Connected)
-                    {
-                        try
-                        {
-                            ClientSocket.Connect(p.serverIP, p.port);
-                            _connect.Sendmsg(ClientSocket,"User", $"connect:{p.userName}");
-                            Thread A = new Thread(ReceiveResponse);
-                            A.Start();
-
-                            loop = false;
-                        }
-                        catch (SocketException)
-                        {
-                            MessageBox.Show("Lỗi : Không thể connect tới server !");
-                            return;
-                        }
-                    }
-                }
-            }
-
-           
-
-        }
-
-        public void ReceiveResponse()
-        {
-            try
-            {
+                ClientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
                 while (!ClientSocket.Connected)
                 {
-                    var buffer = new byte[2048];
-                    int received = ClientSocket.Receive(buffer, SocketFlags.None);
-                    if (received == 0) return;
-                    var data = new byte[received];
-                    Array.Copy(buffer, data, received);
-                    string text = Encoding.UTF8.GetString(data);
-                    var msg = JsonConvert.DeserializeObject<ManagePacket>(text);
-
-                    if (msg.msgtype == "User" && msg.msgcontent == "Exist")
+                    try
                     {
-                        MessageBox.Show("Tên đã tồn tại, vui lòng đặt tên khác");
+                        ClientSocket.Connect(p.serverIP, p.port);
+                        _connect.Sendmsg(ClientSocket, "User", $"connect:{p.userName}");
+                    }
+                    catch (SocketException)
+                    {
+                        MessageBox.Show("Lỗi : Không thể connect tới server !");
                         return;
                     }
-                    else if (msg.msgtype == "User" && msg.msgcontent == "Success")
-                    {
-                        Player_Choose choose = new Player_Choose(ClientSocket, p);
-                        choose.Show();
-                        return;
-                    }
-
                 }
+
+              
             }
-            catch (Exception)
+
+            byte[] bytes = new byte[2048];
+
+            ClientSocket.Receive(bytes);
+            string acceptedUser = Encoding.UTF8.GetString(bytes);
+            var msg = JsonConvert.DeserializeObject<ManagePacket>(acceptedUser);
+            if (msg.msgtype == "User" && msg.msgcontent == "Success")
             {
-                ClientSocket.Close();
+                
+                Player_Choose PY = new Player_Choose(ClientSocket, p);
+                PY.Show();
+                Hide();
+                PY.Disposed += delegate {
+                    this.Show();
+                };
             }
+            else if (msg.msgtype == "User" && msg.msgcontent == "Exist")
+            {
+                MessageBox.Show("Tên đã tồn tại, vui lòng đặt tên khác");
+                
+            }
+
+
+
+
+
+
+
+
         }
 
-        private delegate void SafeCallDelegate(string text);
+     
 
-        private void UpdateEventQC(string text)
-        {
-            //if (Chatbox.InvokeRequired)
-            //{
-            //    var d = new SafeCallDelegate(UpdateEventQC);
-            //    Chatbox.Invoke(d, new object[] { text });
-            //}
-            //else
-            //{
-            //    Chatbox.Text += text;
-            //}
-        }
+    
+
+      
 
 
         private void IpServer_TextChanged(object sender, EventArgs e)
