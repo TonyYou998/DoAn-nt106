@@ -123,7 +123,7 @@ namespace Client
 
             this.Hide();
             int ID_select = 0;
-            ListRoom ls = new ListRoom(Jsonmsg.msgRoom);
+            ListRoom ls = new ListRoom(Jsonmsg.msgRoom,ClientSocket,p);
             ls.Show();
             ls.Disposed += delegate
             {

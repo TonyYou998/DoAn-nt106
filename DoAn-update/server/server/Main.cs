@@ -139,13 +139,13 @@ namespace Server
                 case "CreateRoom":
                  
                     string[] roomData = packet.msgcontent.Split(':');
-                    number_room++;
+                    
 
                     sql.AddRoom(roomData[0]);
                     sql.SetHost(roomData[1]);
-
+                    HC[number_room] = new HorseControl();
                     HC[number_room].listRedHorse = packet.msgHorse;
-
+                    number_room++;
                     break;
 
 
