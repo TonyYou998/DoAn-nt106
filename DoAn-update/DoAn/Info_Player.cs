@@ -18,12 +18,7 @@ namespace Client
         public NguoiChoi p = new NguoiChoi();
         private Connection _connect = new Connection();
         private Thread clientThread;
-        private int toggleForm=0;
 
-        public void setToggle()
-        {
-            this.toggleForm = 1;
-        }
         public Info_Player()
         {
             InitializeComponent();
