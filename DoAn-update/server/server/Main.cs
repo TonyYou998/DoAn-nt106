@@ -132,6 +132,10 @@ namespace Server
                             sql.SetUserOnline(data[1], 0);
                             logs.BeginInvoke((Action)(() =>
                             { logs.AppendText($"\r\nĐã ngắt kết nối với {data[1]}"); }));
+
+                            MSG = new ManagePacket("User", "Host Disconnect");
+                            sendPacketToClient(current, MSG);
+
                         }
                     }
 
@@ -139,20 +143,42 @@ namespace Server
                 case "CreateRoom":
                  
                     string[] roomData = packet.msgcontent.Split(':');
-                    number_room++;
 
                     sql.AddRoom(roomData[0]);
-                    sql.SetHost(roomData[1]);
+                    sql.SetHost(roomData[1], 1);
+                    sql.SetRoomID(roomData[1], number_room + 1);
 
+                    HC[number_room] = new HorseControl();
                     HC[number_room].listRedHorse = packet.msgHorse;
+                    number_room++;
 
                     break;
 
 
-                case "JoinRoom":
-                     MSG = new ManagePacket(sql.ReadRoomData());
-                   
+                case "ListRoom":
+                    MSG = new ManagePacket(sql.ReadRoomData());
                     sendPacketToClient(current, MSG);
+                    break;
+
+                case "JoinRoom":
+                    string[] Data = packet.msgcontent.Split(':');
+                    //RoomID:color:list<Horse>
+                    string Color = Data[1];
+
+                    switch(Color)
+                    {
+                        case "Green":
+                            HC[number_room].listGreenHorse = packet.msgHorse;
+                            break;
+                        case "Blue":
+                            HC[number_room].listBlueHorse = packet.msgHorse;
+                            break;
+                        case "Yellow":
+                            HC[number_room].listyellowHorse = packet.msgHorse;
+                            break;
+                    }
+                    
+
                     break;
 
                 case "Action":

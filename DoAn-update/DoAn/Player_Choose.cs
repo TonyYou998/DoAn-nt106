@@ -113,7 +113,7 @@ namespace Client
         private void btn_Join_Room_Click(object sender, EventArgs e)
         {
            // ClientSocket.Connect(p.serverIP, p.port);
-            _connect.Sendmsg(ClientSocket, "JoinRoom", "null");
+            _connect.Sendmsg(ClientSocket, "ListRoom", "null");
             byte[] bytes = new byte[1024];
 
             ClientSocket.Receive(bytes);

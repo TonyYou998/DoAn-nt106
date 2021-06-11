@@ -69,6 +69,14 @@ namespace Server
             sqlite_cmd.ExecuteNonQuery();        
         }
 
+        public void SetRoomID(string username, int roomID)
+        {
+            SQLiteCommand sqlite_cmd;
+            sqlite_cmd = sqlite_conn.CreateCommand();
+            sqlite_cmd.CommandText = $"UPDATE Users SET RoomID = {roomID} where Username = '{username}'";
+            sqlite_cmd.ExecuteNonQuery();
+        }
+
         public bool IsUserOnline(string username)
         {
             SQLiteCommand sqlite_cmd;
