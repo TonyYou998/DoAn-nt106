@@ -34,7 +34,7 @@ namespace Server
         private void CreateTable()
         {
             SQLiteCommand sqlite_cmd;
-            string Createsql = "CREATE TABLE Users  (Username TEXT NOT NULL PRIMARY KEY, RoomID int, Online int)";
+            string Createsql = "CREATE TABLE Users  (Username TEXT NOT NULL PRIMARY KEY, RoomID int, Online int, isHost int)";
             string Createsql2 = "CREATE TABLE Room  (RoomID INTEGER PRIMARY KEY AUTOINCREMENT, Roomname TEXT NOT NULL)";
             string Createsql3 = "CREATE TABLE Horse (" +
                 "Username TEXT, RoomID int, color TEXT, x int, y int," +
@@ -52,7 +52,15 @@ namespace Server
         private void InsertData()
         {
         }
-        
+
+        public void SetHost(string username, int mode = 0) // mode = 0 : normal, = 1 : host
+        {
+            SQLiteCommand sqlite_cmd;
+            sqlite_cmd = sqlite_conn.CreateCommand();
+            sqlite_cmd.CommandText = $"UPDATE Users SET isHost = {mode.ToString()} where Username = '{username}'";
+            sqlite_cmd.ExecuteNonQuery();
+        }
+
         public void SetUserOnline(string username, int mode=0) // mode = 0 : offline, = 1 : online
         {
             SQLiteCommand sqlite_cmd;
@@ -112,12 +120,12 @@ namespace Server
             sqlite_cmd.ExecuteNonQuery();
         }
 
-        public void AddRoom(string RoomID ,string Title)
+        public void AddRoom(string Title)
         {
             SQLiteCommand sqlite_cmd;
             sqlite_cmd = sqlite_conn.CreateCommand();
             sqlite_cmd.CommandText = "INSERT INTO Room " +
-                $"(RoomID, Roomname) VALUES('{RoomID}','{Title}'); ";
+                $"(Roomname) VALUES('{Title}'); ";
             sqlite_cmd.ExecuteNonQuery();
         }
 

@@ -89,7 +89,7 @@ namespace Client
                 {   
                     try
                     {
-                        _connect.Sendmsg(ClientSocket,"CreateRoom", $"room name:{r.getRoomName()}:user name:{p.getUserName()}",listHorse);
+                        _connect.Sendmsg(ClientSocket,"CreateRoom", $"{r.getRoomName()}:{p.getUserName()}",listHorse);
                         
                     }
                     catch (SocketException)

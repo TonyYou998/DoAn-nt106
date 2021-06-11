@@ -21,7 +21,7 @@ namespace Server
         private int serverPort = 8000;
 
         Sqlite_control sql;
-        int id = 0;
+        int number_room = 0;
 
         HorseControl [] HC = new HorseControl[50];
         public Server()
@@ -139,9 +139,12 @@ namespace Server
                 case "CreateRoom":
                  
                     string[] roomData = packet.msgcontent.Split(':');
-                    id++;
-                    sql.AddRoom(roomID.ToString(), roomData[1]);
-                    HC[id].listRedHorse = packet.msgHorse;
+                    number_room++;
+
+                    sql.AddRoom(roomData[0]);
+                    sql.SetHost(roomData[1]);
+
+                    HC[number_room].listRedHorse = packet.msgHorse;
 
                     break;
 
