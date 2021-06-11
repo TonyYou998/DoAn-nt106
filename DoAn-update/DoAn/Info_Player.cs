@@ -84,85 +84,44 @@ namespace Client
                     }
                 }
 
-                Thread A = new Thread(ReceiveResponse);
-                A.Start();
+              
             }
 
-            //byte[] bytes = new byte[2048];
+            byte[] bytes = new byte[2048];
 
-            //ClientSocket.Receive(bytes);
-            //string acceptedUser = Encoding.UTF8.GetString(bytes);
-            //var msg = JsonConvert.DeserializeObject<ManagePacket>(acceptedUser);
-            //if (msg.msgtype == "User" && msg.msgcontent == "Success")
-            //{
-            //    // Player_Choose choose = new Player_Choose(ClientSocket, p);
-            //    //choose.Show();
-            //    Player_Choose PY = new Player_Choose(ClientSocket,p);
-            //    PY.Show();
-            //    Hide();
-            //}
-
-
-
-
-
-
-
-        }
-
-        public void ReceiveResponse()
-        {
-
-            try
+            ClientSocket.Receive(bytes);
+            string acceptedUser = Encoding.UTF8.GetString(bytes);
+            var msg = JsonConvert.DeserializeObject<ManagePacket>(acceptedUser);
+            if (msg.msgtype == "User" && msg.msgcontent == "Success")
             {
-                while (ClientSocket.Connected)
-                {
-                    var buffer = new byte[2048];
-                    int received = ClientSocket.Receive(buffer, SocketFlags.None);
-                    if (received == 0) return;
-                    var data = new byte[received];
-                    Array.Copy(buffer, data, received);
-                    string text = Encoding.UTF8.GetString(data);
-                    var msg = JsonConvert.DeserializeObject<ManagePacket>(text);
-
-                    if (msg.msgtype == "User" && msg.msgcontent == "Exist")
-                    {
-                        MessageBox.Show("Tên đã tồn tại, vui lòng đặt tên khác");
-                        return;
-                    }
-                    else if (msg.msgtype == "User" && msg.msgcontent == "Success")
-                    {
-                        this.Hide();
-                        Player_Choose choose = new Player_Choose(ClientSocket, p);
-                        choose.Disposed += delegate {
-                            this.Show();
-                        };
-                        choose.Show();
-                        return;
-                    }
-
-                }
+                
+                Player_Choose PY = new Player_Choose(ClientSocket, p);
+                PY.Show();
+                Hide();
+                PY.Disposed += delegate {
+                    this.Show();
+                };
             }
-            catch (Exception)
+            else if (msg.msgtype == "User" && msg.msgcontent == "Exist")
             {
-                ClientSocket.Close();
+                MessageBox.Show("Tên đã tồn tại, vui lòng đặt tên khác");
+                
             }
+
+
+
+
+
+
+
+
         }
 
-        private delegate void SafeCallDelegate(string text);
+     
 
-        private void UpdateEventQC(string text)
-        {
-            //if (Chatbox.InvokeRequired)
-            //{
-            //    var d = new SafeCallDelegate(UpdateEventQC);
-            //    Chatbox.Invoke(d, new object[] { text });
-            //}
-            //else
-            //{
-            //    Chatbox.Text += text;
-            //}
-        }
+    
+
+      
 
 
         private void IpServer_TextChanged(object sender, EventArgs e)
