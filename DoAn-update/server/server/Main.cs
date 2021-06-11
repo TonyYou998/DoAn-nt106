@@ -163,17 +163,17 @@ namespace Server
                 case "JoinRoom":
                     string[] Data = packet.msgcontent.Split(':');
                     //RoomID:color:list<Horse>
-                    string Color = Data[1];
+                    string Color = Data[2];
 
                     switch(Color)
                     {
-                        case "Green":
+                        case "green":
                             HC[number_room].listGreenHorse = packet.msgHorse;
                             break;
-                        case "Blue":
+                        case "blue":
                             HC[number_room].listBlueHorse = packet.msgHorse;
                             break;
-                        case "Yellow":
+                        case "yellow":
                             HC[number_room].listyellowHorse = packet.msgHorse;
                             break;
                     }
