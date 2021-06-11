@@ -105,6 +105,19 @@ namespace DoAn
             new Point { X = 515, Y = 170 },
             new Point { X = 600, Y = 170 }
         };
+        Point[] YellowReady = new Point[]
+       {
+            new Point { X = 515, Y = 440},
+            new Point { X = 600, Y = 440},
+            new Point { X = 515, Y = 530 },
+            new Point { X = 600, Y = 530 }
+       }; Point[] BlueReady = new Point[]
+        {
+            new Point { X = 150, Y = 440},
+            new Point { X = 230, Y = 440},
+            new Point { X = 150, Y = 530 },
+            new Point { X = 230, Y = 530 }
+        };
 
         private int temp, g1=-1, g2 = -1, g3 = -1, g4 = -1;
 
