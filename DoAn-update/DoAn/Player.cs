@@ -46,7 +46,7 @@ namespace Client
             info.Show();
             info.Disposed += delegate
             {
-                this.Show();
+                this.Dispose();
             };
 
             this.Hide();

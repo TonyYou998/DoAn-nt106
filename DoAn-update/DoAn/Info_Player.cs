@@ -65,47 +65,42 @@ namespace Client
         private void btn_Connect_Click(object sender, EventArgs e)
         {
 
-            bool loop = true;
-            while (loop)
+
+            if (p.nhapThongTin(UserName, IpServer))
             {
-                if (p.nhapThongTin(UserName, IpServer))
+
+                ClientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                while (!ClientSocket.Connected)
                 {
-
-                    ClientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                    while (!ClientSocket.Connected)
+                    try
                     {
-                        try
-                        {
-                            ClientSocket.Connect(p.serverIP, p.port);
-                            _connect.Sendmsg(ClientSocket, "User", $"connect:{p.userName}");
-                            Thread A = new Thread(ReceiveResponse);
-                            A.Start();
-
-                            loop = false;
-                            break;
-
-                        }
-                        catch (SocketException)
-                        {
-                            MessageBox.Show("Lỗi : Không thể connect tới server !");
-                            return;
-                        }
+                        ClientSocket.Connect(p.serverIP, p.port);
+                        _connect.Sendmsg(ClientSocket, "User", $"connect:{p.userName}");
+                    }
+                    catch (SocketException)
+                    {
+                        MessageBox.Show("Lỗi : Không thể connect tới server !");
+                        return;
                     }
                 }
-            }
-            byte[] bytes = new byte[2048];
 
-            ClientSocket.Receive(bytes);
-            string acceptedUser = Encoding.UTF8.GetString(bytes);
-            var msg = JsonConvert.DeserializeObject<ManagePacket>(acceptedUser);
-            if (msg.msgtype == "User" && msg.msgcontent == "Success")
-            {
-                // Player_Choose choose = new Player_Choose(ClientSocket, p);
-                //choose.Show();
-                Player_Choose PY = new Player_Choose(ClientSocket,p);
-                PY.Show();
-                Hide();
+                Thread A = new Thread(ReceiveResponse);
+                A.Start();
             }
+
+            //byte[] bytes = new byte[2048];
+
+            //ClientSocket.Receive(bytes);
+            //string acceptedUser = Encoding.UTF8.GetString(bytes);
+            //var msg = JsonConvert.DeserializeObject<ManagePacket>(acceptedUser);
+            //if (msg.msgtype == "User" && msg.msgcontent == "Success")
+            //{
+            //    // Player_Choose choose = new Player_Choose(ClientSocket, p);
+            //    //choose.Show();
+            //    Player_Choose PY = new Player_Choose(ClientSocket,p);
+            //    PY.Show();
+            //    Hide();
+            //}
 
 
 
@@ -117,10 +112,10 @@ namespace Client
 
         public void ReceiveResponse()
         {
-            bool loop = false;
+
             try
             {
-                while (!loop)
+                while (ClientSocket.Connected)
                 {
                     var buffer = new byte[2048];
                     int received = ClientSocket.Receive(buffer, SocketFlags.None);
@@ -137,10 +132,13 @@ namespace Client
                     }
                     else if (msg.msgtype == "User" && msg.msgcontent == "Success")
                     {
-                        // Player_Choose choose = new Player_Choose(ClientSocket, p);
-                        //choose.Show();
-                        setToggle();
-                        loop = true;
+                        this.Hide();
+                        Player_Choose choose = new Player_Choose(ClientSocket, p);
+                        choose.Disposed += delegate {
+                            this.Show();
+                        };
+                        choose.Show();
+                        return;
                     }
 
                 }

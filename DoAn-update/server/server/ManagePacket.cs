@@ -1,4 +1,4 @@
-﻿using Cờ_cá_ngựa;
+﻿using Server;
 using System.Collections.Generic;
 
 namespace Server

@@ -89,7 +89,6 @@ namespace Client
                 {   
                     try
                     {
-                     
                         _connect.Sendmsg(ClientSocket,"Room", $"room name:{r.getRoomName()}:user name:{p.getUserName()}",listHorse);
                         
                     }
