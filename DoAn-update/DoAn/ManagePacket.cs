@@ -10,7 +10,11 @@ namespace Client
         public string msgPlayer { get; set; }
         public List<RoomModel> msgRoom { get; set; }
         public List<Horse> msgHorse { get; set; }
-
+        public HorseControl HC { get; set; }
+        public ManagePacket(HorseControl HC)
+        {
+            this.HC = HC;
+        }
         public ManagePacket()
         {
             msgcontent = "";

@@ -17,11 +17,13 @@ namespace Client
 
         private Socket ClientSocket;
         private Thread clientThread;
+        
         private Connection _connect = new Connection();
         public Player_Choose(Socket ClientSocket , NguoiChoi nguoiChoi)
         {
 
             InitializeComponent();
+            
              p = nguoiChoi;
             this.ClientSocket = ClientSocket;
             PlayerName.Text = nguoiChoi.getUserName();
@@ -130,8 +132,8 @@ namespace Client
                 ID_select = ls.ID_select;
                 ls.Dispose();
                 ls = null;
-                this.Show();
-                MessageBox.Show(ID_select.ToString());
+               // this.Show();
+              
             };
             
         }

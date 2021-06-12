@@ -12,10 +12,13 @@ namespace Client
 {
     public partial class Player_Create : Form
     {
+        private HorseControl HC;
         public Player_Create()
         {
             InitializeComponent();
+         
             //FORM GIAO DIEN
+
             this.Size = new Size(1286, 751);
             this.BackgroundImage = Properties.Resources.BANCO__1_3;
             this.BackgroundImageLayout = ImageLayout.Stretch;

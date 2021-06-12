@@ -1,7 +1,9 @@
 ﻿using Client.Modal;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Net.Sockets;
+using System.Text;
 using System.Windows.Forms;
 
 namespace Client
@@ -39,7 +41,14 @@ namespace Client
             ID_select = int.Parse(id);
             //  _connect.Sendmsg(ClientSocket, "JoinRoom", "null");
             realJoin(int.Parse(numberOfPlayer), ID_select);
-            this.Dispose();
+            HorseControl HC = acceptJoin();
+            if (HC != null)
+            {
+                Player_Join PJ = new Player_Join(HC);
+                this.Dispose();
+                PJ.Show();
+            }
+           
         }
         private void realJoin(int numberOfPlayer, int roomID)
         {
@@ -88,7 +97,15 @@ namespace Client
             lstHorse.Add(h4);
             return lstHorse;
         }
+        private HorseControl acceptJoin()
+        {
+            byte[] bytes = new byte[2048];
 
+            ClientSocket.Receive(bytes);
+            string ListHorseAvailable = Encoding.UTF8.GetString(bytes);
+            var Jsonmsg = JsonConvert.DeserializeObject<ManagePacket>(ListHorseAvailable);
+            return Jsonmsg.HC;
+        }
         private void listView1_SelectedIndexChanged(object sender, System.EventArgs e)
         {
 

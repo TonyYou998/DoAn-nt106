@@ -6,9 +6,11 @@ namespace Client
 {
     public partial class Player_Join : Form
     {
-        public Player_Join()
+        public HorseControl HC { get; set; }
+        public Player_Join(HorseControl HC)
         {
             InitializeComponent();
+            this.HC = HC;
             //FORM GIAO DIEN
             this.Size = new Size(1286, 751);
             this.BackgroundImage = Properties.Resources.BANCO__1_3;
