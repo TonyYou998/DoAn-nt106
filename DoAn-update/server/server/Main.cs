@@ -13,7 +13,7 @@ namespace Server
 {
     public partial class Server : Form
     {
-        private readonly List<Socket> clientSockets = new List<Socket>();
+        private readonly Dictionary<string, Socket> clientSockets = new Dictionary<string, Socket>();
         private readonly byte[] buffer = new byte[2048];
         private Socket serverSockets = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
        
@@ -66,7 +66,7 @@ namespace Server
             {
                 return;// Tắt socket
             }
-            clientSockets.Add(socket); //Thêm Client
+
             socket.BeginReceive(buffer, 0, 2048, SocketFlags.None, ReceiveCallback, socket);
             serverSockets.BeginAccept(AcceptCallBack, null);
         }
@@ -83,7 +83,6 @@ namespace Server
             catch
             {
                 current.Close();
-                clientSockets.Remove(current);
                 return;
             }
 
@@ -116,6 +115,10 @@ namespace Server
                                 sql.Adduser(data[1]);
                                 sql.SetUserOnline(data[1], 1);
 
+                                if (!clientSockets.ContainsValue(current))
+                                {
+                                    clientSockets.Add(data[1], current);
+                                };
                                 //sendPacketToClient(current, MSG);
                                 logs.BeginInvoke((Action)(() =>
                                 { logs.AppendText($"\r\nĐã kết nối với {data[1]}"); }));
@@ -193,51 +196,32 @@ namespace Server
             }
                 
         }
-        //private void deliverymsg(Socket current, string text)
-        //{
-        //    var sk1 = current.RemoteEndPoint.ToString();
-        //    var portA = sk1.Split(':')[1];
 
-        //    foreach (var A in Users)
-        //    {
-        //        if (A.Port == portA)
-        //        {
-        //            foreach (var B in Users)
-        //            {
-        //                if (B.Name == A.Friend)
-        //                {
-        //                    // Tìm socket để gởi msg tới B
-        //                    foreach (Socket socket in clientSockets)
-        //                    {
-        //                        var sk2 = socket.RemoteEndPoint.ToString();
-        //                        var portB = sk2.Split(':')[1];
-        //                        if (portB == B.Port)
-        //                        {
-        //                            byte[] msg = Encoding.UTF8.GetBytes(text);
-        //                            socket.Send(msg);
-        //                        }
-        //                    }
-        //                }
-        //            }
-
-        //        }
-        //    }
-
-        //}
-
-        private void sendPacketToClient(Socket current, ManagePacket MSG ) 
+        private void sendPacketToRoom(ManagePacket MSG, int roomID)
+        {
+            List<string> user_in_room = sql.GetListUserInRoom(roomID);
+            foreach(var u in user_in_room)
+            {
+                Socket temp;
+                if(clientSockets.TryGetValue(u, out temp))
+                {
+                    sendPacketToClient(temp, MSG);
+                }
+            }
+        }
+        private void sendPacketToClient(Socket s, ManagePacket MSG ) 
         {
             string json = JsonConvert.SerializeObject(MSG);
             byte[] buffer = Encoding.UTF8.GetBytes(json);
-            current.Send(buffer, 0, buffer.Length, SocketFlags.None);
+            s.Send(buffer, 0, buffer.Length, SocketFlags.None);
         }
 
         private void CloseAllSockets()
         {
-            foreach (Socket socket in clientSockets)
+            foreach (var socket in clientSockets)
             {
-                socket.Shutdown(SocketShutdown.Both);
-                socket.Close();
+                socket.Key.Shutdown(SocketShutdown.Both);
+                socket.Key.Close();
             }
 
             serverSockets.Close();
