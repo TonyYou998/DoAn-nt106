@@ -165,7 +165,11 @@ namespace Server
 
                 case "JoinRoom":
                     string[] Data = packet.msgcontent.Split(':');
+<<<<<<< HEAD
                     //RoomID:color:list<Horse>
+=======
+                    //username:RoomID:color:list<Horse>
+>>>>>>> master
                     string Color = Data[2];
 
                     switch(Color)
@@ -180,7 +184,9 @@ namespace Server
                             HC[number_room].listyellowHorse = packet.msgHorse;
                             break;
                     }
-                    
+
+                    sql.SetHost(Data[0],0);
+                    sql.SetRoomID(Data[0], int.Parse(Data[1]));
 
                     break;
 
