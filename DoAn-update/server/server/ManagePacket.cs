@@ -9,11 +9,15 @@ namespace Server
         public string msgcontent { get; set; }
         public List<RoomModel> msgRoom { get; set; }
         public List<Horse> msgHorse { get; set; }
-
+        public HorseControl HC { get; set; }
         public ManagePacket() {
             msgcontent = "";
             msgtype = "";
             msgRoom = null;
+        }
+        public ManagePacket(HorseControl HC)
+        {
+            this.HC = HC;
         }
         public ManagePacket(string type,string msg)
         {

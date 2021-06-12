@@ -49,10 +49,23 @@ namespace Server
             sqlite_cmd.ExecuteNonQuery();
         }
 
-        private void InsertData()
+        public List<string> GetListUserInRoom(int roomid)
         {
-        }
+            List<string> luser = new List<string>();
+            SQLiteCommand sqlite_cmd;
+            sqlite_cmd = sqlite_conn.CreateCommand();
+            sqlite_cmd.CommandText = $"SELECT Username from Users where RoomId = {roomid} and Online=1";
 
+            using (var reader = sqlite_cmd.ExecuteReader())
+            {
+                if (reader.Read())
+                {
+                    luser.Add(reader[0].ToString());
+                }
+            }
+
+            return luser;
+        }
         public void SetHost(string username, int mode = 0) // mode = 0 : normal, = 1 : host
         {
             SQLiteCommand sqlite_cmd;
