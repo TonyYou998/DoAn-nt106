@@ -9,9 +9,9 @@ namespace Client.Modal
 {
   public  class Horse
     {
-        private Point location;
-        private String color;
-        private int id;
+        public Point location { get; set; }
+        public String color { get; set; }
+        public int id { get; set; }
         public Horse(Point location,String color,int id)
         {
             this.location = location;

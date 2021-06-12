@@ -19,14 +19,13 @@ namespace Client
             byte[] buffer = Encoding.UTF8.GetBytes(json);
             s.Send(buffer, 0, buffer.Length, SocketFlags.None);
         }
-       public void Sendmsg(Socket s, string type,string content,List<Horse> listHorse)
+        public void Sendmsg(Socket s, string type, string content, List<Horse> listHorse)
         {
-            var MSG = new ManagePacket(type, content,listHorse);
+            var MSG = new ManagePacket(type, content, listHorse);
             string json = JsonConvert.SerializeObject(MSG);
             byte[] buffer = Encoding.UTF8.GetBytes(json);
             s.Send(buffer, 0, buffer.Length, SocketFlags.None);
         }
-
         public void ReceiveResponse(Socket s, NguoiChoi p)
         {
             try
