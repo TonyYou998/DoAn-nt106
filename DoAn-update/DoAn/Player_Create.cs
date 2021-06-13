@@ -15,6 +15,7 @@ namespace Client
     {
         private HorseControl HC;
         private int n = 0;
+        
         private NguoiChoi p { get; set; }
         public Player_Create(NguoiChoi p)
         {

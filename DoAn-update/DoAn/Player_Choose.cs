@@ -133,7 +133,7 @@ namespace Client
                 ID_select = ls.ID_select;
                 ls.Dispose();
                 ls = null;
-               // this.Show();
+                this.Show();
               
             };
             

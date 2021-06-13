@@ -69,8 +69,6 @@ namespace Client
                 case "Yellow":
                     ListCreatedHorse.YELLOW = true;
                     break;
-
-
             }
         }
         public void CreateHorse(string color, Point X, int ID, bool MyHorse)
@@ -110,9 +108,7 @@ namespace Client
 
         public bool CheckMyHorse(string p, string UserNameTest)
         {
-            if (p == UserNameTest)
-                return true;
-            else return false;
+            return (p == UserNameTest);
         }
         public void checkForCreateHorse(string color, string p, string UserNameTest)
         {
@@ -177,8 +173,11 @@ namespace Client
 
         private void Player_Join_Activated(object sender, EventArgs e)
         {
-            // checkForCreateHorse(temp, p., UsernameTest);
-            MessageBox.Show(p.userName);
+            checkForCreateHorse(HC.listyellowHorse[1].color, p.userName, UsernameTest);
+            checkForCreateHorse(HC.listGreenHorse[1].color, p.userName, UsernameTest);
+            checkForCreateHorse(HC.listBlueHorse[1].color, p.userName, UsernameTest);
+            checkForCreateHorse(HC.listRedHorse[1].color, p.userName, UsernameTest);
+
         }
 
         private void Roll_number_Click(object sender, EventArgs e)
@@ -195,6 +194,7 @@ namespace Client
         {
             //MessageBox.Show(sender.ToString());
             PictureBox a = (PictureBox)sender;
+            MessageBox.Show(a.Name);
         }
 
        
