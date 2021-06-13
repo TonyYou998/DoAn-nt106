@@ -37,82 +37,151 @@ namespace Client
             Roll_number.Location = new Point(910, 50);
             Roll_number.BackColor = Color.Transparent;
         }
-       
-        Point[] Green = new Point[]
+        public Soldier Red1, Red2, Red3, Red4;
+        public struct Soldier
         {
-        new Point {X = 650, Y = 235 },
-        new Point {X = 615, Y = 235 },
-        new Point {X = 580, Y = 235 },
-        new Point {X = 545, Y = 235 },
-        new Point {X = 510, Y = 235 },
-        new Point {X = 475, Y = 235 },
-        new Point {X = 440, Y = 235 },
-        new Point {X = 435, Y = 185 },
-        new Point {X = 435, Y = 150 },
-        new Point {X = 435, Y = 120 },
-        new Point {X = 435, Y = 90 },
-        new Point {X = 435, Y = 55 },
-        new Point {X = 435, Y = 25 },
-        new Point {X = 385, Y = 25 },
-        new Point {X = 330, Y = 25 },
-        new Point {X = 330, Y = 55 },
-        new Point {X = 330, Y = 90 },
-        new Point {X = 330, Y = 120 },
-        new Point {X = 330, Y = 150 },
-        new Point {X = 330, Y = 185 },
-        new Point {X = 330, Y = 235 },
-        new Point {X = 290, Y = 235 },
-        new Point {X = 250, Y = 235 },
-        new Point {X = 215, Y = 235 },
-        new Point {X = 180, Y = 235 },
-        new Point {X = 145, Y = 235 },
-        new Point {X = 105, Y = 235 },
-        new Point {X = 105, Y = 280 },
-        new Point {X = 105, Y = 330 },
-        new Point {X = 145, Y = 330 },
-        new Point {X = 180, Y = 330 },
-        new Point {X = 215, Y = 330 },
-        new Point {X = 250, Y = 330 },
-        new Point {X = 290, Y = 330 },
-        new Point {X = 330, Y = 330 },
-        new Point {X = 330, Y = 370 },
-        new Point {X = 330, Y = 400 },
-        new Point {X = 330, Y = 430 },
-        new Point {X = 330, Y = 465 },
-        new Point {X = 330, Y = 495 },
-        new Point {X = 330, Y = 530 },
-        new Point {X = 380, Y = 530 },
-        new Point {X = 430, Y = 530 },
-        new Point {X = 430, Y = 495 },
-        new Point {X = 430, Y = 465 },
-        new Point {X = 430, Y = 430 },
-        new Point {X = 430, Y = 400 },
-        new Point {X = 430, Y = 370 },
-        new Point {X = 430, Y = 330 },
-        new Point {X = 475, Y = 330 },
-        new Point {X = 510, Y = 330 },
-        new Point {X = 545, Y = 330 },
-        new Point {X = 585, Y = 330 },
-        new Point {X = 620, Y = 330 },
-        new Point {X = 655, Y = 330 },
-        new Point {X = 655, Y = 285 },
+            public string color;
+            public int ID;
+            public bool MySoldier;
+            public Point Location;
+        }
+        public struct listCreated
+        {
+            public bool RED;
+            public bool GREEN;
+            public bool YELLOW;
+            public bool BLUE;
+        }
+        public listCreated ListCreatedHorse;
+        public void updateListCreate(string color)
+        {
+            switch (color)
+            {
+                case "Red":
+                    ListCreatedHorse.RED = true;
+                    break;
+                case "Green":
+                    ListCreatedHorse.GREEN = true;
+                    break;
+                case "Blue":
+                    ListCreatedHorse.BLUE = true;
+                    break;
+                case "Yellow":
+                    ListCreatedHorse.YELLOW = true;
+                    break;
+
+
+            }
+        }
+        public void CreateHorse(string color, Point X, int ID, bool MyHorse)
+        {
+            var picture = new PictureBox
+            {
+                Name = color + ID.ToString(),
+                Size = new Size(51, 74),
+                Location = X,
+                BackColor = Color.Transparent
+            };
+            this.Controls.Add(picture);
+            switch (color)
+            {
+                case "Red":
+                    picture.Image = Properties.Resources.red;
+                    break;
+                case "Green":
+                    picture.Image = Properties.Resources.green;
+                    break;
+                case "Yellow":
+                    picture.Image = Properties.Resources.yellow;
+                    break;
+                case "Blue":
+                    picture.Image = Properties.Resources.blue;
+                    break;
+            }
+            if (MyHorse == true)
+            {
+                picture.Click += new EventHandler(Moving);
+            }
+            updateListCreate(color);
+
+
+        }
+        public string temp, UsernameTest;
+
+        public bool CheckMyHorse(string p, string UserNameTest)
+        {
+            if (p == UserNameTest)
+                return true;
+            else return false;
+        }
+        public void checkForCreateHorse(string color, string p, string UserNameTest)
+        {
+            if (color == "Red" && ListCreatedHorse.RED != true)
+            {
+                for (int i = 0; i < 4; i++)
+                {
+                    CreateHorse(color, RedReady[i], i + 1, CheckMyHorse(p,UserNameTest));
+                }
+            }
+            if (color == "Blue" && ListCreatedHorse.BLUE != true)
+            {
+                for (int i = 0; i < 4; i++)
+                {
+                    CreateHorse(color, BlueReady[i], i + 1, CheckMyHorse(p, UserNameTest));
+                }
+            }
+            if (color == "Yellow" && ListCreatedHorse.YELLOW != true)
+            {
+                for (int i = 0; i < 4; i++)
+                {
+                    CreateHorse(color, YellowReady[i], i + 1, CheckMyHorse(p, UserNameTest));
+                }
+            }
+            if (color == "Green" && ListCreatedHorse.GREEN != true)
+            {
+                for (int i = 0; i < 4; i++)
+                {
+                    CreateHorse(color, GreenReady[i], i + 1, CheckMyHorse(p, UserNameTest));
+                }
+            }
+        }
+        //  checkForCreateHorse(temp);
+        Point[] RedReady = new Point[]
+        {
+            new Point { X = 150, Y = 85},
+            new Point { X = 240, Y = 85},
+            new Point { X = 150, Y = 170 },
+            new Point { X = 240, Y = 170 }
         };
         Point[] GreenReady = new Point[]
-        {
+      {
             new Point { X = 515, Y = 85},
             new Point { X = 600, Y = 85},
             new Point { X = 515, Y = 170 },
             new Point { X = 600, Y = 170 }
-        };
+      };
+        Point[] BlueReady = new Point[]
+      {
+            new Point { X = 150, Y = 440},
+            new Point { X = 230, Y = 440},
+            new Point { X = 150, Y = 530 },
+            new Point { X = 230, Y = 530 }
+      };
+        Point[] YellowReady = new Point[]
+      {
+            new Point { X = 515, Y = 440},
+            new Point { X = 600, Y = 440},
+            new Point { X = 515, Y = 530 },
+            new Point { X = 600, Y = 530 }
+      };
 
-        private int temp, g1=-1, g2 = -1, g3 = -1, g4 = -1;
-
-        private void Roll_number_Click(object sender, EventArgs e)
+        private void Player_Join_Activated(object sender, EventArgs e)
         {
-
+            // checkForCreateHorse(temp, p., UsernameTest);
+            MessageBox.Show(p.userName);
         }
 
-        private void Player_Join_Load(object sender, EventArgs e)
+        private void Roll_number_Click(object sender, EventArgs e)
         {
 
         }
@@ -120,71 +189,14 @@ namespace Client
         private void btn_roll_Click(object sender, EventArgs e)
         {
             Random random = new Random();
-            temp = random.Next(1, 6);
+           // temp = random.Next(1, 6);
         }
         public void Moving(object sender, EventArgs e)
         {
             //MessageBox.Show(sender.ToString());
             PictureBox a = (PictureBox)sender;
-            if (a.Name == "Green0")
-            {
-                a.Location = Green[g1 + temp];
-                g1 += temp;
-            }
-            if (a.Name == "Green1")
-            {
-                a.Location = Green[g2 + temp];
-                g2 += temp;
-            }
-            if (a.Name == "Green2")
-            {
-                a.Location = Green[g2 + temp];
-                g3 += temp;
-            }
-            if (a.Name == "Green3")
-            {
-                a.Location = Green[g3 + temp];
-                g4 += temp;
-            }
-
         }
 
-        private void btn_test_Click(object sender, EventArgs e)
-        {
-            Point[] temp = new Point[]
-            {
-               new Point {X = 0, Y= 0}
-
-            };
-            for (int i = 0; i < 4; i++)
-            {
-                switch (i)
-                {
-                    case 0:
-                        temp[0] = GreenReady[i];
-                        break;
-                    case 1:
-                        temp[0] = GreenReady[i];
-                        break;
-                    case 2:
-                        temp[0] = GreenReady[i];
-                        break;
-                    case 3:
-                        temp[0] = GreenReady[i];
-                        break;
-                }
-                var picture = new PictureBox
-                {
-                    Name = "Green" + i.ToString(),
-                    Size = new Size(51, 74),
-                    Location = temp[0],
-                    Image = Properties.Resources.green,
-                };
-                picture.Click += new EventHandler(Moving);
-                this.Controls.Add(picture);
-                picture.BackColor = Color.Transparent;
-            }
-            
-        }
+       
     }
 }
