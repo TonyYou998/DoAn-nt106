@@ -58,7 +58,7 @@ namespace Server
 
             using (var reader = sqlite_cmd.ExecuteReader())
             {
-                if (reader.Read())
+                while(reader.Read())
                 {
                     luser.Add(reader[0].ToString());
                 }
