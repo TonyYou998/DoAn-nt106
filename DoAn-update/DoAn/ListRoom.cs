@@ -1,7 +1,9 @@
 ﻿using Client.Modal;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Net.Sockets;
+using System.Text;
 using System.Windows.Forms;
 
 namespace Client
@@ -12,6 +14,7 @@ namespace Client
         private Socket ClientSocket;
         private Connection _connect = new Connection();
         NguoiChoi p;
+
         public void drawListRoom(List<RoomModel> L)
         {
             int i = 0;
@@ -39,7 +42,14 @@ namespace Client
             ID_select = int.Parse(id);
             //  _connect.Sendmsg(ClientSocket, "JoinRoom", "null");
             realJoin(int.Parse(numberOfPlayer), ID_select);
-            this.Dispose();
+            HorseControl HC = acceptJoin();
+            if (HC != null)
+            {
+                Player_Join PJ = new Player_Join(HC,p);
+                this.Dispose();
+                PJ.Show();
+            }
+           
         }
         private void realJoin(int numberOfPlayer, int roomID)
         {
@@ -77,10 +87,10 @@ namespace Client
             Point p2 = new Point(x2, y2);
             Point p3 = new Point(x1, y2);
             Point p4 = new Point(x2, y1);
-            Horse h1 = new Horse(p1, color, 1);
-            Horse h2 = new Horse(p2, color, 2);
-            Horse h3 = new Horse(p3, color, 3);
-            Horse h4 = new Horse(p4, color, 4);
+            Horse h1 = new Horse(p1, color, 1,p.userName);
+            Horse h2 = new Horse(p2, color, 2,p.userName);
+            Horse h3 = new Horse(p3, color, 3,p.userName);
+            Horse h4 = new Horse(p4, color, 4,p.userName);
 
             lstHorse.Add(h1);
             lstHorse.Add(h2);
@@ -88,7 +98,15 @@ namespace Client
             lstHorse.Add(h4);
             return lstHorse;
         }
+        private HorseControl acceptJoin()
+        {
+            byte[] bytes = new byte[2048];
 
+            ClientSocket.Receive(bytes);
+            string ListHorseAvailable = Encoding.UTF8.GetString(bytes);
+            var Jsonmsg = JsonConvert.DeserializeObject<ManagePacket>(ListHorseAvailable);
+            return Jsonmsg.HC;
+        }
         private void listView1_SelectedIndexChanged(object sender, System.EventArgs e)
         {
 

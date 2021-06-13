@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Client.Modal;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -12,10 +13,16 @@ namespace Client
 {
     public partial class Player_Create : Form
     {
-        public Player_Create()
+        private HorseControl HC;
+        private int n = 0;
+        
+        private NguoiChoi p { get; set; }
+        public Player_Create(NguoiChoi p)
         {
             InitializeComponent();
+            this.p = p;
             //FORM GIAO DIEN
+
             this.Size = new Size(1286, 751);
             this.BackgroundImage = Properties.Resources.BANCO__1_3;
             this.BackgroundImageLayout = ImageLayout.Stretch;
@@ -40,10 +47,10 @@ namespace Client
             //ROLL_NUMBER GIAO DIEN
             Roll_number.Size = new Size(290,290);
             Roll_number.BackgroundImage = Properties.Resources.loading;
-            Roll_number.BackgroundImageLayout = ImageLayout.Stretch;
             Roll_number.Location = new Point(910, 50);
             Roll_number.BackColor = Color.Transparent;
             //
+            Roll_number.BackgroundImageLayout = ImageLayout.Stretch;
             for(int i = 0; i < 4; i++)
             {
                 CreateHorse("Red", RedReady[i], i + 1, true);
@@ -79,6 +86,34 @@ namespace Client
             public bool MySoldier;
             public Point Location;
         }
+        public struct listCreated
+        {
+            public bool RED;
+            public bool GREEN;
+            public bool YELLOW;
+            public bool BLUE;
+        }
+        public listCreated ListCreatedHorse;
+        public void updateListCreate(string color)
+        {
+            switch (color)
+            {
+                case "Red":
+                    ListCreatedHorse.RED = true;
+                    break;
+                case "Green":
+                    ListCreatedHorse.GREEN = true;
+                    break;
+                case "Blue":
+                    ListCreatedHorse.BLUE = true;
+                    break;
+                case "Yellow":
+                    ListCreatedHorse.YELLOW = true;
+                    break;
+
+
+            }
+        }
         public void CreateHorse(string color, Point X, int ID, bool MyHorse)
         {
             var picture = new PictureBox
@@ -108,6 +143,8 @@ namespace Client
             {
                 picture.Click += new EventHandler(Moving);
             }
+            updateListCreate(color);
+
            
         }
         Point[] Red = new Point[]
@@ -134,15 +171,78 @@ namespace Client
             new Point { X = 150, Y = 170 },
             new Point { X = 240, Y = 170 }
         };
-
+        Point[] GreenReady = new Point[]
+      {
+            new Point { X = 515, Y = 85},
+            new Point { X = 600, Y = 85},
+            new Point { X = 515, Y = 170 },
+            new Point { X = 600, Y = 170 }
+      };
+        Point[] BlueReady = new Point[]
+      {
+            new Point { X = 150, Y = 440},
+            new Point { X = 230, Y = 440},
+            new Point { X = 150, Y = 530 },
+            new Point { X = 230, Y = 530 }
+      };
+        Point[] YellowReady = new Point[]
+      {
+            new Point { X = 515, Y = 440},
+            new Point { X = 600, Y = 440},
+            new Point { X = 515, Y = 530 },
+            new Point { X = 600, Y = 530 }
+      };
+        public string temp;
+        public bool tempMyHorse;
+        public void checkForCreateHorse (string color)
+        {
+            if(color=="Red" && ListCreatedHorse.RED != true)
+            {
+                for (int i=0; i < 4; i++)
+                {
+                    CreateHorse(color, RedReady[i], i + 1, tempMyHorse);
+                }
+            }
+            if (color == "Blue" && ListCreatedHorse.BLUE != true)
+            {
+                for (int i = 0; i < 4; i++)
+                {
+                    CreateHorse(color, BlueReady[i], i + 1, tempMyHorse);
+                }
+            }
+            if (color == "Yellow" && ListCreatedHorse.YELLOW != true)
+            {
+                for (int i = 0; i < 4; i++)
+                {
+                    CreateHorse(color, YellowReady[i], i + 1, tempMyHorse);
+                }
+            }
+            if (color == "Green" && ListCreatedHorse.GREEN != true)
+            {
+                for (int i = 0; i < 4; i++)
+                {
+                    CreateHorse(color, GreenReady[i], i + 1, tempMyHorse);
+                }
+            }
+        }
+        //  checkForCreateHorse(temp);
+       
         private void Player_Create_Activated(object sender, EventArgs e)
         {
-            MessageBox.Show("Active");
+            
+                byte[] bytes = new byte[2048];
+
+                //ClientSocket.Receive(bytes);
+                string ListHorseAvailable = Encoding.UTF8.GetString(bytes);
+                //var Jsonmsg = JsonConvert.DeserializeObject<ManagePacket>(ListHorseAvailable);
+               // return Jsonmsg.HC;
+            
+
         }
 
         private void Player_Create_Load(object sender, EventArgs e)
         {
-            MessageBox.Show("Load");
+
         }
 
         Point[] RedTop = new Point[]

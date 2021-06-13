@@ -17,11 +17,13 @@ namespace Client
 
         private Socket ClientSocket;
         private Thread clientThread;
+        
         private Connection _connect = new Connection();
         public Player_Choose(Socket ClientSocket , NguoiChoi nguoiChoi)
         {
 
             InitializeComponent();
+            
              p = nguoiChoi;
             this.ClientSocket = ClientSocket;
             PlayerName.Text = nguoiChoi.getUserName();
@@ -69,10 +71,10 @@ namespace Client
             Point p2 = new Point(240, 85);
             Point p3 = new Point(150, 170);
             Point p4 = new Point(240, 170);
-            Horse h1 = new Horse(p1, "Red", 1);
-            Horse h2 = new Horse(p2, "Red", 2);
-            Horse h3 = new Horse(p3, "Red", 3);
-            Horse h4 = new Horse(p4, "Red", 4);
+            Horse h1 = new Horse(p1, "Red", 1,p.userName);
+            Horse h2 = new Horse(p2, "Red", 2,p.userName);
+            Horse h3 = new Horse(p3, "Red", 3,p.userName);
+            Horse h4 = new Horse(p4, "Red", 4,p.userName);
             List<Horse> listHorse=new List<Horse>();
             listHorse.Add(h1);
             listHorse.Add(h2);
@@ -83,12 +85,13 @@ namespace Client
 
             if (r.setRoomName(RoomName))
             {
-                Player_Create create = new Player_Create();
+                Player_Create create = new Player_Create(p);
                
                 if(ClientSocket.Connected)
                 {   
                     try
                     {
+                       
                         _connect.Sendmsg(ClientSocket,"CreateRoom", $"{r.getRoomName()}:{p.getUserName()}",listHorse);
                         
                     }
@@ -99,10 +102,22 @@ namespace Client
                     clientThread = new Thread(() => _connect.ReceiveResponse(ClientSocket,p));
                     clientThread.Start();
                 }
-                create.Show();
 
-              
-                this.Hide();
+                byte[] bytes = new byte[1024];
+
+                ClientSocket.Receive(bytes);
+                string MSG = Encoding.UTF8.GetString(bytes);
+                var Jsonmsg = JsonConvert.DeserializeObject<ManagePacket>(MSG);
+
+                if (Jsonmsg != null)
+                {
+                    create.Show();
+
+
+                    this.Hide();
+                }
+
+               
                
             }
             else
@@ -131,7 +146,7 @@ namespace Client
                 ls.Dispose();
                 ls = null;
                 this.Show();
-                MessageBox.Show(ID_select.ToString());
+              
             };
             
         }
