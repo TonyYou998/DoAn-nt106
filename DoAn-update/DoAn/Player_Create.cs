@@ -82,6 +82,34 @@ namespace Client
             public bool MySoldier;
             public Point Location;
         }
+        public struct listCreated
+        {
+            public bool RED;
+            public bool GREEN;
+            public bool YELLOW;
+            public bool BLUE;
+        }
+        public listCreated ListCreatedHorse;
+        public void updateListCreate(string color)
+        {
+            switch (color)
+            {
+                case "Red":
+                    ListCreatedHorse.RED = true;
+                    break;
+                case "Green":
+                    ListCreatedHorse.GREEN = true;
+                    break;
+                case "Blue":
+                    ListCreatedHorse.BLUE = true;
+                    break;
+                case "Yellow":
+                    ListCreatedHorse.YELLOW = true;
+                    break;
+
+
+            }
+        }
         public void CreateHorse(string color, Point X, int ID, bool MyHorse)
         {
             var picture = new PictureBox
@@ -111,6 +139,8 @@ namespace Client
             {
                 picture.Click += new EventHandler(Moving);
             }
+            updateListCreate(color);
+
            
         }
         Point[] Red = new Point[]
@@ -137,15 +167,64 @@ namespace Client
             new Point { X = 150, Y = 170 },
             new Point { X = 240, Y = 170 }
         };
-
+        Point[] GreenReady = new Point[]
+      {
+            new Point { X = 515, Y = 85},
+            new Point { X = 600, Y = 85},
+            new Point { X = 515, Y = 170 },
+            new Point { X = 600, Y = 170 }
+      };
+        Point[] BlueReady = new Point[]
+      {
+            new Point { X = 150, Y = 440},
+            new Point { X = 230, Y = 440},
+            new Point { X = 150, Y = 530 },
+            new Point { X = 230, Y = 530 }
+      };
+        Point[] YellowReady = new Point[]
+      {
+            new Point { X = 515, Y = 440},
+            new Point { X = 600, Y = 440},
+            new Point { X = 515, Y = 530 },
+            new Point { X = 600, Y = 530 }
+      };
+        public string temp;
+        public bool tempMyHorse;
+        public void checkForCreateHorse (string color)
+        {
+            if(color=="Red" && ListCreatedHorse.RED != true)
+            {
+                for (int i=0; i < 4; i++)
+                {
+                    CreateHorse(color, RedReady[i], i + 1, tempMyHorse);
+                }
+            }
+            if (color == "Blue" && ListCreatedHorse.BLUE != true)
+            {
+                for (int i = 0; i < 4; i++)
+                {
+                    CreateHorse(color, BlueReady[i], i + 1, tempMyHorse);
+                }
+            }
+            if (color == "Yellow" && ListCreatedHorse.YELLOW != true)
+            {
+                for (int i = 0; i < 4; i++)
+                {
+                    CreateHorse(color, YellowReady[i], i + 1, tempMyHorse);
+                }
+            }
+            if (color == "Green" && ListCreatedHorse.GREEN != true)
+            {
+                for (int i = 0; i < 4; i++)
+                {
+                    CreateHorse(color, GreenReady[i], i + 1, tempMyHorse);
+                }
+            }
+        }
+      //  checkForCreateHorse(temp);
         private void Player_Create_Activated(object sender, EventArgs e)
         {
-            MessageBox.Show("Active");
-        }
-
-        private void Player_Create_Load(object sender, EventArgs e)
-        {
-            MessageBox.Show("Load");
+            
         }
 
         Point[] RedTop = new Point[]

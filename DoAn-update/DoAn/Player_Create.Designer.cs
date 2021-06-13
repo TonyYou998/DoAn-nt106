@@ -98,7 +98,7 @@ namespace Client
             this.DoubleBuffered = true;
             this.Name = "Player_Create";
             this.Text = "Player_Create";
-            this.Load += new System.EventHandler(this.Player_Create_Load);
+            this.Activated += new System.EventHandler(this.Player_Create_Activated);
             ((System.ComponentModel.ISupportInitialize)(this.Roll_number)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.btn_exit)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.btn_Roll)).EndInit();
