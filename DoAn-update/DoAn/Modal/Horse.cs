@@ -12,11 +12,14 @@ namespace Client.Modal
         public Point location { get; set; }
         public String color { get; set; }
         public int id { get; set; }
-        public Horse(Point location,String color,int id)
+        public string owner { get; set; }
+        public Horse(Point location,String color,int id,string owner)
         {
             this.location = location;
             this.color = color;
             this.id = id;
+            this.owner = owner;
+            
         }
     }
 }

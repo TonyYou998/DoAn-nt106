@@ -156,7 +156,7 @@ namespace Server
                     number_room++;
                     //roomID:username:lisHorse:
                     string  userName = roomData[1];
-                 MSG = new ManagePacket(HC[number_room], userName, number_room);
+                 MSG = new ManagePacket(HC[number_room-1], userName, number_room);
                     sendPacketToRoom(MSG, number_room);
                     break;
 

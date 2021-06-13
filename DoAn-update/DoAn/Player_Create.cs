@@ -47,10 +47,10 @@ namespace Client
             //ROLL_NUMBER GIAO DIEN
             Roll_number.Size = new Size(290,290);
             Roll_number.BackgroundImage = Properties.Resources.loading;
-            Roll_number.BackgroundImageLayout = ImageLayout.Stretch;
             Roll_number.Location = new Point(910, 50);
             Roll_number.BackColor = Color.Transparent;
             //
+            Roll_number.BackgroundImageLayout = ImageLayout.Stretch;
             for(int i = 0; i < 4; i++)
             {
                 CreateHorse("Red", RedReady[i], i + 1, true);
