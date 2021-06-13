@@ -13,14 +13,13 @@ namespace Client
 {
     public partial class Player_Create : Form
     {
-        private HorseControl HC;
-        private int n = 0;
-        
-        private NguoiChoi p { get; set; }
+        public HorseControl HC { get; set; }
+        public NguoiChoi p { get; set; }
         public Player_Create(NguoiChoi p)
         {
             InitializeComponent();
             this.p = p;
+            this.HC = HC;
             //FORM GIAO DIEN
 
             this.Size = new Size(1286, 751);
@@ -74,8 +73,6 @@ namespace Client
             Red4.ID = 4;
             Red4.Location = RedReady[3];
             Red4.MySoldier = true;
-
-
         }
         //Các biến sử dụng
         public Soldier Red1, Red2, Red3, Red4;
@@ -110,7 +107,6 @@ namespace Client
                 case "Yellow":
                     ListCreatedHorse.YELLOW = true;
                     break;
-
 
             }
         }
@@ -194,54 +190,68 @@ namespace Client
       };
         public string temp;
         public bool tempMyHorse;
-        public void checkForCreateHorse (string color)
+        public bool CheckMyHorse(string p, string UserNameTest)
         {
-            if(color=="Red" && ListCreatedHorse.RED != true)
+            return (p == UserNameTest);
+        }
+        public void checkForCreateHorse(string color, string p, string UserNameTest)
+        {
+            if (color == "Red" && ListCreatedHorse.RED != true)
             {
-                for (int i=0; i < 4; i++)
+                for (int i = 0; i < 4; i++)
                 {
-                    CreateHorse(color, RedReady[i], i + 1, tempMyHorse);
+                    CreateHorse(color, RedReady[i], i + 1, CheckMyHorse(p, UserNameTest));
                 }
             }
             if (color == "Blue" && ListCreatedHorse.BLUE != true)
             {
                 for (int i = 0; i < 4; i++)
                 {
-                    CreateHorse(color, BlueReady[i], i + 1, tempMyHorse);
+                    CreateHorse(color, BlueReady[i], i + 1, CheckMyHorse(p, UserNameTest));
                 }
             }
             if (color == "Yellow" && ListCreatedHorse.YELLOW != true)
             {
                 for (int i = 0; i < 4; i++)
                 {
-                    CreateHorse(color, YellowReady[i], i + 1, tempMyHorse);
+                    CreateHorse(color, YellowReady[i], i + 1, CheckMyHorse(p, UserNameTest));
                 }
             }
             if (color == "Green" && ListCreatedHorse.GREEN != true)
             {
                 for (int i = 0; i < 4; i++)
                 {
-                    CreateHorse(color, GreenReady[i], i + 1, tempMyHorse);
+                    CreateHorse(color, GreenReady[i], i + 1, CheckMyHorse(p, UserNameTest));
                 }
             }
         }
         //  checkForCreateHorse(temp);
-       
+
         private void Player_Create_Activated(object sender, EventArgs e)
         {
-            
-                byte[] bytes = new byte[2048];
+         
+           
+            if (HC.listyellowHorse.Count >0)
+            {
+                checkForCreateHorse(HC.listyellowHorse[1].color, p.userName, HC.listyellowHorse[1].owner);
+            }
+            if (HC.listGreenHorse.Count>0)
+            {
+                checkForCreateHorse(HC.listGreenHorse[1].color, p.userName, HC.listGreenHorse[1].owner);
+            }
+            if (HC.listBlueHorse.Count>0)
+            {
+                checkForCreateHorse(HC.listBlueHorse[1].color, p.userName, HC.listBlueHorse[1].owner);
+            }
+           
+            byte[] bytes = new byte[2048];
 
                 //ClientSocket.Receive(bytes);
                 string ListHorseAvailable = Encoding.UTF8.GetString(bytes);
                 //var Jsonmsg = JsonConvert.DeserializeObject<ManagePacket>(ListHorseAvailable);
                // return Jsonmsg.HC;
+           
             
-
-        }
-
-        private void Player_Create_Load(object sender, EventArgs e)
-        {
 
         }
 

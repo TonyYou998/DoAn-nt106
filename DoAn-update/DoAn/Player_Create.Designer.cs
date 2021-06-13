@@ -44,10 +44,9 @@ namespace Client
             this.Roll_number.BackColor = System.Drawing.Color.Transparent;
             this.Roll_number.BackgroundImage = global::Client.Properties.Resources._1;
             this.Roll_number.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Roll_number.Location = new System.Drawing.Point(1040, 67);
-            this.Roll_number.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.Roll_number.Location = new System.Drawing.Point(910, 50);
             this.Roll_number.Name = "Roll_number";
-            this.Roll_number.Size = new System.Drawing.Size(343, 400);
+            this.Roll_number.Size = new System.Drawing.Size(300, 300);
             this.Roll_number.TabIndex = 18;
             this.Roll_number.TabStop = false;
             // 
@@ -56,10 +55,9 @@ namespace Client
             this.btn_exit.BackColor = System.Drawing.Color.Transparent;
             this.btn_exit.BackgroundImage = global::Client.Properties.Resources.exit;
             this.btn_exit.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btn_exit.Location = new System.Drawing.Point(1123, 769);
-            this.btn_exit.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.btn_exit.Location = new System.Drawing.Point(983, 577);
             this.btn_exit.Name = "btn_exit";
-            this.btn_exit.Size = new System.Drawing.Size(199, 93);
+            this.btn_exit.Size = new System.Drawing.Size(174, 70);
             this.btn_exit.TabIndex = 17;
             this.btn_exit.TabStop = false;
             // 
@@ -68,10 +66,9 @@ namespace Client
             this.btn_Roll.BackColor = System.Drawing.Color.Transparent;
             this.btn_Roll.BackgroundImage = global::Client.Properties.Resources.roll;
             this.btn_Roll.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btn_Roll.Location = new System.Drawing.Point(1120, 507);
-            this.btn_Roll.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.btn_Roll.Location = new System.Drawing.Point(980, 380);
             this.btn_Roll.Name = "btn_Roll";
-            this.btn_Roll.Size = new System.Drawing.Size(199, 93);
+            this.btn_Roll.Size = new System.Drawing.Size(174, 70);
             this.btn_Roll.TabIndex = 16;
             this.btn_Roll.TabStop = false;
             this.btn_Roll.Click += new System.EventHandler(this.btn_roll_Click);
@@ -81,30 +78,27 @@ namespace Client
             this.btn_Start.BackColor = System.Drawing.Color.Transparent;
             this.btn_Start.BackgroundImage = global::Client.Properties.Resources.START_2;
             this.btn_Start.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btn_Start.Location = new System.Drawing.Point(1123, 631);
-            this.btn_Start.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.btn_Start.Location = new System.Drawing.Point(983, 473);
             this.btn_Start.Name = "btn_Start";
-            this.btn_Start.Size = new System.Drawing.Size(199, 93);
+            this.btn_Start.Size = new System.Drawing.Size(174, 70);
             this.btn_Start.TabIndex = 15;
             this.btn_Start.TabStop = false;
             // 
             // Player_Create
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImage = global::Client.Properties.Resources.BANCO__1_2;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.ClientSize = new System.Drawing.Size(1451, 949);
+            this.ClientSize = new System.Drawing.Size(1270, 712);
             this.Controls.Add(this.Roll_number);
             this.Controls.Add(this.btn_exit);
             this.Controls.Add(this.btn_Roll);
             this.Controls.Add(this.btn_Start);
             this.DoubleBuffered = true;
-            this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.Name = "Player_Create";
             this.Text = "Player_Create";
             this.Activated += new System.EventHandler(this.Player_Create_Activated);
-            this.Load += new System.EventHandler(this.Player_Create_Load);
             ((System.ComponentModel.ISupportInitialize)(this.Roll_number)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.btn_exit)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.btn_Roll)).EndInit();

@@ -199,10 +199,13 @@ namespace Server
                 case "Action":
                     switch (packet.msgcontent)
                     {
-                        case "Connect":
+                        case "Moving":
+                           // sendPacketToRoom(packet, );
+                            break;
+                        case "Next":
 
                             break;
-               
+
                     }
                     break;
             }

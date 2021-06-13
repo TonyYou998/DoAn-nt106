@@ -173,10 +173,26 @@ namespace Client
 
         private void Player_Join_Activated(object sender, EventArgs e)
         {
-            checkForCreateHorse(HC.listyellowHorse[1].color, p.userName, UsernameTest);
-            checkForCreateHorse(HC.listGreenHorse[1].color, p.userName, UsernameTest);
-            checkForCreateHorse(HC.listBlueHorse[1].color, p.userName, UsernameTest);
-            checkForCreateHorse(HC.listRedHorse[1].color, p.userName, UsernameTest);
+            if (HC.listyellowHorse.Count>0)
+            {
+                checkForCreateHorse(HC.listyellowHorse[1].color, p.userName, HC.listyellowHorse[1].owner);
+            }
+            if (HC.listGreenHorse.Count>0)
+            {
+                checkForCreateHorse(HC.listGreenHorse[1].color, p.userName, HC.listGreenHorse[1].owner);
+            }
+            if (HC.listBlueHorse.Count>0)
+            {
+                checkForCreateHorse(HC.listBlueHorse[1].color, p.userName, HC.listBlueHorse[1].owner);
+            }
+            if (HC.listRedHorse.Count>0)
+            {
+                checkForCreateHorse(HC.listRedHorse[1].color, p.userName, HC.listRedHorse[1].owner);
+            }
+
+
+
+
 
         }
 
@@ -188,7 +204,7 @@ namespace Client
         private void btn_roll_Click(object sender, EventArgs e)
         {
             Random random = new Random();
-           // temp = random.Next(1, 6);
+            // temp = random.Next(1, 6);
         }
         public void Moving(object sender, EventArgs e)
         {
