@@ -45,7 +45,7 @@ namespace Client
             HorseControl HC = acceptJoin();
             if (HC != null)
             {
-                Player_Join PJ = new Player_Join(HC,p);
+                Player_Join PJ = new Player_Join(HC,p,ClientSocket);
                 this.Dispose();
                 PJ.Show();
             }

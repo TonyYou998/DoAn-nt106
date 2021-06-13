@@ -1,19 +1,27 @@
 ﻿using Client.Modal;
+using Newtonsoft.Json;
 using System;
 using System.Drawing;
+using System.Net.Sockets;
+using System.Text;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace Client
 {
     public partial class Player_Join : Form
     {
+        private Socket ClientSocket;
         public HorseControl HC { get; set; }
         public NguoiChoi p { get; set; }
-        public Player_Join(HorseControl HC,NguoiChoi p)
+        public Player_Join(HorseControl HC,NguoiChoi p, Socket S)
         {
             InitializeComponent();
             this.HC = HC;
             this.p = p;
+            this.ClientSocket = S;
+            Thread a = new Thread(Player_Join_Receive);
+            a.Start();
             //FORM GIAO DIEN
             this.Size = new Size(1286, 751);
             this.BackgroundImage = Properties.Resources.BANCO__1_3;
@@ -171,29 +179,36 @@ namespace Client
             new Point { X = 600, Y = 530 }
       };
 
-        private void Player_Join_Activated(object sender, EventArgs e)
+        private void Player_Join_Receive()
         {
-            if (HC.listyellowHorse.Count>0)
+            while (ClientSocket.Connected)
             {
-                checkForCreateHorse(HC.listyellowHorse[1].color, p.userName, HC.listyellowHorse[1].owner);
+                byte[] bytes = new byte[1024];
+                ClientSocket.Receive(bytes);
+                string MSG = Encoding.UTF8.GetString(bytes);
+                var Jsonmsg = JsonConvert.DeserializeObject<ManagePacket>(MSG);
+                if (Jsonmsg.msgtype == "JoinRoom")
+                {
+                    HC = Jsonmsg.HC;
+                }
+                if (HC.listyellowHorse.Count > 0)
+                {
+                    checkForCreateHorse(HC.listyellowHorse[1].color, p.userName, HC.listyellowHorse[1].owner);
+                }
+                if (HC.listGreenHorse.Count > 0)
+                {
+                    checkForCreateHorse(HC.listGreenHorse[1].color, p.userName, HC.listGreenHorse[1].owner);
+                }
+                if (HC.listBlueHorse.Count > 0)
+                {
+                    checkForCreateHorse(HC.listBlueHorse[1].color, p.userName, HC.listBlueHorse[1].owner);
+                }
+                if (HC.listRedHorse.Count > 0)
+                {
+                    checkForCreateHorse(HC.listRedHorse[1].color, p.userName, HC.listRedHorse[1].owner);
+                }
             }
-            if (HC.listGreenHorse.Count>0)
-            {
-                checkForCreateHorse(HC.listGreenHorse[1].color, p.userName, HC.listGreenHorse[1].owner);
-            }
-            if (HC.listBlueHorse.Count>0)
-            {
-                checkForCreateHorse(HC.listBlueHorse[1].color, p.userName, HC.listBlueHorse[1].owner);
-            }
-            if (HC.listRedHorse.Count>0)
-            {
-                checkForCreateHorse(HC.listRedHorse[1].color, p.userName, HC.listRedHorse[1].owner);
-            }
-
-
-
-
-
+           
         }
 
         private void Roll_number_Click(object sender, EventArgs e)

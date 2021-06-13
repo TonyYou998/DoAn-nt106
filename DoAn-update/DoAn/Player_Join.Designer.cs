@@ -84,7 +84,6 @@ namespace Client
             this.DoubleBuffered = true;
             this.Name = "Player_Join";
             this.Text = "Player_Join";
-            this.Activated += new System.EventHandler(this.Player_Join_Activated);
             ((System.ComponentModel.ISupportInitialize)(this.Roll_number)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.btn_exit)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.btn_Roll)).EndInit();

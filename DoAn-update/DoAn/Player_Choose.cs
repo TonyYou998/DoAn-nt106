@@ -59,10 +59,6 @@ namespace Client
             RoomName.Location = new Point(595, 315);
         }
 
-        public Player_Choose(int id_room)
-        {
-
-        }
 
         private void btn_Create_Room_Click(object sender, EventArgs e)
         {
@@ -80,45 +76,33 @@ namespace Client
             listHorse.Add(h2);
             listHorse.Add(h3);
             listHorse.Add(h4);
-           
-
-
             if (r.setRoomName(RoomName))
             {
-                Player_Create create = new Player_Create(p);
+                Player_Create create = new Player_Create(p,ClientSocket);
                
                 if(ClientSocket.Connected)
                 {   
                     try
                     {
-                       
                         _connect.Sendmsg(ClientSocket,"CreateRoom", $"{r.getRoomName()}:{p.getUserName()}",listHorse);
-                        
                     }
                     catch (SocketException)
                     {
                         MessageBox.Show("Lỗi : Không thể connect tới server !");
                     }
-                    clientThread = new Thread(() => _connect.ReceiveResponse(ClientSocket,p));
-                    clientThread.Start();
+                   // clientThread = new Thread(() => _connect.ReceiveResponse(ClientSocket,p));
+                   // clientThread.Start();
                 }
 
                 byte[] bytes = new byte[1024];
-
                 ClientSocket.Receive(bytes);
                 string MSG = Encoding.UTF8.GetString(bytes);
                 var Jsonmsg = JsonConvert.DeserializeObject<ManagePacket>(MSG);
-
                 if (Jsonmsg != null)
                 {
                     create.Show();
-
-
                     this.Hide();
                 }
-
-               
-               
             }
             else
                 MessageBox.Show("chưa nhập tên phòng");

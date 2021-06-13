@@ -157,7 +157,7 @@ namespace Server
                     //roomID:username:lisHorse:
                     string  userName = roomData[1];
                  MSG = new ManagePacket(HC[number_room-1], userName, number_room);
-                    sendPacketToRoom(MSG, number_room);
+                    sendPacketToClient(current, MSG);
                     break;
 
 
@@ -178,8 +178,6 @@ namespace Server
                         case "green":
 
                             HC[number_room-1].listGreenHorse = packet.msgHorse;
-                          
-                           
                             break;
                         case "blue":
                             HC[number_room-1].listBlueHorse = packet.msgHorse;
