@@ -17,7 +17,6 @@ namespace Client
         public Socket ClientSocket;
         public NguoiChoi p = new NguoiChoi();
         private Connection _connect = new Connection();
-        private Thread clientThread;
 
         public Info_Player()
         {
@@ -52,41 +51,29 @@ namespace Client
             };
         }
 
-
-        private void connect(string userName, int port, IPAddress ip)
-        {
-
-        }
         private void btn_Connect_Click(object sender, EventArgs e)
         {
-
-
-            if (p.nhapThongTin(UserName, IpServer))
+            if (p.CheckValid(UserName.Text, IpServer.Text))
             {
 
                 ClientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                while (!ClientSocket.Connected)
+                try
                 {
-                    try
-                    {
-                        ClientSocket.Connect(p.serverIP, p.port);
-                        _connect.Sendmsg(ClientSocket, "User", $"connect:{p.userName}");
-                    }
-                    catch (SocketException)
-                    {
-                        MessageBox.Show("Lỗi : Không thể connect tới server !");
-                        return;
-                    }
+                    ClientSocket.Connect(p.serverIP, p.port);
+                    _connect.Sendmsg(ClientSocket, "User", $"connect:{p.userName}");
                 }
-
-              
+                catch (SocketException)
+                {
+                    MessageBox.Show("Lỗi : Không thể connect tới server !");
+                    return;
+                }
             }
 
             byte[] bytes = new byte[2048];
-
             ClientSocket.Receive(bytes);
             string acceptedUser = Encoding.UTF8.GetString(bytes);
             var msg = JsonConvert.DeserializeObject<ManagePacket>(acceptedUser);
+
             if (msg.msgtype == "User" && msg.msgcontent == "Success")
             {
                 
@@ -94,13 +81,13 @@ namespace Client
                 PY.Show();
                 Hide();
                 PY.Disposed += delegate {
-                    this.Show();
+                    this.Dispose();
                 };
             }
             else if (msg.msgtype == "User" && msg.msgcontent == "Exist")
             {
                 MessageBox.Show("Tên đã tồn tại, vui lòng đặt tên khác");
-                
+                return;
             }
 
 

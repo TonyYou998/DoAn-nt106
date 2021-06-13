@@ -12,16 +12,15 @@ namespace Client
     public partial class Player_Join : Form
     {
         private Socket ClientSocket;
-        public HorseControl HC { get; set; }
-        public NguoiChoi p { get; set; }
+        public HorseControl HC;
+        public NguoiChoi p;
         public Player_Join(HorseControl HC,NguoiChoi p, Socket S)
         {
             InitializeComponent();
             this.HC = HC;
             this.p = p;
             this.ClientSocket = S;
-            Thread a = new Thread(Player_Join_Receive);
-            a.Start();
+            UPDATE_BANCO();
             //FORM GIAO DIEN
             this.Size = new Size(1286, 751);
             this.BackgroundImage = Properties.Resources.BANCO__1_3;
@@ -44,6 +43,8 @@ namespace Client
             Roll_number.BackgroundImageLayout = ImageLayout.Stretch;
             Roll_number.Location = new Point(910, 50);
             Roll_number.BackColor = Color.Transparent;
+            Thread a = new Thread(Player_Join_Receive);
+            a.Start();
         }
         public Soldier Red1, Red2, Red3, Red4;
         public struct Soldier
@@ -79,6 +80,11 @@ namespace Client
                     break;
             }
         }
+
+        private void AddControlSafe(PictureBox picture)
+        {
+            this.Controls.Add(picture);
+        }
         public void CreateHorse(string color, Point X, int ID, bool MyHorse)
         {
             var picture = new PictureBox
@@ -88,7 +94,15 @@ namespace Client
                 Location = X,
                 BackColor = Color.Transparent
             };
-            this.Controls.Add(picture);
+            if (this.InvokeRequired)
+            {
+                this.Invoke(new MethodInvoker(() => AddControlSafe(picture)));
+            }
+            else
+            {
+                AddControlSafe(picture);
+            }
+
             switch (color)
             {
                 case "Red":
@@ -187,30 +201,36 @@ namespace Client
                 ClientSocket.Receive(bytes);
                 string MSG = Encoding.UTF8.GetString(bytes);
                 var Jsonmsg = JsonConvert.DeserializeObject<ManagePacket>(MSG);
-                if (Jsonmsg.msgtype == "JoinRoom")
+
+                if (Jsonmsg.HC != null)
                 {
                     HC = Jsonmsg.HC;
-                }
-                if (HC.listyellowHorse.Count > 0)
-                {
-                    checkForCreateHorse(HC.listyellowHorse[1].color, p.userName, HC.listyellowHorse[1].owner);
-                }
-                if (HC.listGreenHorse.Count > 0)
-                {
-                    checkForCreateHorse(HC.listGreenHorse[1].color, p.userName, HC.listGreenHorse[1].owner);
-                }
-                if (HC.listBlueHorse.Count > 0)
-                {
-                    checkForCreateHorse(HC.listBlueHorse[1].color, p.userName, HC.listBlueHorse[1].owner);
-                }
-                if (HC.listRedHorse.Count > 0)
-                {
-                    checkForCreateHorse(HC.listRedHorse[1].color, p.userName, HC.listRedHorse[1].owner);
+                    UPDATE_BANCO();
                 }
             }
            
         }
 
+
+        private void UPDATE_BANCO()
+        {
+            if (HC.listyellowHorse.Count > 0)
+            {
+                checkForCreateHorse(HC.listyellowHorse[1].color, p.userName, HC.listyellowHorse[1].owner);
+            }
+            if (HC.listGreenHorse.Count > 0)
+            {
+                checkForCreateHorse(HC.listGreenHorse[1].color, p.userName, HC.listGreenHorse[1].owner);
+            }
+            if (HC.listBlueHorse.Count > 0)
+            {
+                checkForCreateHorse(HC.listBlueHorse[1].color, p.userName, HC.listBlueHorse[1].owner);
+            }
+            if (HC.listRedHorse.Count > 0)
+            {
+                checkForCreateHorse(HC.listRedHorse[1].color, p.userName, HC.listRedHorse[1].owner);
+            }
+        }
         private void Roll_number_Click(object sender, EventArgs e)
         {
 

@@ -1,32 +1,25 @@
 ﻿using Client.Modal;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Client
 {
     public partial class Player_Create : Form
     {
-        public HorseControl HC = new HorseControl();
-        public NguoiChoi p { get; set; }
-        private Socket ClientSocket;
-        
+        private HorseControl HC = new HorseControl();
+        private  readonly NguoiChoi p;
+        private readonly Socket ClientSocket;
         public Player_Create(NguoiChoi p, Socket S)
         {
             InitializeComponent();
             this.p = p;
             this.ClientSocket = S;
-            Thread a = new Thread(Player_Join_Receive);
-            a.Start();
+           
             //FORM GIAO DIEN
 
             this.Size = new Size(1286, 751);
@@ -80,6 +73,9 @@ namespace Client
             Red4.ID = 4;
             Red4.Location = RedReady[3];
             Red4.MySoldier = true;
+
+            Thread a = new Thread(Player_Join_Receive);
+            a.Start();
         }
         //Các biến sử dụng
         public Soldier Red1, Red2, Red3, Red4;
@@ -117,16 +113,30 @@ namespace Client
 
             }
         }
+
+        private void AddControlSafe(PictureBox picture)
+        {
+            this.Controls.Add(picture);
+        }
         public void CreateHorse(string color, Point X, int ID, bool MyHorse)
         {
             var picture = new PictureBox
             {
-                Name =color + ID.ToString(),
+                Name = color + ID.ToString(),
                 Size = new Size(51, 74),
                 Location = X,
                 BackColor = Color.Transparent
             };
-          this.Controls.Add(picture);
+
+            if (this.InvokeRequired)
+            {
+                this.Invoke(new MethodInvoker(() => AddControlSafe(picture)));
+            }
+            else
+            {
+                AddControlSafe(picture);
+            }
+
             switch (color) 
             {
                 case "Red":
@@ -150,6 +160,7 @@ namespace Client
 
            
         }
+
         Point[] Red = new Point[]
         {
             new Point {X = 330, Y = 25 }, new Point {X = 330, Y = 55 }, new Point {X = 330, Y = 90 }, new Point {X = 330, Y = 120 },
@@ -195,6 +206,16 @@ namespace Client
             new Point { X = 515, Y = 530 },
             new Point { X = 600, Y = 530 }
       };
+        Point[] RedTop = new Point[]
+{
+            new Point { X = 385, Y = 55},
+            new Point { X = 385, Y = 90},
+            new Point { X = 385, Y = 120 },
+            new Point { X = 385, Y = 150 },
+            new Point { X = 385, Y = 185 },
+            new Point { X = 385, Y = 225 }
+};
+
         public string temp;
         public bool tempMyHorse;
         public bool CheckMyHorse(string p, string UserNameTest)
@@ -232,48 +253,16 @@ namespace Client
                 }
             }
         }
-        //  checkForCreateHorse(temp);
 
-        private void Player_Create_Activated_a(object sender, EventArgs e)
+        public void Player_Join_Receive()
         {
-            if (HC != null)
-            {
-                if (HC.listyellowHorse.Count > 0)
-                {
-                    checkForCreateHorse(HC.listyellowHorse[1].color, p.userName, HC.listyellowHorse[1].owner);
-                }
-                if (HC.listGreenHorse.Count > 0)
-                {
-                    checkForCreateHorse(HC.listGreenHorse[1].color, p.userName, HC.listGreenHorse[1].owner);
-                }
-                if (HC.listBlueHorse.Count > 0)
-                {
-                    checkForCreateHorse(HC.listBlueHorse[1].color, p.userName, HC.listBlueHorse[1].owner);
-                }
-            }
-           
-           
-           
-          //  byte[] bytes = new byte[2048];
-
-                //ClientSocket.Receive(bytes);
-               // string ListHorseAvailable = Encoding.UTF8.GetString(bytes);
-                //var Jsonmsg = JsonConvert.DeserializeObject<ManagePacket>(ListHorseAvailable);
-               // return Jsonmsg.HC;
-           
-            
-
-        }
-        [STAThread]
-        private void Player_Join_Receive()
-        {
-            
             while (ClientSocket.Connected)
             {
                 byte[] bytes = new byte[2048];
                 ClientSocket.Receive(bytes);
                 string MSG = Encoding.UTF8.GetString(bytes);
                 var Jsonmsg = JsonConvert.DeserializeObject<ManagePacket>(MSG);
+
                 if (Jsonmsg.HC != null)
                 {
                     HC = Jsonmsg.HC;
@@ -294,25 +283,15 @@ namespace Client
                         checkForCreateHorse(HC.listRedHorse[1].color, p.userName, HC.listRedHorse[1].owner);
                     }
                 }
-            
-              
+
+
             }
 
         }
 
-        Point[] RedTop = new Point[]
-       {
-            new Point { X = 385, Y = 55},
-            new Point { X = 385, Y = 90},
-            new Point { X = 385, Y = 120 },
-            new Point { X = 385, Y = 150 },
-            new Point { X = 385, Y = 185 },
-            new Point { X = 385, Y = 225 }
-       };
 
- 
-   
-        
+
+
         public void Moving(object sender, EventArgs e)
         {
             PictureBox a = (PictureBox)sender;

@@ -175,14 +175,14 @@ namespace Server
 
                     switch(Color)
                     {
-                        case "green":
+                        case "Green":
 
                             HC[number_room-1].listGreenHorse = packet.msgHorse;
                             break;
-                        case "blue":
+                        case "Blue":
                             HC[number_room-1].listBlueHorse = packet.msgHorse;
                             break;
-                        case "yellow":
+                        case "Yellow":
                             HC[number_room-1].listyellowHorse = packet.msgHorse;
                             break;
                     }

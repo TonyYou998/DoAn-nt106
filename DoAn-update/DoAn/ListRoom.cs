@@ -46,8 +46,12 @@ namespace Client
             if (HC != null)
             {
                 Player_Join PJ = new Player_Join(HC,p,ClientSocket);
-                this.Dispose();
+                PJ.Disposed += delegate
+                {
+                    this.Dispose();
+                };
                 PJ.Show();
+                this.Hide();
             }
            
         }
@@ -57,21 +61,21 @@ namespace Client
             {
                 case 1:
                     List<Horse> listGreenHorse = new List<Horse>();
-                    createListHorse(listGreenHorse, 515, 600, 85, 170, "green");
+                    createListHorse(listGreenHorse, 515, 600, 85, 170, "Green");
 
-                    _connect.Sendmsg(ClientSocket, "JoinRoom", $"{p.getUserName()}:{roomID}:green",listGreenHorse);
+                    _connect.Sendmsg(ClientSocket, "JoinRoom", $"{p.userName}:{roomID}:Green",listGreenHorse);
                     break;
                 case 2:
                     List<Horse> listBlueHorse = new List<Horse>();
-                    createListHorse(listBlueHorse, 150, 230, 440, 530, "blue");
+                    createListHorse(listBlueHorse, 150, 230, 440, 530, "Blue");
 
-                    _connect.Sendmsg(ClientSocket, "JoinRoom", $"{p.getUserName()}:{roomID}:blue:{listBlueHorse}",listBlueHorse);
+                    _connect.Sendmsg(ClientSocket, "JoinRoom", $"{p.userName}:{roomID}:Blue:{listBlueHorse}",listBlueHorse);
                     break;
                 case 3:
                     List<Horse> listYellowHorse = new List<Horse>();
-                    createListHorse(listYellowHorse, 515, 600, 440, 530, "yellow");
+                    createListHorse(listYellowHorse, 515, 600, 440, 530, "Yellow");
 
-                    _connect.Sendmsg(ClientSocket, "JoinRoom", $"{p.getUserName()}:{roomID}:yellow:{listYellowHorse}",listYellowHorse);
+                    _connect.Sendmsg(ClientSocket, "JoinRoom", $"{p.userName}:{roomID}:Yellow:{listYellowHorse}",listYellowHorse);
                     break;
                 case 4:
                     MessageBox.Show("full player");

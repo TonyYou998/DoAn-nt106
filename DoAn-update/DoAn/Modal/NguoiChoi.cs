@@ -6,57 +6,26 @@ namespace Client.Modal
 {
     public class NguoiChoi
     {
-        public string userName {
-            get;
-       set;
-        }
-
-        public String getUserName()
-        {
-            return userName;
-        }
+        public string userName { get; set; }
         public int port { get; set; }
-        public int getPort()
-        {
-            return this.port;
-        }
         public IPAddress serverIP { get; set; }
-        public IPAddress getIP()
-        {
-            return this.serverIP;
-        }
 
-        public bool nhapThongTin(RichTextBox userName,RichTextBox Ip)
+        public bool CheckValid(string u, string ip)
         {
             this.port = 8000;
 
-            while(this.userName=="" || this.serverIP==null  )
+            try
             {
-                this.userName = userName.Text;
-               
-                try
-                {
-                    this.serverIP = IPAddress.Parse(Ip.Text);
-                    
-                }
-                catch
-                {
-                    MessageBox.Show("sai định dạng ip\nmởi nhập lại ");
-                  
-                    userName.Text = "";
-
-                    Ip.Text = "";
-
-                    return false;
-                }
-
-              
-               
+                this.serverIP = IPAddress.Parse(ip);
+                this.userName = u;
+            }
+            catch
+            {
+                MessageBox.Show("Sai định dạng IP, vui lòng nhập lại!");
+                return false;
             }
 
             return true;
-
-
         }
     }
 }

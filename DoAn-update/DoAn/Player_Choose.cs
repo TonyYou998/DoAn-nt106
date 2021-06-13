@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Net.Sockets;
 using System.Text;
-using System.Threading;
 using System.Windows.Forms;
 
 namespace Client
@@ -16,7 +15,6 @@ namespace Client
         private NguoiChoi p;
 
         private Socket ClientSocket;
-        private Thread clientThread;
         
         private Connection _connect = new Connection();
         public Player_Choose(Socket ClientSocket , NguoiChoi nguoiChoi)
@@ -24,9 +22,9 @@ namespace Client
 
             InitializeComponent();
             
-             p = nguoiChoi;
+            p = nguoiChoi;
             this.ClientSocket = ClientSocket;
-            PlayerName.Text = nguoiChoi.getUserName();
+            PlayerName.Text = p.userName;
 
             //FORM GIAO DIEN
             this.Size = new Size(1286, 751);
@@ -78,20 +76,16 @@ namespace Client
             listHorse.Add(h4);
             if (r.setRoomName(RoomName))
             {
-                Player_Create create = new Player_Create(p,ClientSocket);
-               
                 if(ClientSocket.Connected)
                 {   
                     try
                     {
-                        _connect.Sendmsg(ClientSocket,"CreateRoom", $"{r.getRoomName()}:{p.getUserName()}",listHorse);
+                        _connect.Sendmsg(ClientSocket,"CreateRoom", $"{r.getRoomName()}:{p.userName}",listHorse);
                     }
                     catch (SocketException)
                     {
                         MessageBox.Show("Lỗi : Không thể connect tới server !");
                     }
-                   // clientThread = new Thread(() => _connect.ReceiveResponse(ClientSocket,p));
-                   // clientThread.Start();
                 }
 
                 byte[] bytes = new byte[1024];
@@ -100,6 +94,10 @@ namespace Client
                 var Jsonmsg = JsonConvert.DeserializeObject<ManagePacket>(MSG);
                 if (Jsonmsg != null)
                 {
+                    Player_Create create = new Player_Create(p, ClientSocket);
+                    create.Disposed += delegate {
+                        this.Dispose();
+                    };
                     create.Show();
                     this.Hide();
                 }
@@ -127,10 +125,7 @@ namespace Client
             ls.Disposed += delegate
             {
                 ID_select = ls.ID_select;
-                ls.Dispose();
-                ls = null;
-                this.Show();
-              
+                this.Dispose();
             };
             
         }
