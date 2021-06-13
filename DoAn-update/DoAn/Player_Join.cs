@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Client.Modal;
+using System;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -7,10 +8,12 @@ namespace Client
     public partial class Player_Join : Form
     {
         public HorseControl HC { get; set; }
-        public Player_Join(HorseControl HC)
+        public NguoiChoi p { get; set; }
+        public Player_Join(HorseControl HC,NguoiChoi p)
         {
             InitializeComponent();
             this.HC = HC;
+            this.p = p;
             //FORM GIAO DIEN
             this.Size = new Size(1286, 751);
             this.BackgroundImage = Properties.Resources.BANCO__1_3;
@@ -103,6 +106,11 @@ namespace Client
         };
 
         private int temp, g1=-1, g2 = -1, g3 = -1, g4 = -1;
+
+        private void Roll_number_Click(object sender, EventArgs e)
+        {
+
+        }
 
         private void Player_Join_Load(object sender, EventArgs e)
         {

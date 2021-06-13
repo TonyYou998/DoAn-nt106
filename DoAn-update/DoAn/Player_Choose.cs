@@ -85,12 +85,13 @@ namespace Client
 
             if (r.setRoomName(RoomName))
             {
-                Player_Create create = new Player_Create();
+                Player_Create create = new Player_Create(p);
                
                 if(ClientSocket.Connected)
                 {   
                     try
                     {
+                       
                         _connect.Sendmsg(ClientSocket,"CreateRoom", $"{r.getRoomName()}:{p.getUserName()}",listHorse);
                         
                     }

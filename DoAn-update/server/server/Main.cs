@@ -154,7 +154,10 @@ namespace Server
                     HC[number_room] = new HorseControl();
                     HC[number_room].listRedHorse = packet.msgHorse;
                     number_room++;
-
+                    //roomID:username:lisHorse:
+                    string  userName = roomData[1];
+                 MSG = new ManagePacket(HC[number_room], userName, number_room);
+                    sendPacketToRoom(MSG, number_room);
                     break;
 
 
@@ -166,7 +169,7 @@ namespace Server
                 case "JoinRoom":
                     string[] Data = packet.msgcontent.Split(':');
 
-
+                    string name = Data[0];
 
                     string Color = Data[2];
 
@@ -188,7 +191,7 @@ namespace Server
 
                     sql.SetHost(Data[0],0);
                     sql.SetRoomID(Data[0], int.Parse(Data[1]));
-                    MSG = new ManagePacket(HC[number_room - 1]);
+                    MSG = new ManagePacket(HC[number_room - 1],name,number_room);
                     sendPacketToRoom(MSG, number_room);
 
                     break;

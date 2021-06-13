@@ -11,9 +11,13 @@ namespace Client
         public List<RoomModel> msgRoom { get; set; }
         public List<Horse> msgHorse { get; set; }
         public HorseControl HC { get; set; }
-        public ManagePacket(HorseControl HC)
+        public string Name { get; set; }
+        public int roomID { get; set; }
+        public ManagePacket(HorseControl HC,string name,int roomID)
         {
             this.HC = HC;
+            this.Name = name;
+            this.roomID = roomID;
         }
         public ManagePacket()
         {

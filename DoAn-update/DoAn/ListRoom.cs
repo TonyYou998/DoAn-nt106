@@ -14,6 +14,7 @@ namespace Client
         private Socket ClientSocket;
         private Connection _connect = new Connection();
         NguoiChoi p;
+
         public void drawListRoom(List<RoomModel> L)
         {
             int i = 0;
@@ -44,7 +45,7 @@ namespace Client
             HorseControl HC = acceptJoin();
             if (HC != null)
             {
-                Player_Join PJ = new Player_Join(HC);
+                Player_Join PJ = new Player_Join(HC,p);
                 this.Dispose();
                 PJ.Show();
             }

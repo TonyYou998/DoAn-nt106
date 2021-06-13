@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Client.Modal;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -13,10 +14,12 @@ namespace Client
     public partial class Player_Create : Form
     {
         private HorseControl HC;
-        public Player_Create()
+        private int n = 0;
+        private NguoiChoi p { get; set; }
+        public Player_Create(NguoiChoi p)
         {
             InitializeComponent();
-         
+            this.p = p;
             //FORM GIAO DIEN
 
             this.Size = new Size(1286, 751);
@@ -221,10 +224,24 @@ namespace Client
                 }
             }
         }
-      //  checkForCreateHorse(temp);
+        //  checkForCreateHorse(temp);
+       
         private void Player_Create_Activated(object sender, EventArgs e)
         {
             
+                byte[] bytes = new byte[2048];
+
+                //ClientSocket.Receive(bytes);
+                string ListHorseAvailable = Encoding.UTF8.GetString(bytes);
+                //var Jsonmsg = JsonConvert.DeserializeObject<ManagePacket>(ListHorseAvailable);
+               // return Jsonmsg.HC;
+            
+
+        }
+
+        private void Player_Create_Load(object sender, EventArgs e)
+        {
+
         }
 
         Point[] RedTop = new Point[]
