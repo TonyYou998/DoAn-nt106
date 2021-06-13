@@ -6,11 +6,14 @@ namespace Client
 {
     public partial class Player_Join : Form
     {
-        public HorseControl HC { get; set; }
+        public HorseControl HC { get; set; }//dùng để nhận location khi dc server gửi đến
         public Player_Join(HorseControl HC)
         {
             InitializeComponent();
-            this.HC = HC;
+            this.HC = HC;//nhận location của tất cả các player đã join vào phòng
+            //problem=>chưa thể cập nhật được khi có người chơi mới vào phòng: vd phòng đã có 2 mems, khi người chơi thứ 3 join vào thì sẽ nhận dc lstHorse của player 1,2,3 nhưng khi player 4 vào thì player 1,2,3 sẽ không nhận được location của player 4 do chưa viết hàm để liên tục lắng nghe từ server, mặt dù bên server có gửi. bên form của host củng như vậy
+
+            //-> chiến làm,any problem???????
             //FORM GIAO DIEN
             this.Size = new Size(1286, 751);
             this.BackgroundImage = Properties.Resources.BANCO__1_3;
