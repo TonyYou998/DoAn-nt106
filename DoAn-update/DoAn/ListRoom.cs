@@ -87,10 +87,10 @@ namespace Client
             Point p2 = new Point(x2, y2);
             Point p3 = new Point(x1, y2);
             Point p4 = new Point(x2, y1);
-            Horse h1 = new Horse(p1, color, 1);
-            Horse h2 = new Horse(p2, color, 2);
-            Horse h3 = new Horse(p3, color, 3);
-            Horse h4 = new Horse(p4, color, 4);
+            Horse h1 = new Horse(p1, color, 1,p.userName);
+            Horse h2 = new Horse(p2, color, 2,p.userName);
+            Horse h3 = new Horse(p3, color, 3,p.userName);
+            Horse h4 = new Horse(p4, color, 4,p.userName);
 
             lstHorse.Add(h1);
             lstHorse.Add(h2);
