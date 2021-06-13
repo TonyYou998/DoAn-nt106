@@ -102,10 +102,22 @@ namespace Client
                     clientThread = new Thread(() => _connect.ReceiveResponse(ClientSocket,p));
                     clientThread.Start();
                 }
-                create.Show();
 
-              
-                this.Hide();
+                byte[] bytes = new byte[1024];
+
+                ClientSocket.Receive(bytes);
+                string MSG = Encoding.UTF8.GetString(bytes);
+                var Jsonmsg = JsonConvert.DeserializeObject<ManagePacket>(MSG);
+
+                if (Jsonmsg != null)
+                {
+                    create.Show();
+
+
+                    this.Hide();
+                }
+
+               
                
             }
             else
