@@ -202,6 +202,11 @@ namespace Server
                             sql.SetRoomStart(data[1], 1);
                             sendPacketToRoom(packet, int.Parse(data[1]));
                             break;
+                        case "Roll":
+                            int rollNuber = int.Parse(data[2]);
+                            MSG = new ManagePacket(rollNuber);
+                           sendPacketToRoom(MSG,int.Parse(data[1]));
+                            break;
                         case "Moving":
                             sendPacketToRoom(packet, int.Parse(data[1]));
                             break;

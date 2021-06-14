@@ -14,6 +14,7 @@ namespace Client
         private HorseControl HC = new HorseControl();
         private readonly NguoiChoi p;
         private readonly Socket ClientSocket;
+        private Connection _connect = new Connection();
         private int roomID { get; set; }
         public Player_Create(NguoiChoi p, Socket S,int roomID)
         {
@@ -121,7 +122,7 @@ namespace Client
             {
                 //send gói bắt đầu để nhận gọi next
                 //nhận về gói có listHorse, Username được đi
-                Connection _connect = new Connection();
+                
                 _connect.Sendmsg(ClientSocket, "Action", $"Start:{roomID}");
                 Started = true;
             }
@@ -237,6 +238,12 @@ namespace Client
             new Point { X = 515, Y = 170 },
             new Point { X = 600, Y = 170 }
       };
+
+        private void Player_Create_Load(object sender, EventArgs e)
+        {
+
+        }
+
         Point[] BlueReady = new Point[]
       {
             new Point { X = 150, Y = 440},
@@ -383,7 +390,7 @@ namespace Client
                 ClientSocket.Receive(bytes);
                 string MSG = Encoding.UTF8.GetString(bytes);
                 var Jsonmsg = JsonConvert.DeserializeObject<ManagePacket>(MSG);
-
+               // Jsonmsg.rollNumber cái này chứa rollNumber=> lấy ra sài
                 if (Jsonmsg.HC != null)
                 {
                     HC = Jsonmsg.HC;
@@ -505,10 +512,11 @@ namespace Client
         public int RollNumber=-1;
         private void btn_roll_Click(object sender, EventArgs e)
         {
-            if (Started == true && Rolled==false && RollNumber==-1 && MyTurn == true)
+            if (Rolled==false && RollNumber==-1 )
             {
                 Random random = new Random();
                 RollNumber = random.Next(1, 6);
+                _connect.Sendmsg(ClientSocket, "Action", $"Roll:{roomID}:{RollNumber}");
                 Rolled = true;
                 MyTurn = false;
                 switch (RollNumber)

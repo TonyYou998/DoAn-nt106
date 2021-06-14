@@ -12,10 +12,15 @@ namespace Server
         public HorseControl HC { get; set; }
         public string Name { get; set; }
         public int roomID { get; set; }
+        public int rollNumber { get; set; }
         public ManagePacket() {
             msgcontent = "";
             msgtype = "";
             msgRoom = null;
+        }
+        public ManagePacket(int rollNumber)
+        {
+            this.rollNumber= rollNumber;
         }
         public ManagePacket(HorseControl HC,string name,int roomID)
         {

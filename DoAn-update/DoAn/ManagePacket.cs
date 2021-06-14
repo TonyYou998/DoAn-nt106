@@ -12,6 +12,7 @@ namespace Client
         public List<Horse> msgHorse { get; set; }
         public HorseControl HC { get; set; }
         public string Name { get; set; }
+        public int rollNumber { get; set; }
         public int roomID { get; set; }
         public ManagePacket(HorseControl HC,string name,int roomID)
         {
@@ -24,6 +25,10 @@ namespace Client
             msgcontent = "";
             msgtype = "";
             msgRoom = null;
+        }
+        public ManagePacket(int rollNumber)
+        {
+            this.roomID = rollNumber;
         }
         public ManagePacket(string type,string msgRoom,List<Horse> listHorse)
         {

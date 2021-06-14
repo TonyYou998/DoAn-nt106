@@ -201,6 +201,7 @@ namespace Client
                 ClientSocket.Receive(bytes);
                 string MSG = Encoding.UTF8.GetString(bytes);
                 var Jsonmsg = JsonConvert.DeserializeObject<ManagePacket>(MSG);
+                //Jsonmsg.rollNumber chưa value của dice lấy ra sài
 
                 if (Jsonmsg.HC != null)
                 {
@@ -211,6 +212,10 @@ namespace Client
            
         }
 
+        private void Player_Join_Load(object sender, EventArgs e)
+        {
+
+        }
 
         private void UPDATE_BANCO()
         {
