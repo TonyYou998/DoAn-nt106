@@ -78,7 +78,7 @@ namespace Client
             a.Start();
         }
         //Các biến sử dụng
-        public Soldier Red1, Red2, Red3, Red4;
+        public Soldier Red1, Red2, Red3, Red4, Green1, Green2, Green3, Green4, Yellow1, Yellow2, Yellow3, Yellow4, Blue1, Blue2, Blue3, Blue4;
         public struct Soldier
         {
             public string color;
@@ -207,14 +207,14 @@ namespace Client
             new Point { X = 600, Y = 530 }
       };
         Point[] RedTop = new Point[]
-{
+       {
             new Point { X = 385, Y = 55},
             new Point { X = 385, Y = 90},
             new Point { X = 385, Y = 120 },
             new Point { X = 385, Y = 150 },
             new Point { X = 385, Y = 185 },
             new Point { X = 385, Y = 225 }
-};
+        };
 
         public string temp;
         public bool tempMyHorse;
@@ -230,6 +230,25 @@ namespace Client
                 {
                     CreateHorse(color, RedReady[i], i + 1, CheckMyHorse(p, UserNameTest));
                 }
+                Red1.color = color;
+                Red1.ID = 1;
+                Red1.Location = RedReady[0];
+                Red1.MySoldier = CheckMyHorse(p, UserNameTest);
+
+                Red2.color = color;
+                Red2.ID = 2;
+                Red2.Location = RedReady[1];
+                Red2.MySoldier = CheckMyHorse(p, UserNameTest);
+
+                Red3.color = color;
+                Red3.ID = 3;
+                Red3.Location = RedReady[2];
+                Red3.MySoldier = CheckMyHorse(p, UserNameTest);
+
+                Red4.color = color;
+                Red4.ID = 4;
+                Red4.Location = RedReady[3];
+                Red4.MySoldier = CheckMyHorse(p, UserNameTest);
             }
             if (color == "Blue" && ListCreatedHorse.BLUE != true)
             {
@@ -237,6 +256,25 @@ namespace Client
                 {
                     CreateHorse(color, BlueReady[i], i + 1, CheckMyHorse(p, UserNameTest));
                 }
+                Blue1.color = color;
+                Blue1.ID = 1;
+                Blue1.Location = BlueReady[0];
+                Blue1.MySoldier = CheckMyHorse(p, UserNameTest);
+
+                Blue2.color = color;
+                Blue2.ID = 2;
+                Blue2.Location = BlueReady[1];
+                Blue2.MySoldier = CheckMyHorse(p, UserNameTest);
+
+                Blue3.color = color;
+                Blue3.ID = 3;
+                Blue3.Location = BlueReady[2];
+                Blue3.MySoldier = CheckMyHorse(p, UserNameTest);
+
+                Blue4.color = color;
+                Blue4.ID = 4;
+                Blue4.Location = BlueReady[3];
+                Blue4.MySoldier = CheckMyHorse(p, UserNameTest);
             }
             if (color == "Yellow" && ListCreatedHorse.YELLOW != true)
             {
@@ -244,6 +282,25 @@ namespace Client
                 {
                     CreateHorse(color, YellowReady[i], i + 1, CheckMyHorse(p, UserNameTest));
                 }
+                Yellow1.color = color;
+                Yellow1.ID = 1;
+                Yellow1.Location = YellowReady[0];
+                Yellow1.MySoldier = CheckMyHorse(p, UserNameTest);
+
+                Yellow2.color = color;
+                Yellow2.ID = 2;
+                Yellow2.Location = YellowReady[1];
+                Yellow2.MySoldier = CheckMyHorse(p, UserNameTest);
+
+                Yellow3.color = color;
+                Yellow3.ID = 3;
+                Yellow3.Location = YellowReady[2];
+                Yellow3.MySoldier = CheckMyHorse(p, UserNameTest);
+
+                Yellow4.color = color;
+                Yellow4.ID = 4;
+                Yellow4.Location = YellowReady[3];
+                Yellow4.MySoldier = CheckMyHorse(p, UserNameTest);
             }
             if (color == "Green" && ListCreatedHorse.GREEN != true)
             {
@@ -251,9 +308,31 @@ namespace Client
                 {
                     CreateHorse(color, GreenReady[i], i + 1, CheckMyHorse(p, UserNameTest));
                 }
+                Green1.color = color;
+                Green1.ID = 1;
+                Green1.Location = GreenReady[0];
+                Green1.MySoldier = CheckMyHorse(p, UserNameTest);
+
+                Green2.color = color;
+                Green2.ID = 2;
+                Green2.Location = GreenReady[1];
+                Green2.MySoldier = CheckMyHorse(p, UserNameTest);
+
+                Green3.color = color;
+                Green3.ID = 3;
+                Green3.Location = GreenReady[2];
+                Green3.MySoldier = CheckMyHorse(p, UserNameTest);
+
+                Green4.color = color;
+                Green4.ID = 4;
+                Green4.Location = GreenReady[3];
+                Green4.MySoldier = CheckMyHorse(p, UserNameTest);
             }
         }
+        public void updateLocation (Point a,Point b, Point c, Point d)
+        {
 
+        }
         public void Player_Join_Receive()
         {
             while (ClientSocket.Connected)
