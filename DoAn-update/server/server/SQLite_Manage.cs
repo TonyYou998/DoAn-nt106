@@ -78,7 +78,7 @@ namespace Server
             sqlite_cmd.ExecuteNonQuery();
         }
 
-        public bool IsRoomStart(string roomID) // mode = 0 : nonstart, = 1 : isplaying
+        public bool IsPlaying(string roomID) // mode = 0 : nonstart, = 1 : isplaying
         {
             SQLiteCommand sqlite_cmd;
             sqlite_cmd = sqlite_conn.CreateCommand();

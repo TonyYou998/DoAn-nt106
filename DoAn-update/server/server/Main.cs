@@ -170,7 +170,7 @@ namespace Server
                     string[] Data = packet.msgcontent.Split(':');
 
                     string name = Data[0];
-
+                    string RoomID = Data[1];
                     string Color = Data[2];
 
                     switch(Color)
@@ -185,6 +185,13 @@ namespace Server
                         case "Yellow":
                             HC[number_room-1].listyellowHorse = packet.msgHorse;
                             break;
+                    }
+
+                    if (!sql.IsPlaying(RoomID))
+                    {
+                        MSG = new ManagePacket("JoinRoom", "Isplaying");
+                        sendPacketToClient(current, MSG);
+                        break;
                     }
 
                     sql.SetHost(Data[0],0);
