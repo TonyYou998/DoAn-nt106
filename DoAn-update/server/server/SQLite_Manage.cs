@@ -35,18 +35,13 @@ namespace Server
         {
             SQLiteCommand sqlite_cmd;
             string Createsql = "CREATE TABLE Users  (Username TEXT NOT NULL PRIMARY KEY, RoomID int, Online int, isHost int)";
-            string Createsql2 = "CREATE TABLE Room  (RoomID INTEGER PRIMARY KEY AUTOINCREMENT, Roomname TEXT NOT NULL)";
-            string Createsql3 = "CREATE TABLE Horse (" +
-                "Username TEXT, RoomID int, color TEXT, x int, y int," +
-                "FOREIGN KEY (Username) REFERENCES Users(Username)" +
-                ")";
+            string Createsql2 = "CREATE TABLE Room  (RoomID INTEGER PRIMARY KEY AUTOINCREMENT, Roomname TEXT NOT NULL, isPlaying int)";
             sqlite_cmd = sqlite_conn.CreateCommand();
             sqlite_cmd.CommandText = Createsql;
             sqlite_cmd.ExecuteNonQuery();
             sqlite_cmd.CommandText = Createsql2;
             sqlite_cmd.ExecuteNonQuery();
-            sqlite_cmd.CommandText = Createsql3;
-            sqlite_cmd.ExecuteNonQuery();
+
         }
 
         public List<string> GetListUserInRoom(int roomid)
@@ -73,6 +68,34 @@ namespace Server
             sqlite_cmd = sqlite_conn.CreateCommand();
             sqlite_cmd.CommandText = $"UPDATE Users SET isHost = {mode.ToString()} where Username = '{username}'";
             sqlite_cmd.ExecuteNonQuery();
+        }
+
+        public void SetRoomStart(string roomID, int mode = 0) // mode = 0 : nonstart, = 1 : isplaying
+        {
+            SQLiteCommand sqlite_cmd;
+            sqlite_cmd = sqlite_conn.CreateCommand();
+            sqlite_cmd.CommandText = $"UPDATE Rooms SET isPlaying = {mode} where RoomId = {roomID}";
+            sqlite_cmd.ExecuteNonQuery();
+        }
+
+        public bool IsRoomStart(string roomID) // mode = 0 : nonstart, = 1 : isplaying
+        {
+            SQLiteCommand sqlite_cmd;
+            sqlite_cmd = sqlite_conn.CreateCommand();
+            sqlite_cmd.CommandText = $"SELECT isPlaying from Users where RoomId = '{roomID}'";
+
+            using (var reader = sqlite_cmd.ExecuteReader())
+            {
+                if (reader.Read())
+                {
+                    int status = int.Parse(reader[0].ToString());
+                    if (status == 1)
+                        return true;
+                    else
+                        return false;
+                }
+            }
+            return false;
         }
 
         public void SetUserOnline(string username, int mode=0) // mode = 0 : offline, = 1 : online

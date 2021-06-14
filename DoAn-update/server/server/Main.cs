@@ -195,15 +195,19 @@ namespace Server
                     break;
 
                 case "Action":
-                    switch (packet.msgcontent)
+                    data = packet.msgcontent.Split(':');
+                    switch (data[0])
                     {
+                        case "Start": // Room:1
+                            sql.SetRoomStart(data[1], 1);
+                            sendPacketToRoom(packet, int.Parse(data[1]));
+                            break;
                         case "Moving":
-                           // sendPacketToRoom(packet, );
+                            sendPacketToRoom(packet, int.Parse(data[1]));
                             break;
                         case "Next":
-
+                            sendPacketToRoom(packet, int.Parse(data[1]));
                             break;
-
                     }
                     break;
             }
