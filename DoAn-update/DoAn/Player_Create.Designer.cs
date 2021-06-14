@@ -83,6 +83,7 @@ namespace Client
             this.btn_Start.Size = new System.Drawing.Size(174, 70);
             this.btn_Start.TabIndex = 15;
             this.btn_Start.TabStop = false;
+            this.btn_Start.Click += new System.EventHandler(this.btn_Start_Click);
             // 
             // Player_Create
             // 

@@ -114,6 +114,16 @@ namespace Client
             }
         }
 
+        private void btn_Start_Click(object sender, EventArgs e)
+        {
+            if (Started == false)
+            {
+                //send gói bắt đầu để nhận gọi next
+                //nhận về gói có listHorse, Username được đi
+                Started = true;
+            }
+        }
+
         private void AddControlSafe(PictureBox picture)
         {
             this.Controls.Add(picture);
@@ -216,8 +226,7 @@ namespace Client
             new Point { X = 385, Y = 225 }
         };
 
-        public string temp;
-        public bool tempMyHorse;
+        public bool Started =false, Rolled=false, Continue;
         public bool CheckMyHorse(string p, string UserNameTest)
         {
             return (p == UserNameTest);
@@ -329,10 +338,7 @@ namespace Client
                 Green4.MySoldier = CheckMyHorse(p, UserNameTest);
             }
         }
-        public void updateLocation (Point a,Point b, Point c, Point d)
-        {
-
-        }
+       
         public void Player_Join_Receive()
         {
             while (ClientSocket.Connected)
@@ -380,7 +386,10 @@ namespace Client
         
         private void btn_roll_Click(object sender, EventArgs e)
         {
-           
+            if (Started == true && Rolled==false)
+            {
+
+            }
         }
     }
 }
