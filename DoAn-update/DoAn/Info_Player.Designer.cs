@@ -110,6 +110,7 @@ namespace Client
             this.Controls.Add(this.UserName);
             this.Controls.Add(this.IpServer);
             this.DoubleBuffered = true;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.Name = "Info_Player";
             this.Text = "Info_Player";

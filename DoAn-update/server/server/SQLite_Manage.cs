@@ -74,7 +74,7 @@ namespace Server
         {
             SQLiteCommand sqlite_cmd;
             sqlite_cmd = sqlite_conn.CreateCommand();
-            sqlite_cmd.CommandText = $"UPDATE Rooms SET isPlaying = {mode} where RoomId = {roomID}";
+            sqlite_cmd.CommandText = $"UPDATE Room SET isPlaying = {mode} where RoomId = {roomID}";
             sqlite_cmd.ExecuteNonQuery();
         }
 
@@ -88,8 +88,8 @@ namespace Server
             {
                 if (reader.Read())
                 {
-                    int status = int.Parse(reader[0].ToString());
-                    if (status == 1)
+                    int status;
+                    if (int.TryParse(reader[0].ToString(), out status))
                         return true;
                     else
                         return false;

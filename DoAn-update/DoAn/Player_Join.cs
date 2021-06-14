@@ -43,6 +43,12 @@ namespace Client
             Roll_number.BackgroundImageLayout = ImageLayout.Stretch;
             Roll_number.Location = new Point(910, 50);
             Roll_number.BackColor = Color.Transparent;
+
+            //LABLE
+            alert.Text = ""; //59, 25
+            alert.Location = new Point(59, 25);
+            alert.BackColor = Color.Transparent;
+
             Thread a = new Thread(Player_Join_Receive);
             a.Start();
         }

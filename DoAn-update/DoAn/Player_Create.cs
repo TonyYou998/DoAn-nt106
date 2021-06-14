@@ -50,8 +50,13 @@ namespace Client
             Roll_number.BackgroundImage = Properties.Resources.loading;
             Roll_number.Location = new Point(910, 50);
             Roll_number.BackColor = Color.Transparent;
-            //
+            //LABLE
+            alert.Text = ""; //59, 25
+            alert.Location = new Point(59,25);
+            alert.BackColor = Color.Transparent;
+
             Roll_number.BackgroundImageLayout = ImageLayout.Stretch;
+
             for (int i = 0; i < 4; i++)
             {
                 CreateHorse("Red", RedReady[i], i + 1, true);
@@ -116,17 +121,7 @@ namespace Client
             }
         }
 
-        private void btn_Start_Click(object sender, EventArgs e)
-        {
-            if (Started == false)
-            {
-                //send gói bắt đầu để nhận gọi next
-                //nhận về gói có listHorse, Username được đi
-                
-                _connect.Sendmsg(ClientSocket, "Action", $"Start:{roomID}");
-                Started = true;
-            }
-        }
+      
 
         private void AddControlSafe(PictureBox picture)
         {
@@ -238,12 +233,6 @@ namespace Client
             new Point { X = 515, Y = 170 },
             new Point { X = 600, Y = 170 }
       };
-
-        private void Player_Create_Load(object sender, EventArgs e)
-        {
-
-        }
-
         Point[] BlueReady = new Point[]
       {
             new Point { X = 150, Y = 440},
@@ -382,6 +371,17 @@ namespace Client
             }
         }
        
+        private void timeout()
+        {
+            for(int i =0; i < 20; i++)
+            {
+                progressBar1.BeginInvoke((Action)(() => { 
+                    progressBar1.Value = progressBar1.Value + 5; 
+                }));
+                Thread.Sleep(1000);
+            }
+            _connect.Sendmsg(ClientSocket,HC);
+        }
         public void Player_Join_Receive()
         {
             while (ClientSocket.Connected)
@@ -390,27 +390,108 @@ namespace Client
                 ClientSocket.Receive(bytes);
                 string MSG = Encoding.UTF8.GetString(bytes);
                 var Jsonmsg = JsonConvert.DeserializeObject<ManagePacket>(MSG);
-               // Jsonmsg.rollNumber cái này chứa rollNumber=> lấy ra sài
+                // Jsonmsg.rollNumber cái này chứa rollNumber=> lấy ra sài
+
                 if (Jsonmsg.HC != null)
                 {
                     HC = Jsonmsg.HC;
-                    if (HC.listyellowHorse.Count > 0)
-                    {
-                        checkForCreateHorse(HC.listyellowHorse[1].color, p.userName, HC.listyellowHorse[1].owner);
-                    }
-                    if (HC.listGreenHorse.Count > 0)
-                    {
-                        checkForCreateHorse(HC.listGreenHorse[1].color, p.userName, HC.listGreenHorse[1].owner);
-                    }
-                    if (HC.listBlueHorse.Count > 0)
-                    {
-                        checkForCreateHorse(HC.listBlueHorse[1].color, p.userName, HC.listBlueHorse[1].owner);
-                    }
-                    if (HC.listRedHorse.Count > 0)
-                    {
-                        checkForCreateHorse(HC.listRedHorse[1].color, p.userName, HC.listRedHorse[1].owner);
-                    }
+                    updateBC();
+                    continue;
                 }
+
+                if (Jsonmsg.msgtype == "Action")
+                {
+                    string[] s = Jsonmsg.msgcontent.Split(':');
+                    if (s[0] == "Start")
+                    {
+                        alert.BeginInvoke((Action)(() => { 
+                            alert.Text = $"Trận đấu bắt đầu, lượt chơi của {s[2]}"; 
+                        }));
+
+                        if (s[2] == p.userName)
+                        {
+                            MyTurn = true;
+                        }
+                        else MyTurn = false;
+
+                        Thread t = new Thread(timeout);
+                        t.Start();
+                    }
+                    continue;
+                }
+                if (Jsonmsg.msgtype == "Roll")
+                {
+                    string[] s = Jsonmsg.msgcontent.Split(':');
+                    switch (Jsonmsg.rollNumber)
+                    {
+                        case 1:
+                            Roll_number.BackgroundImage = Properties.Resources._1;
+                            break;
+                        case 2:
+                            Roll_number.BackgroundImage = Properties.Resources._2;
+                            break;
+                        case 3:
+                            Roll_number.BackgroundImage = Properties.Resources._3;
+                            break;
+                        case 4:
+                            Roll_number.BackgroundImage = Properties.Resources._4;
+                            break;
+                        case 5:
+                            Roll_number.BackgroundImage = Properties.Resources._5;
+                            break;
+                        case 6:
+                            Roll_number.BackgroundImage = Properties.Resources._6;
+                            break;
+                    }
+
+                    alert.BeginInvoke((Action)(() => {
+                        alert.Text = $"Lượt chơi của {s[2]}";
+                    }));
+
+                    if (s[2] == p.userName)
+                    {
+                        MyTurn = true;
+                    }
+                    else MyTurn = false;
+
+                    Thread t = new Thread(timeout);
+                    t.Start();
+                    continue;
+                }
+
+
+            }
+        }
+
+        private void btn_Start_Click(object sender, EventArgs e)
+        {
+            if (Started == false)
+            {
+                //send gói bắt đầu để nhận gọi next
+                //nhận về gói có listHorse, Username được đi
+
+                _connect.Sendmsg(ClientSocket, "Action", $"Start:{roomID}:{p.userName}");
+                Started = true;
+                btn_Start.Dispose();
+            }
+        }
+        public void updateBC()
+        {
+            if (HC.listyellowHorse.Count > 0)
+            {
+                checkForCreateHorse(HC.listyellowHorse[1].color, p.userName, HC.listyellowHorse[1].owner);
+            }
+            if (HC.listGreenHorse.Count > 0)
+            {
+                checkForCreateHorse(HC.listGreenHorse[1].color, p.userName, HC.listGreenHorse[1].owner);
+            }
+            if (HC.listBlueHorse.Count > 0)
+            {
+                checkForCreateHorse(HC.listBlueHorse[1].color, p.userName, HC.listBlueHorse[1].owner);
+            }
+            if (HC.listRedHorse.Count > 0)
+            {
+                checkForCreateHorse(HC.listRedHorse[1].color, p.userName, HC.listRedHorse[1].owner);
             }
         }
         public void updateHorse (HorseControl HC, Point a, int t, string color)
@@ -500,82 +581,64 @@ namespace Client
         }
         public void Moving(object sender, EventArgs e)
         {
-            PictureBox a = (PictureBox)sender;
-            MessageBox.Show(a.Name);
-            for (int i = 0; i < 4; i++)
+            if (MyTurn)
             {
-                if (a.Location != RedReady[i]&&Not_On_Top("Red",Red,a.Location)==true)
+                PictureBox a = (PictureBox)sender;
+                MessageBox.Show(a.Name);
+                for (int i = 0; i < 4; i++)
                 {
-                    if (checkBehindThisHorese(a.Location, HC, RollNumber) == false)
+                    if (a.Location != RedReady[i] && Not_On_Top("Red", Red, a.Location) == true)
                     {
-                        a.Location = Red[ConvertLocationToIndex(a.Location, Red) + RollNumber];
+                        if (checkBehindThisHorese(a.Location, HC, RollNumber) == false)
+                        {
+                            a.Location = Red[ConvertLocationToIndex(a.Location, Red) + RollNumber];
+                            updateHorse(HC, a.Location, i, "Red");
+                            Rolled = false;
+                            if (RollNumber == 1 || RollNumber == 6)
+                            {
+                                MyTurn = true;
+                            }
+                            RollNumber = -1;
+                        }
+                        else
+                        {
+                            if (RollNumber == 1 || RollNumber == 6)
+                            {
+                                MyTurn = true;
+                            }
+                        }
+
+
+                    }
+                    if (a.Location == RedReady[i] && (RollNumber == 1 || RollNumber == 6))
+                    {
+                        a.Location = Red[0];
                         updateHorse(HC, a.Location, i, "Red");
+                        MyTurn = true;
                         Rolled = false;
-                        if (RollNumber == 1 || RollNumber == 6)
-                        {
-                            MyTurn = true;
-                        }
                         RollNumber = -1;
+                        break;
                     }
-                    else
+                    if (a.Location == RedReady[i] && (RollNumber != 1 || RollNumber != 6))
                     {
-                        if (RollNumber == 1 || RollNumber == 6)
-                        {
-                            MyTurn = true;
-                        }
+                        MyTurn = false;
+                        Rolled = false;
+                        //Send next
                     }
-
-
-                }
-                if (a.Location == RedReady[i] && (RollNumber == 1 || RollNumber == 6))
-                {
-                    a.Location = Red[0];
-                    updateHorse(HC, a.Location, i, "Red");
-                    MyTurn = true;
-                    Rolled = false;
-                    RollNumber = -1;
-                    break;
-                }
-                if(a.Location == RedReady[i] && (RollNumber != 1 || RollNumber != 6))
-                {
-                    MyTurn = false;
-                    Rolled = false;
-                    //Send next
                 }
             }
+            
         }
 
         public int RollNumber=-1;
         private void btn_roll_Click(object sender, EventArgs e)
         {
-            if (Rolled==false && RollNumber==-1 )
+            if (Rolled==false && RollNumber==-1 && MyTurn)
             {
                 Random random = new Random();
                 RollNumber = random.Next(1, 6);
                 _connect.Sendmsg(ClientSocket, "Action", $"Roll:{roomID}:{RollNumber}");
-                Rolled = true;
-                MyTurn = false;
-                switch (RollNumber)
-                {
-                    case 1:
-                        Roll_number.BackgroundImage = Properties.Resources._1;
-                        break;
-                    case 2:
-                        Roll_number.BackgroundImage = Properties.Resources._2;
-                        break;
-                    case 3:
-                        Roll_number.BackgroundImage = Properties.Resources._3;
-                        break;
-                    case 4:
-                        Roll_number.BackgroundImage = Properties.Resources._4;
-                        break;
-                    case 5:
-                        Roll_number.BackgroundImage = Properties.Resources._5;
-                        break;
-                    case 6:
-                        Roll_number.BackgroundImage = Properties.Resources._6;
-                        break;
-                }
+
             }
         }
     }

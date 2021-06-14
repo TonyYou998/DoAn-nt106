@@ -23,5 +23,14 @@ namespace Client
             byte[] buffer = Encoding.UTF8.GetBytes(json);
             s.Send(buffer, 0, buffer.Length, SocketFlags.None);
         }
+
+        public void Sendmsg(Socket s, HorseControl HC)
+        {
+            var MSG = new ManagePacket { HC = HC };
+            string json = JsonConvert.SerializeObject(MSG);
+            byte[] buffer = Encoding.UTF8.GetBytes(json);
+            s.Send(buffer, 0, buffer.Length, SocketFlags.None);
+        }
+
     }
 }

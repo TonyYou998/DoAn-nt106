@@ -33,6 +33,8 @@ namespace Client
             this.btn_exit = new System.Windows.Forms.PictureBox();
             this.btn_Roll = new System.Windows.Forms.PictureBox();
             this.btn_Start = new System.Windows.Forms.PictureBox();
+            this.alert = new System.Windows.Forms.Label();
+            this.progressBar1 = new System.Windows.Forms.ProgressBar();
             ((System.ComponentModel.ISupportInitialize)(this.Roll_number)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.btn_exit)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.btn_Roll)).BeginInit();
@@ -42,7 +44,6 @@ namespace Client
             // Roll_number
             // 
             this.Roll_number.BackColor = System.Drawing.Color.Transparent;
-            this.Roll_number.BackgroundImage = global::Client.Properties.Resources._1;
             this.Roll_number.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.Roll_number.Location = new System.Drawing.Point(1040, 67);
             this.Roll_number.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
@@ -54,8 +55,8 @@ namespace Client
             // btn_exit
             // 
             this.btn_exit.BackColor = System.Drawing.Color.Transparent;
-            this.btn_exit.BackgroundImage = global::Client.Properties.Resources.exit;
             this.btn_exit.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btn_exit.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btn_exit.Location = new System.Drawing.Point(1123, 769);
             this.btn_exit.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btn_exit.Name = "btn_exit";
@@ -66,8 +67,8 @@ namespace Client
             // btn_Roll
             // 
             this.btn_Roll.BackColor = System.Drawing.Color.Transparent;
-            this.btn_Roll.BackgroundImage = global::Client.Properties.Resources.roll;
             this.btn_Roll.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btn_Roll.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btn_Roll.Location = new System.Drawing.Point(1120, 507);
             this.btn_Roll.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btn_Roll.Name = "btn_Roll";
@@ -79,8 +80,8 @@ namespace Client
             // btn_Start
             // 
             this.btn_Start.BackColor = System.Drawing.Color.Transparent;
-            this.btn_Start.BackgroundImage = global::Client.Properties.Resources.START_2;
             this.btn_Start.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btn_Start.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btn_Start.Location = new System.Drawing.Point(1123, 631);
             this.btn_Start.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btn_Start.Name = "btn_Start";
@@ -89,13 +90,34 @@ namespace Client
             this.btn_Start.TabStop = false;
             this.btn_Start.Click += new System.EventHandler(this.btn_Start_Click);
             // 
+            // alert
+            // 
+            this.alert.AutoSize = true;
+            this.alert.BackColor = System.Drawing.Color.Transparent;
+            this.alert.Font = new System.Drawing.Font("Arial Narrow", 16.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.alert.ForeColor = System.Drawing.SystemColors.ActiveBorder;
+            this.alert.Location = new System.Drawing.Point(59, 25);
+            this.alert.Name = "alert";
+            this.alert.Size = new System.Drawing.Size(93, 33);
+            this.alert.TabIndex = 19;
+            this.alert.Text = "aaaaaa";
+            // 
+            // progressBar1
+            // 
+            this.progressBar1.Location = new System.Drawing.Point(1040, 12);
+            this.progressBar1.Name = "progressBar1";
+            this.progressBar1.Size = new System.Drawing.Size(343, 45);
+            this.progressBar1.TabIndex = 20;
+            // 
             // Player_Create
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackgroundImage = global::Client.Properties.Resources.BANCO__1_2;
+            this.BackColor = System.Drawing.SystemColors.AppWorkspace;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(1451, 949);
+            this.Controls.Add(this.progressBar1);
+            this.Controls.Add(this.alert);
             this.Controls.Add(this.Roll_number);
             this.Controls.Add(this.btn_exit);
             this.Controls.Add(this.btn_Roll);
@@ -104,12 +126,12 @@ namespace Client
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.Name = "Player_Create";
             this.Text = "Player_Create";
-            this.Load += new System.EventHandler(this.Player_Create_Load);
             ((System.ComponentModel.ISupportInitialize)(this.Roll_number)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.btn_exit)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.btn_Roll)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.btn_Start)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -119,5 +141,7 @@ namespace Client
         private System.Windows.Forms.PictureBox btn_exit;
         private System.Windows.Forms.PictureBox btn_Roll;
         private System.Windows.Forms.PictureBox btn_Start;
+        private System.Windows.Forms.Label alert;
+        private System.Windows.Forms.ProgressBar progressBar1;
     }
 }

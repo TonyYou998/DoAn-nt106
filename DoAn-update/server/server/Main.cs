@@ -187,7 +187,7 @@ namespace Server
                             break;
                     }
 
-                    if (!sql.IsPlaying(RoomID))
+                    if (sql.IsPlaying(RoomID))
                     {
                         MSG = new ManagePacket("JoinRoom", "Isplaying");
                         sendPacketToClient(current, MSG);
@@ -203,6 +203,7 @@ namespace Server
 
                 case "Action":
                     data = packet.msgcontent.Split(':');
+                    // data[1] = roomID, data[2] = rollnumber, data[3] = username;
                     switch (data[0])
                     {
                         case "Start": // Room:1
@@ -210,9 +211,13 @@ namespace Server
                             sendPacketToRoom(packet, int.Parse(data[1]));
                             break;
                         case "Roll":
-                            int rollNuber = int.Parse(data[2]);
-                            MSG = new ManagePacket { msgtype="Roll",rollNumber=rollNuber};
-                           sendPacketToRoom(MSG,int.Parse(data[1]));
+                            MSG = new ManagePacket {
+                                msgtype = "Roll",
+                                rollNumber = int.Parse(data[2]),
+                                msgcontent = $"{data[3]}"
+                            };
+
+                            sendPacketToRoom(MSG,int.Parse(data[1]));
                             break;
                         case "Moving":
                             sendPacketToRoom(packet, int.Parse(data[1]));
