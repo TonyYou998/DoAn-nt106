@@ -188,6 +188,38 @@ namespace Client
             new Point {X = 440, Y = 235 }, new Point {X = 435, Y = 185 }, new Point {X = 435, Y = 150 }, new Point {X = 435, Y = 120 },
             new Point {X = 435, Y = 90 }, new Point {X = 435, Y = 55 }, new Point {X = 435, Y = 25 }, new Point {X = 385, Y = 25 }
         };
+        Point[] Green = new Point[]
+        {
+            new Point {X = 650, Y = 235 }, new Point {X = 615, Y = 235 }, new Point {X = 580, Y = 235 }, new Point {X = 545, Y = 235 }, new Point {X = 510, Y = 235 },
+            new Point {X = 475, Y = 235 }, new Point {X = 440, Y = 235 }, new Point {X = 435, Y = 185 }, new Point {X = 435, Y = 150 },
+            new Point {X = 435, Y = 120 }, new Point {X = 435, Y = 90 }, new Point {X = 435, Y = 55 }, new Point {X = 435, Y = 25 },
+            new Point {X = 385, Y = 25 }, new Point {X = 330, Y = 25 }, new Point {X = 330, Y = 55 }, new Point {X = 330, Y = 90 }, new Point {X = 330, Y = 120 }, new Point {X = 330, Y = 150 }, new Point {X = 330, Y = 185 }, new Point {X = 330, Y = 235 },
+            new Point {X = 290, Y = 235 }, new Point {X = 250, Y = 235 }, new Point {X = 215, Y = 235 }, new Point {X = 180, Y = 235 },
+            new Point {X = 145, Y = 235 }, new Point {X = 105, Y = 235 }, new Point {X = 105, Y = 280 }, new Point {X = 105, Y = 330 },
+            new Point {X = 145, Y = 330 }, new Point {X = 180, Y = 330 }, new Point {X = 215, Y = 330 }, new Point {X = 250, Y = 330 },
+            new Point {X = 290, Y = 330 }, new Point {X = 330, Y = 330 }, new Point {X = 330, Y = 370 }, new Point {X = 330, Y = 400 },
+            new Point {X = 330, Y = 430 }, new Point {X = 330, Y = 465 }, new Point {X = 330, Y = 495 }, new Point {X = 330, Y = 530 },
+            new Point {X = 380, Y = 530 }, new Point {X = 430, Y = 530 }, new Point {X = 430, Y = 495 }, new Point {X = 430, Y = 465 },
+            new Point {X = 430, Y = 430 }, new Point {X = 430, Y = 400 }, new Point {X = 430, Y = 370 }, new Point {X = 430, Y = 330 },
+            new Point {X = 475, Y = 330 }, new Point {X = 510, Y = 330 }, new Point {X = 545, Y = 330 }, new Point {X = 585, Y = 330 },
+            new Point {X = 620, Y = 330 }, new Point {X = 655, Y = 330 }, new Point {X = 655, Y = 285 },
+        };
+        Point[] Yellow = new Point[]
+        {
+            new Point {X = 430, Y = 530 }, new Point {X = 430, Y = 495 }, new Point {X = 430, Y = 465 }, new Point {X = 430, Y = 430 },
+ new Point {X = 430, Y = 400 }, new Point {X = 430, Y = 370 }, new Point {X = 430, Y = 330 }, new Point {X = 475, Y = 330 },
+ new Point {X = 510, Y = 330 }, new Point {X = 545, Y = 330 }, new Point {X = 585, Y = 330 }, new Point {X = 620, Y = 330 },
+ new Point {X = 655, Y = 330 }, new Point {X = 655, Y = 285 }, new Point {X = 650, Y = 235 }, new Point {X = 615, Y = 235 },
+ new Point {X = 580, Y = 235 }, new Point {X = 545, Y = 235 }, new Point {X = 510, Y = 235 }, new Point {X = 475, Y = 235 },
+ new Point {X = 440, Y = 235 }, new Point {X = 435, Y = 185 }, new Point {X = 435, Y = 150 }, new Point {X = 435, Y = 120 },
+ new Point {X = 435, Y = 90 }, new Point {X = 435, Y = 55 }, new Point {X = 435, Y = 25 }, new Point {X = 385, Y = 25 }, new Point {X = 330, Y = 25 }, new Point {X = 330, Y = 55 }, new Point {X = 330, Y = 90 }, new Point {X = 330, Y = 120 },
+ new Point {X = 330, Y = 150 }, new Point {X = 330, Y = 185 }, new Point {X = 330, Y = 235 }, new Point {X = 290, Y = 235 },
+ new Point {X = 250, Y = 235 }, new Point {X = 215, Y = 235 }, new Point {X = 180, Y = 235 }, new Point {X = 145, Y = 235 },
+ new Point {X = 105, Y = 235 }, new Point {X = 105, Y = 280 }, new Point {X = 105, Y = 330 }, new Point {X = 145, Y = 330 },
+ new Point {X = 180, Y = 330 }, new Point {X = 215, Y = 330 }, new Point {X = 250, Y = 330 }, new Point {X = 290, Y = 330 },
+ new Point {X = 330, Y = 330 }, new Point {X = 330, Y = 370 }, new Point {X = 330, Y = 400 }, new Point {X = 330, Y = 430 },
+ new Point {X = 330, Y = 465 }, new Point {X = 330, Y = 495 }, new Point {X = 330, Y = 530 }, new Point {X = 380, Y = 530 },
+        };
         Point[] RedReady = new Point[]
         {
             new Point { X = 150, Y = 85},
@@ -226,7 +258,7 @@ namespace Client
             new Point { X = 385, Y = 225 }
         };
 
-        public bool Started =false, Rolled=false, Continue;
+        public bool Started =false, Rolled=false, MyTurn = false;
         public bool CheckMyHorse(string p, string UserNameTest)
         {
             return (p == UserNameTest);
@@ -368,27 +400,63 @@ namespace Client
                         checkForCreateHorse(HC.listRedHorse[1].color, p.userName, HC.listRedHorse[1].owner);
                     }
                 }
-
-
             }
-
         }
 
+        public int ConvertLocationToIndex (Point a,Point[] b)
+        {
+            for(int i = 0; i < b.Length; i++)
+            {
+                if (a == b[i])
+                    return i;
+            }
+            return -1;
+        }
 
-
-
+        
         public void Moving(object sender, EventArgs e)
         {
             PictureBox a = (PictureBox)sender;
             MessageBox.Show(a.Name);
+            if (a.Name == "Red1")
+            {
+                if (a.Location != RedReady[0]&& a.Location != RedReady[1] && a.Location != RedReady[2] && a.Location != RedReady[3])
+                    Red1.Location = Red[ConvertLocationToIndex(a.Location, Red)];
+                if (a.Location == RedReady[0])
+                {
+
+                }
+            }
         }
 
-        
+        public int RollNumber=-1;
         private void btn_roll_Click(object sender, EventArgs e)
         {
-            if (Started == true && Rolled==false)
+            if (Started == true && Rolled==false && RollNumber==-1 && MyTurn == true)
             {
-
+                Random random = new Random();
+                RollNumber = random.Next(1, 6);
+                switch (RollNumber)
+                {
+                    case 1:
+                        Roll_number.BackgroundImage = Properties.Resources._1;
+                        break;
+                    case 2:
+                        Roll_number.BackgroundImage = Properties.Resources._1;
+                        break;
+                    case 3:
+                        Roll_number.BackgroundImage = Properties.Resources._1;
+                        break;
+                    case 4:
+                        Roll_number.BackgroundImage = Properties.Resources._1;
+                        break;
+                    case 5:
+                        Roll_number.BackgroundImage = Properties.Resources._1;
+                        break;
+                    case 6:
+                        Roll_number.BackgroundImage = Properties.Resources._1;
+                        break;
+                }
             }
         }
     }
