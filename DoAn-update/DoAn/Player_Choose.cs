@@ -94,7 +94,7 @@ namespace Client
                 var Jsonmsg = JsonConvert.DeserializeObject<ManagePacket>(MSG);
                 if (Jsonmsg != null)
                 {
-                    Player_Create create = new Player_Create(p, ClientSocket);
+                    Player_Create create = new Player_Create(p, ClientSocket, Jsonmsg.roomID);
                     create.Disposed += delegate {
                         this.Dispose();
                     };

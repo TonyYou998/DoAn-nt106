@@ -12,14 +12,15 @@ namespace Client
     public partial class Player_Create : Form
     {
         private HorseControl HC = new HorseControl();
-        private  readonly NguoiChoi p;
+        private readonly NguoiChoi p;
         private readonly Socket ClientSocket;
-        public Player_Create(NguoiChoi p, Socket S)
+        private int roomID { get; set; }
+        public Player_Create(NguoiChoi p, Socket S,int roomID)
         {
             InitializeComponent();
             this.p = p;
             this.ClientSocket = S;
-           
+            this.roomID = roomID;
             //FORM GIAO DIEN
 
             this.Size = new Size(1286, 751);
@@ -44,13 +45,13 @@ namespace Client
             btn_exit.Location = new Point(980, 580);
             btn_exit.BackColor = Color.Transparent;
             //ROLL_NUMBER GIAO DIEN
-            Roll_number.Size = new Size(290,290);
+            Roll_number.Size = new Size(290, 290);
             Roll_number.BackgroundImage = Properties.Resources.loading;
             Roll_number.Location = new Point(910, 50);
             Roll_number.BackColor = Color.Transparent;
             //
             Roll_number.BackgroundImageLayout = ImageLayout.Stretch;
-            for(int i = 0; i < 4; i++)
+            for (int i = 0; i < 4; i++)
             {
                 CreateHorse("Red", RedReady[i], i + 1, true);
             }
@@ -120,6 +121,8 @@ namespace Client
             {
                 //send gói bắt đầu để nhận gọi next
                 //nhận về gói có listHorse, Username được đi
+                Connection _connect = new Connection();
+                _connect.Sendmsg(ClientSocket, "Action", $"Start:{roomID}");
                 Started = true;
             }
         }
@@ -147,7 +150,7 @@ namespace Client
                 AddControlSafe(picture);
             }
 
-            switch (color) 
+            switch (color)
             {
                 case "Red":
                     picture.Image = Properties.Resources.red;
@@ -168,7 +171,7 @@ namespace Client
             }
             updateListCreate(color);
 
-           
+
         }
 
         Point[] Red = new Point[]
@@ -258,7 +261,8 @@ namespace Client
             new Point { X = 385, Y = 225 }
         };
 
-        public bool Started =false, Rolled=false, MyTurn = false;
+        public bool Started = false, Rolled = false, MyTurn = false;
+       
         public bool CheckMyHorse(string p, string UserNameTest)
         {
             return (p == UserNameTest);
