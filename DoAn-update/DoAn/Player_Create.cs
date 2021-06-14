@@ -413,18 +413,87 @@ namespace Client
             return -1;
         }
 
-        
+        public bool checkBehindThisHorese(Point a, HorseControl HC, int temp)
+        {
+            for (int j = 1; j <= temp; j++)
+            {
+                Point k = Red[ConvertLocationToIndex(a, Red)+j];
+                for (int i = 0; i < 4; i++)
+                {
+                    if (HC.listBlueHorse.Count > 0)
+                    {
+                        if (HC.listBlueHorse[i].location == k)
+                        {
+                            return true;
+                        }
+                    }
+                    if (HC.listGreenHorse.Count > 0)
+                    {
+                        if (HC.listGreenHorse[i].location == k)
+                        {
+                            return true;
+                        }
+                    }
+                    if (HC.listRedHorse.Count > 0)
+                    {
+                        if (HC.listRedHorse[i].location == k)
+                        {
+                            return true;
+                        }
+                    }
+                    if (HC.listyellowHorse.Count > 0)
+                    {
+                        if (HC.listyellowHorse[i].location == k)
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+            return false;
+        }
+
+        public int checkActionMoving;
+        public bool Not_On_Top (string color, Point[] t, Point a)
+        {
+            for(int i= 0; i < 6; i++)
+            {
+                if (a == t[i]) 
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+        public bool Not_Horse_in_here (Point a, Point b)
+        {
+            return (a == b);
+        }
         public void Moving(object sender, EventArgs e)
         {
             PictureBox a = (PictureBox)sender;
-            MessageBox.Show(a.Name);
-            if (a.Name == "Red1")
+            MessageBox.Show(a.BackgroundImage.ToString());
+            for (int i = 0; i < 4; i++)
             {
-                if (a.Location != RedReady[0]&& a.Location != RedReady[1] && a.Location != RedReady[2] && a.Location != RedReady[3])
-                    Red1.Location = Red[ConvertLocationToIndex(a.Location, Red)];
-                if (a.Location == RedReady[0])
+                if (a.Location != RedReady[i]&&Not_On_Top("Red",Red,a.Location)==true)
                 {
-
+                    if (checkBehindThisHorese(a.Location, HC, RollNumber) == false)
+                    {
+                        a.Location = Red[ConvertLocationToIndex(a.Location, Red) + RollNumber];
+                        Rolled = false;
+                        RollNumber = -1;
+                        if (RollNumber == 1 || RollNumber == 6)
+                        {
+                            MyTurn = true;
+                        }
+                    }
+                }
+                if (a.Location == RedReady[i] && (RollNumber == 1 || RollNumber == 6))
+                {
+                    a.Location = Red[0];
+                    MyTurn = true;
+                    Rolled = false;
+                    RollNumber = -1;
                 }
             }
         }
@@ -436,6 +505,8 @@ namespace Client
             {
                 Random random = new Random();
                 RollNumber = random.Next(1, 6);
+                Rolled = true;
+                MyTurn = false;
                 switch (RollNumber)
                 {
                     case 1:
