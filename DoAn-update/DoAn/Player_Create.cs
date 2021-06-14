@@ -19,6 +19,7 @@ namespace Client
         public Player_Create(NguoiChoi p, Socket S,int roomID)
         {
             InitializeComponent();
+            //nhận thông tin user,clientsocket và room id từ form choose
             this.p = p;
             this.ClientSocket = S;
             this.roomID = roomID;

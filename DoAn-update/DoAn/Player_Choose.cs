@@ -60,6 +60,7 @@ namespace Client
 
         private void btn_Create_Room_Click(object sender, EventArgs e)
         {
+            //khỏi tạo vị trí của các quân cờ khi create
             Room r = new Room();
            Point p1 = new Point(150,80);
             Point p2 = new Point(240, 85);
@@ -69,6 +70,7 @@ namespace Client
             Horse h2 = new Horse(p2, "Red", 2,p.userName);
             Horse h3 = new Horse(p3, "Red", 3,p.userName);
             Horse h4 = new Horse(p4, "Red", 4,p.userName);
+            // add các quân cờ vào list
             List<Horse> listHorse=new List<Horse>();
             listHorse.Add(h1);
             listHorse.Add(h2);
@@ -80,6 +82,7 @@ namespace Client
                 {   
                     try
                     {
+                        //gửi gói tin yêu cầu tạo phòng đến server
                         _connect.Sendmsg(ClientSocket,"CreateRoom", $"{r.getRoomName()}:{p.userName}",listHorse);
                     }
                     catch (SocketException)
@@ -94,6 +97,7 @@ namespace Client
                 var Jsonmsg = JsonConvert.DeserializeObject<ManagePacket>(MSG);
                 if (Jsonmsg != null)
                 {
+                    //khi server tạo thành công thì nhận resp chuyển qua form player create
                     Player_Create create = new Player_Create(p, ClientSocket, Jsonmsg.roomID);
                     create.Disposed += delegate {
                         this.Dispose();
@@ -110,9 +114,11 @@ namespace Client
         private void btn_Join_Room_Click(object sender, EventArgs e)
         {
            // ClientSocket.Connect(p.serverIP, p.port);
+           //gửi gói tin yêu cầu xem các phòng hiện có
             _connect.Sendmsg(ClientSocket, "ListRoom", "null");
             byte[] bytes = new byte[1024];
 
+            //nhận lại list room
             ClientSocket.Receive(bytes);
             string listRoom = Encoding.UTF8.GetString(bytes);
             var Jsonmsg = JsonConvert.DeserializeObject<ManagePacket>(listRoom);
