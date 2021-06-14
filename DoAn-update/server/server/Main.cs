@@ -153,11 +153,12 @@ namespace Server
 
                     HC[number_room] = new HorseControl();
                     HC[number_room].listRedHorse = packet.msgHorse;
-                    number_room++;
+                    
                     //roomID:username:lisHorse:
                     string  userName = roomData[1];
-                 MSG = new ManagePacket(HC[number_room-1], userName, number_room);
+                    MSG = new ManagePacket(HC[number_room], userName, number_room+1);
                     sendPacketToClient(current, MSG);
+                    number_room++;
                     break;
 
 
@@ -206,7 +207,7 @@ namespace Server
                     // data[1] = roomID, data[2] = rollnumber, data[3] = username;
                     switch (data[0])
                     {
-                        case "Start": // Room:1
+                        case "Start": 
                             sql.SetRoomStart(data[1], 1);
                             sendPacketToRoom(packet, int.Parse(data[1]));
                             break;
@@ -233,7 +234,7 @@ namespace Server
 
         private void sendPacketToRoom(ManagePacket MSG, int roomID)
         {
-            List<string> user_in_room = sql.GetListUserInRoom(roomID+1);
+            List<string> user_in_room = sql.GetListUserInRoom(roomID);
             foreach(var u in user_in_room)
             {
                 Socket temp;
