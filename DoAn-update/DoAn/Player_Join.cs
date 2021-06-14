@@ -243,8 +243,7 @@ namespace Client
 
         private void btn_roll_Click(object sender, EventArgs e)
         {
-            Random random = new Random();
-            // temp = random.Next(1, 6);
+           
         }
         public void Moving(object sender, EventArgs e)
         {
