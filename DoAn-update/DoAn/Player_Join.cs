@@ -170,34 +170,39 @@ namespace Client
             }
         }
         //  checkForCreateHorse(temp);
-        Point[] RedReady = new Point[]
+        Point[] Ready = new Point[]
         {
             new Point { X = 150, Y = 85},
             new Point { X = 240, Y = 85},
             new Point { X = 150, Y = 170 },
-            new Point { X = 240, Y = 170 }
-        };
-        Point[] GreenReady = new Point[]
-      {
+            new Point { X = 240, Y = 170 },
             new Point { X = 515, Y = 85},
             new Point { X = 600, Y = 85},
             new Point { X = 515, Y = 170 },
-            new Point { X = 600, Y = 170 }
-      };
-        Point[] BlueReady = new Point[]
-      {
+            new Point { X = 600, Y = 170 },
             new Point { X = 150, Y = 440},
             new Point { X = 230, Y = 440},
             new Point { X = 150, Y = 530 },
-            new Point { X = 230, Y = 530 }
-      };
-        Point[] YellowReady = new Point[]
-      {
+            new Point { X = 230, Y = 530 },
             new Point { X = 515, Y = 440},
             new Point { X = 600, Y = 440},
             new Point { X = 515, Y = 530 },
             new Point { X = 600, Y = 530 }
-      };
+        };
+
+ 
+
+        private void timeout()
+        {
+            for (int i = 0; i < 20; i++)
+            {
+                progressBar1.BeginInvoke((Action)(() => {
+                    progressBar1.Value = progressBar1.Value + 5;
+                }));
+                Thread.Sleep(1000);
+            }
+            _connect.Sendmsg(ClientSocket, HC);
+        }
 
         private void Player_Join_Receive()
         {
@@ -238,6 +243,7 @@ namespace Client
                     HC = Jsonmsg.HC;
                     UPDATE_BANCO();
                 }
+
             }
            
         }
