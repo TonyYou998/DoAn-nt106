@@ -402,6 +402,24 @@ namespace Client
                 }
             }
         }
+        public void updateHorse (HorseControl HC, Point a, int t, string color)
+        {
+            switch (color)
+            {
+                case "Red":
+                    HC.listRedHorse[t].location = a;
+                    break;
+                case "Green":
+                    HC.listGreenHorse[t].location = a;
+                    break;
+                case "Yellow":
+                    HC.listyellowHorse[t].location = a;
+                    break;
+                case "Blue":
+                    HC.listBlueHorse[t].location = a;
+                    break;
+            }
+        }
 
         public int ConvertLocationToIndex (Point a,Point[] b)
         {
@@ -472,7 +490,7 @@ namespace Client
         public void Moving(object sender, EventArgs e)
         {
             PictureBox a = (PictureBox)sender;
-            MessageBox.Show(a.BackgroundImage.ToString());
+            MessageBox.Show(a.Name);
             for (int i = 0; i < 4; i++)
             {
                 if (a.Location != RedReady[i]&&Not_On_Top("Red",Red,a.Location)==true)
@@ -480,20 +498,38 @@ namespace Client
                     if (checkBehindThisHorese(a.Location, HC, RollNumber) == false)
                     {
                         a.Location = Red[ConvertLocationToIndex(a.Location, Red) + RollNumber];
+                        updateHorse(HC, a.Location, i, "Red");
                         Rolled = false;
+                        if (RollNumber == 1 || RollNumber == 6)
+                        {
+                            MyTurn = true;
+                        }
                         RollNumber = -1;
+                    }
+                    else
+                    {
                         if (RollNumber == 1 || RollNumber == 6)
                         {
                             MyTurn = true;
                         }
                     }
+
+
                 }
                 if (a.Location == RedReady[i] && (RollNumber == 1 || RollNumber == 6))
                 {
                     a.Location = Red[0];
+                    updateHorse(HC, a.Location, i, "Red");
                     MyTurn = true;
                     Rolled = false;
                     RollNumber = -1;
+                    break;
+                }
+                if(a.Location == RedReady[i] && (RollNumber != 1 || RollNumber != 6))
+                {
+                    MyTurn = false;
+                    Rolled = false;
+                    //Send next
                 }
             }
         }
