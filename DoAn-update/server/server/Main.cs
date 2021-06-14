@@ -177,13 +177,13 @@ namespace Server
                     {
                         case "Green":
 
-                            HC[number_room-1].listGreenHorse = packet.msgHorse;
+                            HC[int.Parse(RoomID)-1].listGreenHorse = packet.msgHorse;
                             break;
                         case "Blue":
-                            HC[number_room-1].listBlueHorse = packet.msgHorse;
+                            HC[int.Parse(RoomID)-1].listBlueHorse = packet.msgHorse;
                             break;
                         case "Yellow":
-                            HC[number_room-1].listyellowHorse = packet.msgHorse;
+                            HC[int.Parse(RoomID)-1].listyellowHorse = packet.msgHorse;
                             break;
                     }
 
@@ -196,8 +196,8 @@ namespace Server
 
                     sql.SetHost(Data[0],0);
                     sql.SetRoomID(Data[0], int.Parse(Data[1]));
-                    MSG = new ManagePacket(HC[number_room - 1],name,number_room);
-                    sendPacketToRoom(MSG, number_room);
+                    MSG = new ManagePacket(HC[int.Parse(RoomID) - 1],name,int.Parse(RoomID)-1);
+                    sendPacketToRoom(MSG, int.Parse(RoomID)-1);
 
                     break;
 
@@ -233,7 +233,7 @@ namespace Server
 
         private void sendPacketToRoom(ManagePacket MSG, int roomID)
         {
-            List<string> user_in_room = sql.GetListUserInRoom(roomID);
+            List<string> user_in_room = sql.GetListUserInRoom(roomID+1);
             foreach(var u in user_in_room)
             {
                 Socket temp;
