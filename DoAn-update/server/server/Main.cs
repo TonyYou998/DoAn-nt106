@@ -211,7 +211,7 @@ namespace Server
                             break;
                         case "Roll":
                             int rollNuber = int.Parse(data[2]);
-                            MSG = new ManagePacket(rollNuber);
+                            MSG = new ManagePacket { msgtype="Roll",rollNumber=rollNuber};
                            sendPacketToRoom(MSG,int.Parse(data[1]));
                             break;
                         case "Moving":

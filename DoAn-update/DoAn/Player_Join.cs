@@ -39,7 +39,7 @@ namespace Client
             btn_exit.BackColor = Color.Transparent;
             //ROLL_NUMBER GIAO DIEN
             Roll_number.Size = new Size(290, 290);
-            Roll_number.BackgroundImage = Properties.Resources._1;
+            Roll_number.BackgroundImage = Properties.Resources.loading;
             Roll_number.BackgroundImageLayout = ImageLayout.Stretch;
             Roll_number.Location = new Point(910, 50);
             Roll_number.BackColor = Color.Transparent;
@@ -201,7 +201,31 @@ namespace Client
                 ClientSocket.Receive(bytes);
                 string MSG = Encoding.UTF8.GetString(bytes);
                 var Jsonmsg = JsonConvert.DeserializeObject<ManagePacket>(MSG);
-                //Jsonmsg.rollNumber chưa value của dice lấy ra sài
+                if (Jsonmsg.msgtype=="Roll")
+                {
+                    switch (Jsonmsg.rollNumber)
+                    {
+                        case 1:
+                            Roll_number.BackgroundImage = Properties.Resources._1;
+                            break;
+                        case 2:
+                            Roll_number.BackgroundImage = Properties.Resources._2;
+                            break;
+                        case 3:
+                            Roll_number.BackgroundImage = Properties.Resources._3;
+                            break;
+                        case 4:
+                            Roll_number.BackgroundImage = Properties.Resources._4;
+                            break;
+                        case 5:
+                            Roll_number.BackgroundImage = Properties.Resources._5;
+                            break;
+                        case 6:
+                            Roll_number.BackgroundImage = Properties.Resources._6;
+                            break;
+                    }
+                }
+                    
 
                 if (Jsonmsg.HC != null)
                 {

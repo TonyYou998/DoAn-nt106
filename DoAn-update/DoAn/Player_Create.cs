@@ -561,19 +561,19 @@ namespace Client
                         Roll_number.BackgroundImage = Properties.Resources._1;
                         break;
                     case 2:
-                        Roll_number.BackgroundImage = Properties.Resources._1;
+                        Roll_number.BackgroundImage = Properties.Resources._2;
                         break;
                     case 3:
-                        Roll_number.BackgroundImage = Properties.Resources._1;
+                        Roll_number.BackgroundImage = Properties.Resources._3;
                         break;
                     case 4:
-                        Roll_number.BackgroundImage = Properties.Resources._1;
+                        Roll_number.BackgroundImage = Properties.Resources._4;
                         break;
                     case 5:
-                        Roll_number.BackgroundImage = Properties.Resources._1;
+                        Roll_number.BackgroundImage = Properties.Resources._5;
                         break;
                     case 6:
-                        Roll_number.BackgroundImage = Properties.Resources._1;
+                        Roll_number.BackgroundImage = Properties.Resources._6;
                         break;
                 }
             }

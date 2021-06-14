@@ -82,7 +82,7 @@ namespace Server
         {
             SQLiteCommand sqlite_cmd;
             sqlite_cmd = sqlite_conn.CreateCommand();
-            sqlite_cmd.CommandText = $"SELECT isPlaying from Users where RoomId = '{roomID}'";
+            sqlite_cmd.CommandText = $"SELECT isPlaying from Room where RoomId = '{roomID}'";
 
             using (var reader = sqlite_cmd.ExecuteReader())
             {
