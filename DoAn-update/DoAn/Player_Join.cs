@@ -280,8 +280,8 @@ namespace Client
                         {
                             MyTurn = true;
                             Rolled = false;
-                            Thread t = new Thread(timeout);
-                            t.Start();
+                            //Thread t = new Thread(timeout);
+                            //t.Start();
                         }
                         else
                         {
@@ -312,12 +312,12 @@ namespace Client
                     continue;
                 }
 
-                if (Jsonmsg.msgtype == "ProgressBar")
-                {
-                    progressBar1.BeginInvoke((Action)(() => {
-                        progressBar1.Value = int.Parse(Jsonmsg.msgcontent);
-                    }));
-                }
+                //if (Jsonmsg.msgtype == "ProgressBar")
+                //{
+                //    progressBar1.BeginInvoke((Action)(() => {
+                //        progressBar1.Value = int.Parse(Jsonmsg.msgcontent);
+                //    }));
+                //}
 
             }
         }
