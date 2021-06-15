@@ -12,8 +12,9 @@ namespace Client
     public partial class Player_Join : Form
     {
         private Socket ClientSocket;
-        public HorseControl HC;
-        public NguoiChoi p;
+        private HorseControl HC;
+        private NguoiChoi p;
+        private Connection _connect = new Connection();
         public Player_Join(HorseControl HC,NguoiChoi p, Socket S)
         {
             InitializeComponent();
@@ -140,33 +141,23 @@ namespace Client
         }
         public void checkForCreateHorse(string color, string p, string UserNameTest)
         {
+            int _start = 0, end= 0,i;
+
             if (color == "Red" && ListCreatedHorse.RED != true)
+            { _start = 0; end = 4; }
+
+            if (color == "Green" && ListCreatedHorse.BLUE != true)
+            { _start = 4; end = 8; }
+
+            if (color == "Blue" && ListCreatedHorse.YELLOW != true)
+            { _start = 8; end = 12; }
+
+            if (color == "Yellow" && ListCreatedHorse.GREEN != true)
+            { _start = 12; end = 16; }
+
+            for (i = _start; i < end; i++)
             {
-                for (int i = 0; i < 4; i++)
-                {
-                    CreateHorse(color, RedReady[i], i + 1, CheckMyHorse(p,UserNameTest));
-                }
-            }
-            if (color == "Blue" && ListCreatedHorse.BLUE != true)
-            {
-                for (int i = 0; i < 4; i++)
-                {
-                    CreateHorse(color, BlueReady[i], i + 1, CheckMyHorse(p, UserNameTest));
-                }
-            }
-            if (color == "Yellow" && ListCreatedHorse.YELLOW != true)
-            {
-                for (int i = 0; i < 4; i++)
-                {
-                    CreateHorse(color, YellowReady[i], i + 1, CheckMyHorse(p, UserNameTest));
-                }
-            }
-            if (color == "Green" && ListCreatedHorse.GREEN != true)
-            {
-                for (int i = 0; i < 4; i++)
-                {
-                    CreateHorse(color, GreenReady[i], i + 1, CheckMyHorse(p, UserNameTest));
-                }
+                CreateHorse(color, Ready[i], i + 1, CheckMyHorse(p, UserNameTest));
             }
         }
         //  checkForCreateHorse(temp);

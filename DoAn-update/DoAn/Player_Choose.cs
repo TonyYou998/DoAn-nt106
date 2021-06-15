@@ -97,8 +97,7 @@ namespace Client
                 var Jsonmsg = JsonConvert.DeserializeObject<ManagePacket>(MSG);
                 if (Jsonmsg != null)
                 {
-                    //khi server tạo thành công thì nhận resp chuyển qua form player create
-                    Player_Create create = new Player_Create(p, ClientSocket, Jsonmsg.roomID);
+                    Player_Create create = new Player_Create(p, ClientSocket, Jsonmsg.roomID, Jsonmsg.HC);
                     create.Disposed += delegate {
                         this.Dispose();
                     };

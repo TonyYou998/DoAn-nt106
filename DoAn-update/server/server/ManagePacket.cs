@@ -9,7 +9,7 @@ namespace Server
         public string msgcontent { get; set; }
         public List<RoomModel> msgRoom { get; set; }
         public List<Horse> msgHorse { get; set; }
-        public HorseControl HC { get; set; }
+        public HorseControl HC = new HorseControl();
         public string Name { get; set; }
         public int roomID { get; set; }
         public int rollNumber { get; set; }
@@ -24,7 +24,6 @@ namespace Server
         }
         public ManagePacket(HorseControl HC,string name,int roomID)
         {
-
             this.HC = HC;
             this.Name = name;
             this.roomID = roomID;
