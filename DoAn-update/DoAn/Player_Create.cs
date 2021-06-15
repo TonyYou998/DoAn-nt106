@@ -200,7 +200,7 @@ namespace Client
         };
 
 
-        public bool Started = false, Rolled = false, MyTurn = true;
+        public bool Started = false, Rolled = true, MyTurn = true;
        
         public bool CheckMyHorse(string p, string UserNameTest)
         {

@@ -193,7 +193,7 @@ namespace Client
             new Point { X = 600, Y = 530 }
         };
 
-        public bool Started = false, Rolled = false, MyTurn = false;
+        public bool Started = false, Rolled = true, MyTurn = true;
 
         private void timeout()
         {
