@@ -41,21 +41,25 @@ namespace Client
 
             ID_select = int.Parse(id);
             //  _connect.Sendmsg(ClientSocket, "JoinRoom", "null");
-            realJoin(int.Parse(numberOfPlayer), ID_select);
-            HorseControl HC = acceptJoin();
-            if (HC != null)
+            if (realJoin(int.Parse(numberOfPlayer), ID_select))
             {
-                Player_Join PJ = new Player_Join(HC,p,ClientSocket,int.Parse(id));
-                PJ.Disposed += delegate
+                HorseControl HC = acceptJoin();
+                if (HC != null)
                 {
-                    this.Dispose();
-                };
-                PJ.Show();
-                this.Hide();
+                    Player_Join PJ = new Player_Join(HC, p, ClientSocket, int.Parse(id));
+                    PJ.Disposed += delegate
+                    {
+                        this.Dispose();
+                    };
+                    PJ.Show();
+                    this.Hide();
+                }
             }
+            
+              
            
         }
-        private void realJoin(int numberOfPlayer, int roomID)
+        private bool realJoin(int numberOfPlayer, int roomID)
         {
             switch (numberOfPlayer)
             {
@@ -64,25 +68,26 @@ namespace Client
                     createListHorse(listGreenHorse, 515, 600, 85, 170, "Green");
 
                     _connect.Sendmsg(ClientSocket, "JoinRoom", $"{p.userName}:{roomID}:Green",listGreenHorse);
-                    break;
+                    return true;
                 case 2:
                     List<Horse> listBlueHorse = new List<Horse>();
                     createListHorse(listBlueHorse, 150, 230, 440, 530, "Blue");
 
                     _connect.Sendmsg(ClientSocket, "JoinRoom", $"{p.userName}:{roomID}:Blue:{listBlueHorse}",listBlueHorse);
-                    break;
+                    return true;
                 case 3:
                     List<Horse> listYellowHorse = new List<Horse>();
                     createListHorse(listYellowHorse, 515, 600, 440, 530, "Yellow");
 
                     _connect.Sendmsg(ClientSocket, "JoinRoom", $"{p.userName}:{roomID}:Yellow:{listYellowHorse}",listYellowHorse);
-                    break;
+                    return true;
                 case 4:
                     MessageBox.Show("full player");
-                    break;
+                    return false;
+                    
                 default:
                     MessageBox.Show("hack");
-                    break;
+                    return false;
             }
         }
         public List<Horse> createListHorse(List<Horse> lstHorse, int x1, int x2, int y1, int y2, string color)
