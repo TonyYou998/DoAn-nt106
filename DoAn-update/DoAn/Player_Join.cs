@@ -556,23 +556,59 @@ namespace Client
 
         public int RollNumber = 6;
 
-        private void updateBC()
+        public void updateBC()
         {
-            if (HC.listyellowHorse.Count > 0)
+            if (HC != null)
             {
-                checkForCreateHorse(HC.listyellowHorse[1].color, p.userName, HC.listyellowHorse[1].owner);
-            }
-            if (HC.listGreenHorse.Count > 0)
-            {
-                checkForCreateHorse(HC.listGreenHorse[1].color, p.userName, HC.listGreenHorse[1].owner);
-            }
-            if (HC.listBlueHorse.Count > 0)
-            {
-                checkForCreateHorse(HC.listBlueHorse[1].color, p.userName, HC.listBlueHorse[1].owner);
-            }
-            if (HC.listRedHorse.Count > 0)
-            {
-                checkForCreateHorse(HC.listRedHorse[1].color, p.userName, HC.listRedHorse[1].owner);
+                for (int i = 0; i < Controls.Count; i++)
+                {
+                    if (Controls[i].GetType().Name == "PictureBox")
+                    {
+                        string name = Controls[i].Name;
+                        string color = name.Substring(0, name.Length - 1);
+                        switch (color)
+                        {
+                            case "Red":
+                                int id = int.Parse(name.Substring(name.Length - 1, 1));
+
+                                if (this.InvokeRequired)
+                                {
+                                    this.Invoke(new MethodInvoker(() =>
+                                    { Controls[i].Location = HC.listRedHorse[id - 1].location; }
+                                    ));
+                                }
+
+                                break;
+                            case "Green":
+                                int _id = int.Parse(name.Substring(name.Length - 1, 1));
+                                if (this.InvokeRequired)
+                                {
+                                    this.Invoke(new MethodInvoker(() =>
+                                    { Controls[i].Location = HC.listGreenHorse[_id - 1].location; }
+                                    ));
+                                }
+                                break;
+                            case "Blue":
+                                int __id = int.Parse(name.Substring(name.Length - 1, 1));
+                                if (this.InvokeRequired)
+                                {
+                                    this.Invoke(new MethodInvoker(() =>
+                                    { Controls[i].Location = HC.listBlueHorse[__id - 1].location; }
+                                    ));
+                                }
+                                break;
+                            case "Yellow":
+                                int ___id = int.Parse(name.Substring(name.Length - 1, 1));
+                                if (this.InvokeRequired)
+                                {
+                                    this.Invoke(new MethodInvoker(() =>
+                                    { Controls[i].Location = HC.listyellowHorse[___id - 1].location; }
+                                    ));
+                                }
+                                break;
+                        }
+                    }
+                }
             }
         }
         private void Roll_number_Click(object sender, EventArgs e)
