@@ -253,10 +253,6 @@ namespace Client
                         Thread t = new Thread(timeout);
                         t.Start();
                     }
-                    else if (s[0] == "Join")
-                    {
-                        InitBC();
-                    }
                     continue;
                 }
                 if (Jsonmsg.msgtype == "Roll")
