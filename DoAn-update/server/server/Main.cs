@@ -17,7 +17,7 @@ namespace Server
         private readonly byte[] buffer = new byte[2048];
         private Socket serverSockets = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
        
-        private IPAddress serverIP = IPAddress.Parse("26.104.250.120");
+        //private IPAddress serverIP = IPAddress.Parse("127.0.0.1");
         private int serverPort = 8000;
 
         Sqlite_control sql;
@@ -41,7 +41,7 @@ namespace Server
             logs.Text = msg + "\n";
             try
             {
-                serverSockets.Bind(new IPEndPoint(serverIP, serverPort));
+                serverSockets.Bind(new IPEndPoint(IPAddress.Any, serverPort));
             }
             catch
             {
