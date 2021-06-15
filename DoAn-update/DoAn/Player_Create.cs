@@ -211,13 +211,13 @@ namespace Client
             if (color == "Red" && ListCreatedHorse.RED != true)
             { _start = 0; end = 4; }
 
-            if (color == "Green" && ListCreatedHorse.BLUE != true)
+            if (color == "Green" && ListCreatedHorse.GREEN != true)
             { _start = 4; end = 8; }
 
-            if (color == "Blue" && ListCreatedHorse.YELLOW != true)
+            if (color == "Blue" && ListCreatedHorse.BLUE != true)
             { _start = 8; end = 12; }
 
-            if (color == "Yellow" && ListCreatedHorse.GREEN != true)
+            if (color == "Yellow" && ListCreatedHorse.YELLOW != true)
             { _start = 12; end = 16; }
 
             for (i = _start; i < end; i++)
@@ -330,7 +330,6 @@ namespace Client
                     t.Start();
                     continue;
                 }
-
                 if (Jsonmsg.msgtype == "Update" && Jsonmsg.HC != null)
                 {
                     HC = Jsonmsg.HC;
@@ -354,7 +353,7 @@ namespace Client
         }
         public void updateBC()
         {
-            if(HC != null)
+            if (HC != null)
             {
                 for (int i = 0; i < Controls.Count; i++)
                 {
@@ -370,18 +369,26 @@ namespace Client
                                 if (this.InvokeRequired)
                                 {
                                     this.Invoke(new MethodInvoker(() =>
-                                        { Controls[i].Location = HC.listRedHorse[id - 1].location; }
+                                    { Controls[i].Location = HC.listRedHorse[id - 1].location; }
                                     ));
                                 }
-                                
+                                else
+                                {
+                                    Controls[i].Location = HC.listRedHorse[id - 1].location;
+                                }
+
                                 break;
                             case "Green":
                                 int _id = int.Parse(name.Substring(name.Length - 1, 1));
                                 if (this.InvokeRequired)
                                 {
                                     this.Invoke(new MethodInvoker(() =>
-                                    { Controls[i].Location = HC.listGreenHorse[_id - 1].location; }
+                                    { Controls[i].Location = HC.listGreenHorse[(_id - 1) % 4].location; }
                                     ));
+                                }
+                                else
+                                {
+                                    Controls[i].Location = HC.listGreenHorse[(_id - 1) % 4].location;
                                 }
                                 break;
                             case "Blue":
@@ -389,8 +396,12 @@ namespace Client
                                 if (this.InvokeRequired)
                                 {
                                     this.Invoke(new MethodInvoker(() =>
-                                    { Controls[i].Location = HC.listBlueHorse[__id - 1].location; }
+                                    { Controls[i].Location = HC.listBlueHorse[(__id - 1) % 4].location; }
                                     ));
+                                }
+                                else
+                                {
+                                    Controls[i].Location = HC.listBlueHorse[(__id - 1) % 4].location;
                                 }
                                 break;
                             case "Yellow":
@@ -398,8 +409,12 @@ namespace Client
                                 if (this.InvokeRequired)
                                 {
                                     this.Invoke(new MethodInvoker(() =>
-                                    { Controls[i].Location = HC.listyellowHorse[___id - 1].location; }
+                                    { Controls[i].Location = HC.listyellowHorse[(___id - 1) % 4].location; }
                                     ));
+                                }
+                                else
+                                {
+                                    Controls[i].Location = HC.listyellowHorse[(___id - 1) % 4].location;
                                 }
                                 break;
                         }
@@ -509,7 +524,7 @@ namespace Client
                 {
                     bool move = true;
                     int pos = ConvertLocationToIndex(Horse.Location, Map);
-                    
+
                     for (var i = 1; i < RollNumber; i++)
                     {
                         int _index = (i + pos) > 55 ? (i + pos) % 56 : (i + pos);
@@ -528,17 +543,6 @@ namespace Client
                         }
                         else
                         {
-                            if (color == "Red")
-                            {
-                                if (pos + RollNumber > 55)
-                                    MessageBox.Show("NEXT");
-                                else if (pos + RollNumber == 55)
-                                {
-                                    Horse.Location = Map[pos + RollNumber];
-                                    MessageBox.Show("WIN");
-                                }
-                                else Horse.Location = Map[pos + RollNumber];
-                            }
 
                             if (color == "Green")
                             {
@@ -581,70 +585,29 @@ namespace Client
                 }
                 else // Đang trong chuồng
                 {
-                    if(RollNumber == 1 || RollNumber == 6) // quay được 1 hoặc 6
+                    if (RollNumber == 1 || RollNumber == 6) // quay được 1 hoặc 6
                     {
-                            if (color == "Red")
+                        if (color == "Red")
+                        {
+                            if (AcceptMoving(0)) // Có quân nào tồn tại ở ngay chỗ xuất quân hay không?
                             {
-                                if (AcceptMoving(0)) // Có quân nào tồn tại ở ngay chỗ xuất quân hay không?
-                                {
-                                    Horse.Location = Map[0];
-                                    HC.listRedHorse[id].location = Map[0] ;
-                                    _connect.Sendmsg(ClientSocket, "Next", roomID.ToString(), HC);
+                                Horse.Location = Map[0];
+                                HC.listBlueHorse[id].location = Map[0];
                             }
-                                else
-                                {
-                                    MessageBox.Show("Không thể ra quân");
-                                }
-                            }                            
-                                
-                            else if (color == "Blue")
+                            else
                             {
-                                if (AcceptMoving(14)) // Có quân nào tồn tại ở ngay chỗ xuất quân hay không?
-                                {
-                                    Horse.Location = Map[14];
-                                    HC.listBlueHorse[id].location = Map[14];
-                                    _connect.Sendmsg(ClientSocket, "Next", roomID.ToString(), HC);
+                                MessageBox.Show("Ko đi đc");
+                                _connect.Sendmsg(ClientSocket, "Next", roomID.ToString(), HC);
                             }
-                                else
-                                {
-                                    MessageBox.Show("Không thể ra quân");
-                                }
-                            }
-
-                            else if (color == "Green")
-                            {
-                                if (AcceptMoving(42)) // Có quân nào tồn tại ở ngay chỗ xuất quân hay không?
-                                {
-                                    Horse.Location = Map[42];
-                                    HC.listGreenHorse[id].location = Map[42];
-                                    _connect.Sendmsg(ClientSocket, "Next", roomID.ToString(), HC);
-                            }
-                                else // Không thể ra quân
-                                {
-                                    MessageBox.Show("Không thể ra quân");
-                                }
-                            }
-                            else // Yellow
-                            {
-                                if (AcceptMoving(28)) // Có quân nào tồn tại ở ngay chỗ xuất quân hay không?
-                                {
-                                    Horse.Location = Map[28];
-                                    HC.listyellowHorse[id].location = Map[28];
-                                    _connect.Sendmsg(ClientSocket, "Next", roomID.ToString(), HC);
-                                }
-                                else
-                                {
-                                    MessageBox.Show("Không thể ra quân");
-                                }
-                            };
+                        }
                     }
                     else
                     {
-                        MessageBox.Show("Phải xoay ra 1 hoặc 6 mới được phép ra quân");
+                        alert.Text = "Phải xoay ra mặt 1 hoặc 6 thì mới đi được";
                     }
                 }
             }
-        }
+            }
 
         private bool AcceptMoving(int _index)
         {
