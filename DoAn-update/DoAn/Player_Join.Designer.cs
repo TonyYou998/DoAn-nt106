@@ -49,7 +49,6 @@ namespace Client
             this.Roll_number.Size = new System.Drawing.Size(339, 383);
             this.Roll_number.TabIndex = 23;
             this.Roll_number.TabStop = false;
-            this.Roll_number.Click += new System.EventHandler(this.Roll_number_Click);
             // 
             // btn_exit
             // 

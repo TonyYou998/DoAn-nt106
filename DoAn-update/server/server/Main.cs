@@ -219,26 +219,53 @@ namespace Server
                             sendPacketToRoom(packet);
                             break;
                         case "Roll":
-                            MSG = new ManagePacket {
-                                msgtype = "Roll",
-                                rollNumber = int.Parse(data[2]),
-                                msgcontent = $"{data[3]}",
-                                roomID = packet.roomID
-                            };
+                            string nextplayer = "";
+                            if (int.Parse(data[2]) == 1 || int.Parse(data[2]) == 6)
+                                nextplayer = data[3];
+                            else
+                                nextplayer = getNextPlayer(data[3], data[1]);
 
+                                MSG = new ManagePacket
+                                {
+                                    msgtype = "Roll",
+                                    rollNumber = int.Parse(data[2]),
+                                    msgcontent = nextplayer,
+                                    roomID = packet.roomID
+                                };
                             sendPacketToRoom(MSG);
                             break;
-                        //case "Moving":
-                        //    sendPacketToRoom(packet);
-                        //    break;
+
                         case "Next":
+                            //nextplayer = "";
+                            //if (int.Parse(data[2]) == 1 || int.Parse(data[2]) == 6)
+                            //    nextplayer = data[3];
+                            //else
+                            //    nextplayer = getNextPlayer(data[3], data[1]);
+
                             packet.msgtype = "Update";
                             sendPacketToRoom(packet);
                             break;
                     }
                     break;
+
+                case "ProgressBar":
+                    MSG = new ManagePacket
+                    {
+                        msgtype = "ProgressBar",
+                        roomID = packet.roomID
+                    };
+                    sendPacketToRoom(MSG);
+                    break;
             }
                 
+        }
+
+        private string getNextPlayer(string current_player, string roomID)
+        {
+            List<string> user_in_room = sql.GetListUserInRoom(int.Parse(roomID));
+
+            int index = user_in_room.IndexOf(current_player);
+            return user_in_room[(index + 1) % user_in_room.Count];
         }
 
         private void sendPacketToRoom(ManagePacket MSG)

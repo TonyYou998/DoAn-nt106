@@ -24,6 +24,7 @@ namespace Client
             this.ClientSocket = S;
             this.roomID = roomID;
             this.HC = HC;
+            this.Text = p.userName;
             InitBC();
             //FORM GIAO DIEN
 
@@ -180,7 +181,7 @@ namespace Client
 
         Point[] Ready = new Point[]
         {
-            new Point { X = 150, Y = 85},
+            new Point { X = 150, Y = 80},
             new Point { X = 240, Y = 85},
             new Point { X = 150, Y = 170 },
             new Point { X = 240, Y = 170 },
@@ -250,11 +251,17 @@ namespace Client
         {
             for(int i =0; i < 20; i++)
             {
+                if (progressBar1.Value == 0) break;
                 progressBar1.BeginInvoke((Action)(() => { 
                     progressBar1.Value = progressBar1.Value + 5; 
                 }));
+                _connect.Sendmsg(ClientSocket, "ProgressBar", progressBar1.Value.ToString());
                 Thread.Sleep(1000);
             }
+            progressBar1.BeginInvoke((Action)(() => {
+                progressBar1.Value = 0;
+            }));
+            // Client không làm j cả sẽ gởi lượt đi tiếp theo đến đối thủ
             _connect.Sendmsg(ClientSocket,"Next",roomID.ToString(),HC);
         }
         public void Player_Join_Receive()
@@ -265,7 +272,6 @@ namespace Client
                 ClientSocket.Receive(bytes);
                 string MSG = Encoding.UTF8.GetString(bytes);
                 var Jsonmsg = JsonConvert.DeserializeObject<ManagePacket>(MSG);
-                // Jsonmsg.rollNumber cái này chứa rollNumber=> lấy ra sài
 
                 if (Jsonmsg.msgtype == "Action")
                 {
@@ -276,14 +282,10 @@ namespace Client
                             alert.Text = $"Trận đấu bắt đầu, lượt chơi của {s[2]}"; 
                         }));
 
-                        if (s[2] == p.userName)
-                        {
-                            MyTurn = true;
-                        }
-                        else MyTurn = false;
-
+                        MyTurn = true;
+                        Rolled = false;
                         Thread t = new Thread(timeout);
-                        t.Start();
+                        t.Start();  
                     }
                     
                     continue;
@@ -313,18 +315,24 @@ namespace Client
                             break;
                     }
 
-                    alert.BeginInvoke((Action)(() => {
-                        alert.Text = $"Lượt chơi của {s[2]}";
-                    }));
-
-                    if (s[2] == p.userName)
+                    RollNumber = Jsonmsg.rollNumber;
+                    if(Jsonmsg.msgcontent == p.userName) // Nếu lượt đi bằng với tên người chơi 
                     {
                         MyTurn = true;
+                        Rolled = false;
+                        Thread t = new Thread(timeout);
+                        t.Start();
                     }
-                    else MyTurn = false;
+                    else
+                    {
+                        MyTurn = false;
+                        Rolled = false;
+                    }
 
-                    Thread t = new Thread(timeout);
-                    t.Start();
+                    alert.BeginInvoke((Action)(() => {
+                        alert.Text = $"Lượt chơi của {Jsonmsg.msgcontent}";
+                    }));
+
                     continue;
                 }
 
@@ -340,6 +348,13 @@ namespace Client
                     HC = Jsonmsg.HC;
                     updateBC();
                     continue;
+                }
+
+                if(Jsonmsg.msgtype == "ProgressBar")
+                {
+                    progressBar1.BeginInvoke((Action)(() => {
+                        progressBar1.Value = int.Parse(Jsonmsg.msgcontent);
+                    }));
                 }
 
             }
@@ -510,9 +525,9 @@ namespace Client
         }
         public bool Is_in_readyArea (Point A)
         {
-            foreach(var i in Ready)
+            for (int i =0; i < 4; i++)
             {
-                if (A == i) return true;
+                if (A == Ready[i]) return true;
             }
             return false;
         }
@@ -523,7 +538,7 @@ namespace Client
             string color = name.Substring(0, name.Length - 1 );
             int id = int.Parse(name.Substring(name.Length - 1, 1));
 
-            if (MyTurn)
+            if (MyTurn && Rolled)
             {
                 if (!Is_in_readyArea(Horse.Location)) // Nếu không có trong chuồng
                 {
@@ -549,7 +564,7 @@ namespace Client
                         else
                         {
 
-                            if (color == "Green")
+                            if (color == "Red")
                             {
                                 int calc = ((42 + pos + 56) % 56) + RollNumber;
                                 if (calc > 55) MessageBox.Show("NEXT");
@@ -561,29 +576,6 @@ namespace Client
                                 else Horse.Location = Map[pos + RollNumber];
                             }
 
-                            if (color == "Blue")
-                            {
-                                int calc = ((14 + pos + 56) % 56) + RollNumber;
-                                if (calc > 55) MessageBox.Show("NEXT");
-                                else if (calc == 55)
-                                {
-                                    Horse.Location = Map[pos + RollNumber];
-                                    MessageBox.Show("WIN");
-                                }
-                                else Horse.Location = Map[pos + RollNumber];
-                            }
-
-                            if (color == "Yellow")
-                            {
-                                int calc = ((28 + pos + 56) % 56) + RollNumber;
-                                if (calc > 55) MessageBox.Show("NEXT");
-                                else if (calc == 55)
-                                {
-                                    Horse.Location = Map[pos + RollNumber];
-                                    MessageBox.Show("WIN");
-                                }
-                                else Horse.Location = Map[pos + RollNumber];
-                            }
                         }
                     }
 
@@ -597,20 +589,20 @@ namespace Client
                             if (AcceptMoving(0)) // Có quân nào tồn tại ở ngay chỗ xuất quân hay không?
                             {
                                 Horse.Location = Map[0];
-                                HC.listBlueHorse[id].location = Map[0];
+                                HC.listRedHorse[id - 1].location = Map[0];
                             }
                             else
                             {
                                 MessageBox.Show("Ko đi đc");
-                                _connect.Sendmsg(ClientSocket, "Next", roomID.ToString(), HC);
                             }
                         }
                     }
                     else
                     {
-                        alert.Text = "Phải xoay ra mặt 1 hoặc 6 thì mới đi được";
+                        alert.Text = "Phải xoay ra mặt 1 hoặc 6 thì mới xuất quân được";
                     }
                 }
+                _connect.Sendmsg(ClientSocket, "Next", roomID.ToString(), HC);
             }
             }
 
@@ -698,12 +690,12 @@ namespace Client
         public int RollNumber=6;
         private void btn_roll_Click(object sender, EventArgs e)
         {
-            if (Rolled==false && RollNumber==-1 && MyTurn)
+            if (!Rolled && MyTurn)
             {
+                Rolled = true;
                 Random random = new Random();
                 RollNumber = random.Next(1, 6);
-                _connect.Sendmsg(ClientSocket, "Action", $"Roll:{roomID}:{RollNumber}");
-
+                _connect.Sendmsg(ClientSocket, "Action", $"Roll:{roomID}:{RollNumber}:{p.userName}");
             }
         }
     }

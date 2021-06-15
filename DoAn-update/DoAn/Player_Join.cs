@@ -23,6 +23,7 @@ namespace Client
             this.p = p;
             this.roomID = roomID;
             this.ClientSocket = S;
+            this.Text = p.userName;
             InitBC();
             //FORM GIAO DIEN
             this.Size = new Size(1286, 751);
@@ -233,7 +234,6 @@ namespace Client
                 ClientSocket.Receive(bytes);
                 string MSG = Encoding.UTF8.GetString(bytes);
                 var Jsonmsg = JsonConvert.DeserializeObject<ManagePacket>(MSG);
-                // Jsonmsg.rollNumber cái này chứa rollNumber=> lấy ra sài
 
                 if (Jsonmsg.msgtype == "Action")
                 {
@@ -244,15 +244,10 @@ namespace Client
                             alert.Text = $"Trận đấu bắt đầu, lượt chơi của {s[2]}";
                         }));
 
-                        if (s[2] == p.userName)
-                        {
-                            MyTurn = true;
-                        }
-                        else MyTurn = false;
-
-                        Thread t = new Thread(timeout);
-                        t.Start();
+                        //Thread t = new Thread(timeout);
+                        //t.Start();
                     }
+
                     continue;
                 }
                 if (Jsonmsg.msgtype == "Roll")
@@ -280,18 +275,24 @@ namespace Client
                             break;
                     }
 
-                    alert.BeginInvoke((Action)(() => {
-                        alert.Text = $"Lượt chơi của {s[2]}";
-                    }));
-
-                    if (s[2] == p.userName)
+                    RollNumber = Jsonmsg.rollNumber;
+                    if (Jsonmsg.msgcontent == p.userName) // Nếu lượt đi bằng với tên người chơi 
                     {
                         MyTurn = true;
+                        Rolled = false;
+                        Thread t = new Thread(timeout);
+                        t.Start();
                     }
-                    else MyTurn = false;
+                    else
+                    {
+                        MyTurn = false;
+                        Rolled = false;
+                    }
 
-                    Thread t = new Thread(timeout);
-                    t.Start();
+                    alert.BeginInvoke((Action)(() => {
+                        alert.Text = $"Lượt chơi của {Jsonmsg.msgcontent}";
+                    }));
+                    
                     continue;
                 }
 
@@ -308,6 +309,7 @@ namespace Client
                     updateBC();
                     continue;
                 }
+
             }
         }
 
@@ -415,7 +417,6 @@ namespace Client
                             else
                             {
                                 MessageBox.Show("Ko đi đc");
-                                _connect.Sendmsg(ClientSocket,"Next",roomID.ToString(),HC);
                             }
                         }
 
@@ -429,7 +430,6 @@ namespace Client
                             else
                             {
                                 MessageBox.Show("Ko đi đc");
-                                _connect.Sendmsg(ClientSocket,"Next",roomID.ToString(),HC);
                             }
                         }
                         else // Yellow
@@ -442,10 +442,11 @@ namespace Client
                             else
                             {
                                 MessageBox.Show("Ko đi đc");
-                                _connect.Sendmsg(ClientSocket,"Next",roomID.ToString(),HC);
                             }
                         };
                     }
+                    else { alert.Text = "Phải xoay ra mặt 1 hoặc 6 thì mới xuất quân được"; }
+                    _connect.Sendmsg(ClientSocket, "Next", roomID.ToString(), HC);
                 }
             }
         }
@@ -604,14 +605,16 @@ namespace Client
                 }
             }
         }
-        private void Roll_number_Click(object sender, EventArgs e)
-        {
-
-        }
 
         private void btn_roll_Click(object sender, EventArgs e)
         {
-           
+            if (!Rolled && MyTurn)
+            {
+                Rolled = true;
+                Random random = new Random();
+                RollNumber = random.Next(1, 6);
+                _connect.Sendmsg(ClientSocket, "Action", $"Roll:{roomID}:{RollNumber}:{p.userName}");
+            }
         }
        
     }
