@@ -251,11 +251,11 @@ namespace Client
         {
             for(int i =0; i < 20; i++)
             {
-                if (progressBar1.Value == 0) break;
                 progressBar1.BeginInvoke((Action)(() => { 
                     progressBar1.Value = progressBar1.Value + 5; 
                 }));
-                _connect.Sendmsg(ClientSocket, "ProgressBar", progressBar1.Value.ToString());
+                _connect.Sendmsg(ClientSocket, "ProgressBar", $"{roomID}:{progressBar1.Value.ToString()}");
+                if (progressBar1.Value == 0) break;
                 Thread.Sleep(1000);
             }
             progressBar1.BeginInvoke((Action)(() => {
@@ -287,54 +287,52 @@ namespace Client
                         Thread t = new Thread(timeout);
                         t.Start();  
                     }
-                    
+
+                    if (s[0] == "Roll")
+                    {
+                        switch (Jsonmsg.rollNumber)
+                        {
+                            case 1:
+                                Roll_number.BackgroundImage = Properties.Resources._1;
+                                break;
+                            case 2:
+                                Roll_number.BackgroundImage = Properties.Resources._2;
+                                break;
+                            case 3:
+                                Roll_number.BackgroundImage = Properties.Resources._3;
+                                break;
+                            case 4:
+                                Roll_number.BackgroundImage = Properties.Resources._4;
+                                break;
+                            case 5:
+                                Roll_number.BackgroundImage = Properties.Resources._5;
+                                break;
+                            case 6:
+                                Roll_number.BackgroundImage = Properties.Resources._6;
+                                break;
+                        }
+
+                        RollNumber = Jsonmsg.rollNumber;
+                        if (s[1] == p.userName) // Nếu lượt đi bằng với tên người chơi 
+                        {
+                            MyTurn = true;
+                            Thread t = new Thread(timeout);
+                            t.Start();
+                        }
+                        else
+                        {
+                            MyTurn = false;
+                            Rolled = false;
+                        }
+
+                        alert.BeginInvoke((Action)(() => {
+                            alert.Text = $"Lượt chơi của {s[1]}";
+                        }));
+
+                    }
                     continue;
                 }
-                if (Jsonmsg.msgtype == "Roll")
-                {
-                    string[] s = Jsonmsg.msgcontent.Split(':');
-                    switch (Jsonmsg.rollNumber)
-                    {
-                        case 1:
-                            Roll_number.BackgroundImage = Properties.Resources._1;
-                            break;
-                        case 2:
-                            Roll_number.BackgroundImage = Properties.Resources._2;
-                            break;
-                        case 3:
-                            Roll_number.BackgroundImage = Properties.Resources._3;
-                            break;
-                        case 4:
-                            Roll_number.BackgroundImage = Properties.Resources._4;
-                            break;
-                        case 5:
-                            Roll_number.BackgroundImage = Properties.Resources._5;
-                            break;
-                        case 6:
-                            Roll_number.BackgroundImage = Properties.Resources._6;
-                            break;
-                    }
-
-                    RollNumber = Jsonmsg.rollNumber;
-                    if(Jsonmsg.msgcontent == p.userName) // Nếu lượt đi bằng với tên người chơi 
-                    {
-                        MyTurn = true;
-                        Rolled = false;
-                        Thread t = new Thread(timeout);
-                        t.Start();
-                    }
-                    else
-                    {
-                        MyTurn = false;
-                        Rolled = false;
-                    }
-
-                    alert.BeginInvoke((Action)(() => {
-                        alert.Text = $"Lượt chơi của {Jsonmsg.msgcontent}";
-                    }));
-
-                    continue;
-                }
+                
 
                 if (Jsonmsg.msgtype == "Join" && Jsonmsg.HC != null)
                 {

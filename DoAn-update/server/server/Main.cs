@@ -227,23 +227,18 @@ namespace Server
                             else
                                 nextplayer = getNextPlayer(data[3], data[1]);
 
-                                MSG = new ManagePacket
-                                {
-                                    msgtype = "Roll",
-                                    rollNumber = int.Parse(data[2]),
-                                    msgcontent = nextplayer,
+                            MSG = new ManagePacket
+                            {
+                                msgtype = "Action",
+                                rollNumber = int.Parse(data[2]),
+                                msgcontent = $"Roll:{nextplayer}",
+
                                     roomID = packet.roomID
                                 };
                             sendPacketToRoom(MSG);
                             break;
 
                         case "Next":
-                            //nextplayer = "";
-                            //if (int.Parse(data[2]) == 1 || int.Parse(data[2]) == 6)
-                            //    nextplayer = data[3];
-                            //else
-                            //    nextplayer = getNextPlayer(data[3], data[1]);
-
                             packet.msgtype = "Update";
                             sendPacketToRoom(packet);
                             break;
@@ -251,10 +246,12 @@ namespace Server
                     break;
 
                 case "ProgressBar":
+                    data = packet.msgcontent.Split(':');
                     MSG = new ManagePacket
                     {
                         msgtype = "ProgressBar",
-                        roomID = packet.roomID
+                        roomID = int.Parse(data[0]),
+                        msgcontent = data[1]
                     };
                     sendPacketToRoom(MSG);
                     break;

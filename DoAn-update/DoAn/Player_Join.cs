@@ -193,18 +193,24 @@ namespace Client
             new Point { X = 600, Y = 530 }
         };
 
-        public bool Started = false, Rolled = false, MyTurn = true;
+        public bool Started = false, Rolled = false, MyTurn = false;
 
         private void timeout()
         {
             for (int i = 0; i < 20; i++)
             {
+                if (progressBar1.Value == 0) break;
                 progressBar1.BeginInvoke((Action)(() => {
                     progressBar1.Value = progressBar1.Value + 5;
                 }));
+                _connect.Sendmsg(ClientSocket, "ProgressBar", progressBar1.Value.ToString());
                 Thread.Sleep(1000);
             }
-            _connect.Sendmsg(ClientSocket,"Next",roomID.ToString(),HC);
+            progressBar1.BeginInvoke((Action)(() => {
+                progressBar1.Value = 0;
+            }));
+            // Client không làm j cả sẽ gởi lượt đi tiếp theo đến đối thủ
+            _connect.Sendmsg(ClientSocket, "Next", roomID.ToString(), HC);
         }
 
         public void InitBC()
@@ -243,58 +249,54 @@ namespace Client
                         alert.BeginInvoke((Action)(() => {
                             alert.Text = $"Trận đấu bắt đầu, lượt chơi của {s[2]}";
                         }));
-
-                        //Thread t = new Thread(timeout);
-                        //t.Start();
                     }
 
+                    if (s[0] == "Roll")
+                    {
+                        switch (Jsonmsg.rollNumber)
+                        {
+                            case 1:
+                                Roll_number.BackgroundImage = Properties.Resources._1;
+                                break;
+                            case 2:
+                                Roll_number.BackgroundImage = Properties.Resources._2;
+                                break;
+                            case 3:
+                                Roll_number.BackgroundImage = Properties.Resources._3;
+                                break;
+                            case 4:
+                                Roll_number.BackgroundImage = Properties.Resources._4;
+                                break;
+                            case 5:
+                                Roll_number.BackgroundImage = Properties.Resources._5;
+                                break;
+                            case 6:
+                                Roll_number.BackgroundImage = Properties.Resources._6;
+                                break;
+                        }
+
+                        RollNumber = Jsonmsg.rollNumber;
+                        if (Jsonmsg.msgcontent == p.userName) // Nếu lượt đi bằng với tên người chơi 
+                        {
+                            MyTurn = true;
+                            Rolled = false;
+                            Thread t = new Thread(timeout);
+                            t.Start();
+                        }
+                        else
+                        {
+                            MyTurn = false;
+                            Rolled = false;
+                        }
+
+                        alert.BeginInvoke((Action)(() => {
+                            alert.Text = $"Lượt chơi của {Jsonmsg.msgcontent}";
+                        }));
+
+                    }
                     continue;
                 }
-                if (Jsonmsg.msgtype == "Roll")
-                {
-                    string[] s = Jsonmsg.msgcontent.Split(':');
-                    switch (Jsonmsg.rollNumber)
-                    {
-                        case 1:
-                            Roll_number.BackgroundImage = Properties.Resources._1;
-                            break;
-                        case 2:
-                            Roll_number.BackgroundImage = Properties.Resources._2;
-                            break;
-                        case 3:
-                            Roll_number.BackgroundImage = Properties.Resources._3;
-                            break;
-                        case 4:
-                            Roll_number.BackgroundImage = Properties.Resources._4;
-                            break;
-                        case 5:
-                            Roll_number.BackgroundImage = Properties.Resources._5;
-                            break;
-                        case 6:
-                            Roll_number.BackgroundImage = Properties.Resources._6;
-                            break;
-                    }
 
-                    RollNumber = Jsonmsg.rollNumber;
-                    if (Jsonmsg.msgcontent == p.userName) // Nếu lượt đi bằng với tên người chơi 
-                    {
-                        MyTurn = true;
-                        Rolled = false;
-                        Thread t = new Thread(timeout);
-                        t.Start();
-                    }
-                    else
-                    {
-                        MyTurn = false;
-                        Rolled = false;
-                    }
-
-                    alert.BeginInvoke((Action)(() => {
-                        alert.Text = $"Lượt chơi của {Jsonmsg.msgcontent}";
-                    }));
-                    
-                    continue;
-                }
 
                 if (Jsonmsg.msgtype == "Join" && Jsonmsg.HC != null)
                 {
@@ -308,6 +310,13 @@ namespace Client
                     HC = Jsonmsg.HC;
                     updateBC();
                     continue;
+                }
+
+                if (Jsonmsg.msgtype == "ProgressBar")
+                {
+                    progressBar1.BeginInvoke((Action)(() => {
+                        progressBar1.Value = int.Parse(Jsonmsg.msgcontent);
+                    }));
                 }
 
             }
