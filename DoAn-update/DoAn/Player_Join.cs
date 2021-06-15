@@ -15,13 +15,15 @@ namespace Client
         private HorseControl HC;
         private NguoiChoi p;
         private Connection _connect = new Connection();
-        public Player_Join(HorseControl HC,NguoiChoi p, Socket S)
+        private int roomID;
+        public Player_Join(HorseControl HC,NguoiChoi p, Socket S, int roomID)
         {
             InitializeComponent();
             this.HC = HC;
             this.p = p;
+            this.roomID = roomID;
             this.ClientSocket = S;
-            UPDATE_BANCO();
+            updateBC();
             //FORM GIAO DIEN
             this.Size = new Size(1286, 751);
             this.BackgroundImage = Properties.Resources.BANCO__1_3;
@@ -53,14 +55,6 @@ namespace Client
             Thread a = new Thread(Player_Join_Receive);
             a.Start();
         }
-        public Soldier Red1, Red2, Red3, Red4;
-        public struct Soldier
-        {
-            public string color;
-            public int ID;
-            public bool MySoldier;
-            public Point Location;
-        }
         public struct listCreated
         {
             public bool RED;
@@ -69,6 +63,23 @@ namespace Client
             public bool BLUE;
         }
         public listCreated ListCreatedHorse;
+        Point[] Map = new Point[]
+        {
+            new Point {X = 330, Y = 25 }, new Point {X = 330, Y = 55 }, new Point {X = 330, Y = 90 }, new Point {X = 330, Y = 120 },
+            new Point {X = 330, Y = 150 }, new Point {X = 330, Y = 185 }, new Point {X = 330, Y = 235 }, new Point {X = 290, Y = 235 },
+            new Point {X = 250, Y = 235 }, new Point {X = 215, Y = 235 }, new Point {X = 180, Y = 235 }, new Point {X = 145, Y = 235 },
+            new Point {X = 105, Y = 235 }, new Point {X = 105, Y = 280 }, new Point {X = 105, Y = 330 }, new Point {X = 145, Y = 330 },
+            new Point {X = 180, Y = 330 }, new Point {X = 215, Y = 330 }, new Point {X = 250, Y = 330 }, new Point {X = 290, Y = 330 },
+            new Point {X = 330, Y = 330 }, new Point {X = 330, Y = 370 }, new Point {X = 330, Y = 400 }, new Point {X = 330, Y = 430 },
+            new Point {X = 330, Y = 465 }, new Point {X = 330, Y = 495 }, new Point {X = 330, Y = 530 }, new Point {X = 380, Y = 530 },
+            new Point {X = 430, Y = 530 }, new Point {X = 430, Y = 495 }, new Point {X = 430, Y = 465 }, new Point {X = 430, Y = 430 },
+            new Point {X = 430, Y = 400 }, new Point {X = 430, Y = 370 }, new Point {X = 430, Y = 330 }, new Point {X = 475, Y = 330 },
+            new Point {X = 510, Y = 330 }, new Point {X = 545, Y = 330 }, new Point {X = 585, Y = 330 }, new Point {X = 620, Y = 330 },
+            new Point {X = 655, Y = 330 }, new Point {X = 655, Y = 285 }, new Point {X = 650, Y = 235 }, new Point {X = 615, Y = 235 },
+            new Point {X = 580, Y = 235 }, new Point {X = 545, Y = 235 }, new Point {X = 510, Y = 235 }, new Point {X = 475, Y = 235 },
+            new Point {X = 440, Y = 235 }, new Point {X = 435, Y = 185 }, new Point {X = 435, Y = 150 }, new Point {X = 435, Y = 120 },
+            new Point {X = 435, Y = 90 }, new Point {X = 435, Y = 55 }, new Point {X = 435, Y = 25 }, new Point {X = 385, Y = 25 }
+        };
         public void updateListCreate(string color)
         {
             switch (color)
@@ -181,7 +192,7 @@ namespace Client
             new Point { X = 600, Y = 530 }
         };
 
- 
+        public bool Started = false, Rolled = false, MyTurn = true;
 
         private void timeout()
         {
@@ -192,19 +203,65 @@ namespace Client
                 }));
                 Thread.Sleep(1000);
             }
-            _connect.Sendmsg(ClientSocket, HC);
+            _connect.Sendmsg(ClientSocket,"Next",roomID.ToString(),HC);
         }
 
-        private void Player_Join_Receive()
+        public void InitBC()
+        {
+            if (HC.listyellowHorse.Count > 0)
+            {
+                checkForCreateHorse(HC.listyellowHorse[1].color, p.userName, HC.listyellowHorse[1].owner);
+            }
+            if (HC.listGreenHorse.Count > 0)
+            {
+                checkForCreateHorse(HC.listGreenHorse[1].color, p.userName, HC.listGreenHorse[1].owner);
+            }
+            if (HC.listBlueHorse.Count > 0)
+            {
+                checkForCreateHorse(HC.listBlueHorse[1].color, p.userName, HC.listBlueHorse[1].owner);
+            }
+            if (HC.listRedHorse.Count > 0)
+            {
+                checkForCreateHorse(HC.listRedHorse[1].color, p.userName, HC.listRedHorse[1].owner);
+            }
+        }
+        public void Player_Join_Receive()
         {
             while (ClientSocket.Connected)
             {
-                byte[] bytes = new byte[1024];
+                byte[] bytes = new byte[2048];
                 ClientSocket.Receive(bytes);
                 string MSG = Encoding.UTF8.GetString(bytes);
                 var Jsonmsg = JsonConvert.DeserializeObject<ManagePacket>(MSG);
-                if (Jsonmsg.msgtype=="Roll")
+                // Jsonmsg.rollNumber cái này chứa rollNumber=> lấy ra sài
+
+                if (Jsonmsg.msgtype == "Action")
                 {
+                    string[] s = Jsonmsg.msgcontent.Split(':');
+                    if (s[0] == "Start")
+                    {
+                        alert.BeginInvoke((Action)(() => {
+                            alert.Text = $"Trận đấu bắt đầu, lượt chơi của {s[2]}";
+                        }));
+
+                        if (s[2] == p.userName)
+                        {
+                            MyTurn = true;
+                        }
+                        else MyTurn = false;
+
+                        Thread t = new Thread(timeout);
+                        t.Start();
+                    }
+                    else if (s[0] == "Join")
+                    {
+                        InitBC();
+                    }
+                    continue;
+                }
+                if (Jsonmsg.msgtype == "Roll")
+                {
+                    string[] s = Jsonmsg.msgcontent.Split(':');
                     switch (Jsonmsg.rollNumber)
                     {
                         case 1:
@@ -226,41 +283,332 @@ namespace Client
                             Roll_number.BackgroundImage = Properties.Resources._6;
                             break;
                     }
-                }
-                    
 
-                if (Jsonmsg.HC != null)
+                    alert.BeginInvoke((Action)(() => {
+                        alert.Text = $"Lượt chơi của {s[2]}";
+                    }));
+
+                    if (s[2] == p.userName)
+                    {
+                        MyTurn = true;
+                    }
+                    else MyTurn = false;
+
+                    Thread t = new Thread(timeout);
+                    t.Start();
+                    continue;
+                }
+
+                if (Jsonmsg.msgtype == "Update" && Jsonmsg.HC != null)
                 {
                     HC = Jsonmsg.HC;
-                    UPDATE_BANCO();
+                    updateBC();
+                    continue;
                 }
 
             }
-           
         }
 
-        private void Player_Join_Load(object sender, EventArgs e)
+        public bool Is_in_readyArea(Point A)
         {
-
+            foreach (var i in Ready)
+            {
+                if (A == i) return true;
+            }
+            return false;
         }
 
-        private void UPDATE_BANCO()
+        public int ConvertLocationToIndex(Point a, Point[] b)
         {
-            if (HC.listyellowHorse.Count > 0)
+            for (int i = 0; i < b.Length; i++)
             {
-                checkForCreateHorse(HC.listyellowHorse[1].color, p.userName, HC.listyellowHorse[1].owner);
+                if (a == b[i])
+                    return i;
             }
-            if (HC.listGreenHorse.Count > 0)
+            return -1;
+        }
+        public void Moving(object sender, EventArgs e)
+        {
+            PictureBox Horse = (PictureBox)sender;
+            string name = Horse.Name.ToString();
+            string color = name.Substring(0, name.Length - 1);
+            int id = int.Parse(name.Substring(name.Length - 1, 1));
+
+            if (MyTurn)
             {
-                checkForCreateHorse(HC.listGreenHorse[1].color, p.userName, HC.listGreenHorse[1].owner);
+                if (!Is_in_readyArea(Horse.Location)) // Nếu không có trong chuồng
+                {
+                    bool move = true;
+                    int pos = ConvertLocationToIndex(Horse.Location, Map);
+
+                    for (var i = 1; i < RollNumber; i++)
+                    {
+                        int _index = (i + pos) > 55 ? (i + pos) % 56 : (i + pos);
+                        if (!AcceptMoving(_index)) move = false;
+                    }
+
+                    if (move)
+                    {
+                        if (GetColorHorse(RollNumber + pos) != color)
+                        {
+                            kickAssHorse(RollNumber + pos);
+                        }
+                        else if (GetColorHorse(RollNumber + pos) == color)
+                        {
+                            MessageBox.Show("NEXT");
+                        }
+                        else
+                        {
+                            if (color == "Red")
+                            {
+                                if (pos + RollNumber > 55)
+                                    MessageBox.Show("NEXT");
+                                else if (pos + RollNumber == 55)
+                                {
+                                    Horse.Location = Map[pos + RollNumber];
+                                    MessageBox.Show("WIN");
+                                }
+                                else Horse.Location = Map[pos + RollNumber];
+                            }
+
+                            if (color == "Green")
+                            {
+                                int calc = ((42 + pos + 56) % 56) + RollNumber;
+                                if (calc > 55) MessageBox.Show("NEXT");
+                                else if (calc == 55)
+                                {
+                                    Horse.Location = Map[pos + RollNumber];
+                                    MessageBox.Show("WIN");
+                                }
+                                else Horse.Location = Map[pos + RollNumber];
+                            }
+
+                            if (color == "Blue")
+                            {
+                                int calc = ((14 + pos + 56) % 56) + RollNumber;
+                                if (calc > 55) MessageBox.Show("NEXT");
+                                else if (calc == 55)
+                                {
+                                    Horse.Location = Map[pos + RollNumber];
+                                    MessageBox.Show("WIN");
+                                }
+                                else Horse.Location = Map[pos + RollNumber];
+                            }
+
+                            if (color == "Yellow")
+                            {
+                                int calc = ((28 + pos + 56) % 56) + RollNumber;
+                                if (calc > 55) MessageBox.Show("NEXT");
+                                else if (calc == 55)
+                                {
+                                    Horse.Location = Map[pos + RollNumber];
+                                    MessageBox.Show("WIN");
+                                }
+                                else Horse.Location = Map[pos + RollNumber];
+                            }
+                        }
+                    }
+
+                }
+                else // Đang trong chuồng
+                {
+                    if (RollNumber == 1 || RollNumber == 6) // quay được 1 hoặc 6
+                    {
+                        if (color == "Red")
+                        {
+                            if (AcceptMoving(0)) // Có quân nào tồn tại ở ngay chỗ xuất quân hay không?
+                            {
+                                Horse.Location = Map[0];
+                                HC.listRedHorse[id].location = Map[0];
+                            }
+                            else
+                            {
+                                MessageBox.Show("Ko đi đc");
+                                _connect.Sendmsg(ClientSocket,"Next",roomID.ToString(),HC);
+                            }
+                        }
+
+                        else if (color == "Blue")
+                        {
+                            if (AcceptMoving(14)) // Có quân nào tồn tại ở ngay chỗ xuất quân hay không?
+                            {
+                                Horse.Location = Map[14];
+                                HC.listBlueHorse[id].location = Map[14];
+                            }
+                            else
+                            {
+                                MessageBox.Show("Ko đi đc");
+                                _connect.Sendmsg(ClientSocket,"Next",roomID.ToString(),HC);
+                            }
+                        }
+
+                        else if (color == "Green")
+                        {
+                            if (AcceptMoving(42)) // Có quân nào tồn tại ở ngay chỗ xuất quân hay không?
+                            {
+                                Horse.Location = Map[42];
+                                HC.listGreenHorse[id].location = Map[42];
+                            }
+                            else
+                            {
+                                MessageBox.Show("Ko đi đc");
+                                _connect.Sendmsg(ClientSocket,"Next",roomID.ToString(),HC);
+                            }
+                        }
+                        else // Yellow
+                        {
+                            if (AcceptMoving(28)) // Có quân nào tồn tại ở ngay chỗ xuất quân hay không?
+                            {
+                                Horse.Location = Map[28];
+                                HC.listyellowHorse[id].location = Map[28];
+                            }
+                            else
+                            {
+                                MessageBox.Show("Ko đi đc");
+                                _connect.Sendmsg(ClientSocket,"Next",roomID.ToString(),HC);
+                            }
+                        };
+                    }
+                }
             }
-            if (HC.listBlueHorse.Count > 0)
+        }
+
+        private bool AcceptMoving(int _index)
+        {
+            foreach (var j in HC.listRedHorse)
             {
-                checkForCreateHorse(HC.listBlueHorse[1].color, p.userName, HC.listBlueHorse[1].owner);
+                if (Map[_index] == j.location) return false;
             }
-            if (HC.listRedHorse.Count > 0)
+            foreach (var j in HC.listGreenHorse)
             {
-                checkForCreateHorse(HC.listRedHorse[1].color, p.userName, HC.listRedHorse[1].owner);
+                if (Map[_index] == j.location) return false;
+            }
+            foreach (var j in HC.listBlueHorse)
+            {
+                if (Map[_index] == j.location) return false;
+            }
+            foreach (var j in HC.listyellowHorse)
+            {
+                if (Map[_index] == j.location) return false;
+            }
+            return true;
+        }
+
+        private string GetColorHorse(int _index)
+        {
+            foreach (var j in HC.listRedHorse)
+            {
+                if (Map[_index] == j.location) return j.color;
+            }
+            foreach (var j in HC.listGreenHorse)
+            {
+                if (Map[_index] == j.location) return j.color;
+            }
+            foreach (var j in HC.listBlueHorse)
+            {
+                if (Map[_index] == j.location) return j.color;
+            }
+            foreach (var j in HC.listyellowHorse)
+            {
+                if (Map[_index] == j.location) return j.color;
+            }
+            return "";
+        }
+
+        private void kickAssHorse(int _index)
+        {
+            for (var i = 0; i < Controls.Count; i++)
+            {
+                if (Controls[i].Location == Map[_index])
+                {
+                    string name = Controls[i].Name;
+                    string color = name.Substring(0, name.Length - 1);
+                    string color_index = name.Substring(name.Length - 1, name.Length);
+
+                    if (color == "Red")
+                    {
+                        int index = int.Parse(color_index) - 1;
+                        Controls[i].Location = Ready[index];
+                        HC.listRedHorse[index].location = Ready[index];
+                    }
+                    else if (color == "Green")
+                    {
+                        int index = int.Parse(color_index) - 1;
+                        Controls[i].Location = Ready[index];
+                        HC.listGreenHorse[index].location = Ready[index];
+                    }
+                    else if (color == "Blue")
+                    {
+                        int index = int.Parse(color_index) - 1;
+                        Controls[i].Location = Ready[index];
+                        HC.listBlueHorse[index].location = Ready[index];
+                    }
+                    else if (color == "Yellow")
+                    {
+                        int index = int.Parse(color_index) - 1;
+                        Controls[i].Location = Ready[index];
+                        HC.listyellowHorse[index].location = Ready[index];
+                    }
+                }
+            }
+            _connect.Sendmsg(ClientSocket, "Next", roomID.ToString(), HC);
+        }
+
+        public int RollNumber = 6;
+
+        public void updateBC()
+        {
+            if (HC != null)
+            {
+                for (int i = 0; i < Controls.Count; i++)
+                {
+                    if (Controls[i].GetType().Name == "PictureBox")
+                    {
+                        string name = Controls[i].Name;
+                        string color = name.Substring(0, name.Length - 1);
+                        switch (color)
+                        {
+                            case "Red":
+                                int id = int.Parse(name.Substring(name.Length - 1, 1));
+
+                                if (this.InvokeRequired)
+                                {
+                                    this.Invoke(new MethodInvoker(() =>
+                                    { Controls[i].Location = HC.listRedHorse[id - 1].location; }
+                                    ));
+                                }
+
+                                break;
+                            case "Green":
+                                int _id = int.Parse(name.Substring(name.Length - 1, 1));
+                                if (this.InvokeRequired)
+                                {
+                                    this.Invoke(new MethodInvoker(() =>
+                                    { Controls[i].Location = HC.listGreenHorse[_id - 1].location; }
+                                    ));
+                                }
+                                break;
+                            case "Blue":
+                                int __id = int.Parse(name.Substring(name.Length - 1, 1));
+                                if (this.InvokeRequired)
+                                {
+                                    this.Invoke(new MethodInvoker(() =>
+                                    { Controls[i].Location = HC.listBlueHorse[__id - 1].location; }
+                                    ));
+                                }
+                                break;
+                            case "Yellow":
+                                int ___id = int.Parse(name.Substring(name.Length - 1, 1));
+                                if (this.InvokeRequired)
+                                {
+                                    this.Invoke(new MethodInvoker(() =>
+                                    { Controls[i].Location = HC.listyellowHorse[___id - 1].location; }
+                                    ));
+                                }
+                                break;
+                        }
+                    }
+                }
             }
         }
         private void Roll_number_Click(object sender, EventArgs e)
@@ -272,13 +620,6 @@ namespace Client
         {
            
         }
-        public void Moving(object sender, EventArgs e)
-        {
-            //MessageBox.Show(sender.ToString());
-            PictureBox a = (PictureBox)sender;
-            MessageBox.Show(a.Name);
-        }
-
        
     }
 }
