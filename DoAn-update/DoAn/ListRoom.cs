@@ -17,6 +17,7 @@ namespace Client
 
         public void drawListRoom(List<RoomModel> L)
         {
+           //render list phòng
             int i = 0;
             while (i < L.Count)
             {
@@ -29,6 +30,7 @@ namespace Client
         public ListRoom(List<RoomModel> ListRoom, Socket ClientSocket, NguoiChoi p)
         {
             InitializeComponent();
+            //render list phòng
             drawListRoom(ListRoom);
             this.ClientSocket = ClientSocket;
             this.p = p;
@@ -36,6 +38,7 @@ namespace Client
 
         private void Double_click(object sender, MouseEventArgs e)
         {
+            //gửi request tới server
             var id = listView1.SelectedItems[0].Text;
             var numberOfPlayer = listView1.SelectedItems[0].SubItems[2].Text;
 
@@ -61,6 +64,7 @@ namespace Client
         }
         private bool realJoin(int numberOfPlayer, int roomID)
         {
+            //phân chia màu và list horse cho người chơi join vào theo số người chơi hiện có trong phòng
             switch (numberOfPlayer)
             {
                 case 1:
@@ -81,7 +85,9 @@ namespace Client
 
                     _connect.Sendmsg(ClientSocket, "JoinRoom", $"{p.userName}:{roomID}:Yellow:{listYellowHorse}",listYellowHorse);
                     return true;
+
                 case 4:
+                    //nếu đã có 4 người chhoiw thì báo full
                     MessageBox.Show("full player");
                     return false;
                     
@@ -92,6 +98,8 @@ namespace Client
         }
         public List<Horse> createListHorse(List<Horse> lstHorse, int x1, int x2, int y1, int y2, string color)
         {
+
+            // cấp phát tài nguyên cho người chơi mới
             Point p1 = new Point(x1, y1);
             Point p2 = new Point(x2, y2);
             Point p3 = new Point(x1, y2);
@@ -113,7 +121,9 @@ namespace Client
 
             ClientSocket.Receive(bytes);
             string ListHorseAvailable = Encoding.UTF8.GetString(bytes);
+            //nhận resp từ server
             var Jsonmsg = JsonConvert.DeserializeObject<ManagePacket>(ListHorseAvailable);
+        //    trả về lstHorse của tất cả người chơi đã join
             return Jsonmsg.HC;
         }
         private void listView1_SelectedIndexChanged(object sender, System.EventArgs e)
