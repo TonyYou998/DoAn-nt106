@@ -146,7 +146,7 @@ namespace Server
                 case "CreateRoom":
                  
                     string[] roomData = packet.msgcontent.Split(':');
-
+                    //nhận được listHorse từ cli thêm vào HorseControl
                     sql.AddRoom(roomData[0]);
                     sql.SetHost(roomData[1], 1);
                     sql.SetRoomID(roomData[1], number_room + 1);
@@ -157,13 +157,15 @@ namespace Server
                     //roomID:username:lisHorse:
                     string  userName = roomData[1];
                     MSG = new ManagePacket(HC[number_room], userName, number_room+1);
+                    //phản hồi cho cli nếu đã tạo phòng thành công
                     sendPacketToClient(current, MSG);
-                    number_room++;
+                 //   number_room++;
                     break;
 
 
                 case "ListRoom":
                     MSG = new ManagePacket(sql.ReadRoomData());
+                    //trả về listRoom khi cli join vào
                     sendPacketToClient(current, MSG);
                     break;
 
@@ -173,7 +175,7 @@ namespace Server
                     string name = Data[0];
                     string RoomID = Data[1];
                     string Color = Data[2];
-
+                    //add clie vào listRoom theo màu
                     switch(Color)
                     {
                         case "Green":
@@ -187,7 +189,7 @@ namespace Server
                             HC[int.Parse(RoomID)-1].listyellowHorse = packet.msgHorse;
                             break;
                     }
-
+                    //nếu đã start thì không join vào dc nữa
                     if (sql.IsPlaying(RoomID))
                     {
                         MSG = new ManagePacket("JoinRoom", "Isplaying");
@@ -324,21 +326,6 @@ namespace Server
         {
 
         }
-       /* private void createListHorse(List<Horse> listHorse)
-        {
-            Point p1 = new Point(150,85); ;
-            Point p2 = new Point(240, 85);
-            Point p3 = new Point(150, 170);
-            Point p4 = new Point(240, 170);
-            Horse h1 = new Horse(p1, "red", 1);
-            Horse h2 = new Horse(p2, "red", 2);
-            Horse h3 = new Horse(p3, "red", 3);
-            Horse h4 = new Horse(p4, "red", 4);
-            listHorse.Add(h1);
-            listHorse.Add(h2);
-            listHorse.Add(h3);
-            listHorse.Add(h4);
-
-        }*/
+       
     }
 }
