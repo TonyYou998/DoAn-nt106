@@ -24,9 +24,9 @@ namespace Client
             s.Send(buffer, 0, buffer.Length, SocketFlags.None);
         }
 
-        public void Sendmsg(Socket s, HorseControl HC)
+        public void Sendmsg(Socket s, string content,string RoomID,  HorseControl HC)
         {
-            var MSG = new ManagePacket { HC = HC };
+            var MSG = new ManagePacket { msgtype="Action", msgcontent=$"{content}:{RoomID}",  HC = HC };
             string json = JsonConvert.SerializeObject(MSG);
             byte[] buffer = Encoding.UTF8.GetBytes(json);
             s.Send(buffer, 0, buffer.Length, SocketFlags.None);

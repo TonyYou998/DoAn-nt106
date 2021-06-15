@@ -110,7 +110,6 @@ namespace Client
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.Name = "Player_Join";
             this.Text = "Player_Join";
-            this.Load += new System.EventHandler(this.Player_Join_Load);
             ((System.ComponentModel.ISupportInitialize)(this.Roll_number)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.btn_exit)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.btn_Roll)).EndInit();

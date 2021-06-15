@@ -195,36 +195,46 @@ namespace Server
                         break;
                     }
 
+
                     sql.SetHost(Data[0],0);
                     sql.SetRoomID(Data[0], int.Parse(Data[1]));
-                    MSG = new ManagePacket(HC[int.Parse(RoomID) - 1],name,int.Parse(RoomID)-1);
-                    sendPacketToRoom(MSG, int.Parse(RoomID)-1);
+                    MSG = new ManagePacket
+                    {
+                        msgtype = "Action",
+                        msgcontent = "Join",
+                        roomID = int.Parse(RoomID),
+                        HC = HC[int.Parse(RoomID) - 1]
+                    };
+                    sendPacketToRoom(MSG);
 
                     break;
 
                 case "Action":
                     data = packet.msgcontent.Split(':');
+                    packet.roomID = int.Parse(data[1]);
                     // data[1] = roomID, data[2] = rollnumber, data[3] = username;
                     switch (data[0])
                     {
                         case "Start": 
                             sql.SetRoomStart(data[1], 1);
-                            sendPacketToRoom(packet, int.Parse(data[1]));
+                            sendPacketToRoom(packet);
                             break;
                         case "Roll":
                             MSG = new ManagePacket {
                                 msgtype = "Roll",
                                 rollNumber = int.Parse(data[2]),
-                                msgcontent = $"{data[3]}"
+                                msgcontent = $"{data[3]}",
+                                roomID = packet.roomID
                             };
 
-                            sendPacketToRoom(MSG,int.Parse(data[1]));
+                            sendPacketToRoom(MSG);
                             break;
-                        case "Moving":
-                            sendPacketToRoom(packet, int.Parse(data[1]));
-                            break;
+                        //case "Moving":
+                        //    sendPacketToRoom(packet);
+                        //    break;
                         case "Next":
-                            sendPacketToRoom(packet, int.Parse(data[1]));
+                            packet.msgtype = "Update";
+                            sendPacketToRoom(packet);
                             break;
                     }
                     break;
@@ -232,9 +242,9 @@ namespace Server
                 
         }
 
-        private void sendPacketToRoom(ManagePacket MSG, int roomID)
+        private void sendPacketToRoom(ManagePacket MSG)
         {
-            List<string> user_in_room = sql.GetListUserInRoom(roomID);
+            List<string> user_in_room = sql.GetListUserInRoom(MSG.roomID);
             foreach(var u in user_in_room)
             {
                 Socket temp;

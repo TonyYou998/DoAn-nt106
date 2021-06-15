@@ -23,7 +23,7 @@ namespace Client
             this.ClientSocket = S;
             this.roomID = roomID;
             this.HC = HC;
-
+            InitBC();
             //FORM GIAO DIEN
 
             this.Size = new Size(1286, 751);
@@ -226,6 +226,25 @@ namespace Client
             }
         }
 
+        public void InitBC()
+        {
+            if (HC.listyellowHorse.Count > 0)
+            {
+                checkForCreateHorse(HC.listyellowHorse[1].color, p.userName, HC.listyellowHorse[1].owner);
+            }
+            if (HC.listGreenHorse.Count > 0)
+            {
+                checkForCreateHorse(HC.listGreenHorse[1].color, p.userName, HC.listGreenHorse[1].owner);
+            }
+            if (HC.listBlueHorse.Count > 0)
+            {
+                checkForCreateHorse(HC.listBlueHorse[1].color, p.userName, HC.listBlueHorse[1].owner);
+            }
+            if (HC.listRedHorse.Count > 0)
+            {
+                checkForCreateHorse(HC.listRedHorse[1].color, p.userName, HC.listRedHorse[1].owner);
+            }
+        }
         private void timeout()
         {
             for(int i =0; i < 20; i++)
@@ -235,7 +254,7 @@ namespace Client
                 }));
                 Thread.Sleep(1000);
             }
-            _connect.Sendmsg(ClientSocket,HC);
+            _connect.Sendmsg(ClientSocket,"Next",roomID.ToString(),HC);
         }
         public void Player_Join_Receive()
         {
@@ -246,13 +265,6 @@ namespace Client
                 string MSG = Encoding.UTF8.GetString(bytes);
                 var Jsonmsg = JsonConvert.DeserializeObject<ManagePacket>(MSG);
                 // Jsonmsg.rollNumber cái này chứa rollNumber=> lấy ra sài
-
-                if (Jsonmsg.HC != null)
-                {
-                    HC = Jsonmsg.HC;
-                    updateBC();
-                    continue;
-                }
 
                 if (Jsonmsg.msgtype == "Action")
                 {
@@ -271,6 +283,11 @@ namespace Client
 
                         Thread t = new Thread(timeout);
                         t.Start();
+                    }
+                    else if(s[0] == "Join")
+                    {
+                        HC = Jsonmsg.HC;
+                        InitBC();
                     }
                     continue;
                 }
@@ -314,6 +331,12 @@ namespace Client
                     continue;
                 }
 
+                if (Jsonmsg.msgtype == "Update" && Jsonmsg.HC != null)
+                {
+                    HC = Jsonmsg.HC;
+                    updateBC();
+                    continue;
+                }
 
             }
         }
@@ -331,21 +354,57 @@ namespace Client
         }
         public void updateBC()
         {
-            if (HC.listyellowHorse.Count > 0)
+            if(HC != null)
             {
-                checkForCreateHorse(HC.listyellowHorse[1].color, p.userName, HC.listyellowHorse[1].owner);
-            }
-            if (HC.listGreenHorse.Count > 0)
-            {
-                checkForCreateHorse(HC.listGreenHorse[1].color, p.userName, HC.listGreenHorse[1].owner);
-            }
-            if (HC.listBlueHorse.Count > 0)
-            {
-                checkForCreateHorse(HC.listBlueHorse[1].color, p.userName, HC.listBlueHorse[1].owner);
-            }
-            if (HC.listRedHorse.Count > 0)
-            {
-                checkForCreateHorse(HC.listRedHorse[1].color, p.userName, HC.listRedHorse[1].owner);
+                for (int i = 0; i < Controls.Count; i++)
+                {
+                    if (Controls[i].GetType().Name == "PictureBox")
+                    {
+                        string name = Controls[i].Name;
+                        string color = name.Substring(0, name.Length - 1);
+                        switch (color)
+                        {
+                            case "Red":
+                                int id = int.Parse(name.Substring(name.Length - 1, 1));
+
+                                if (this.InvokeRequired)
+                                {
+                                    this.Invoke(new MethodInvoker(() =>
+                                        { Controls[i].Location = HC.listRedHorse[id - 1].location; }
+                                    ));
+                                }
+                                
+                                break;
+                            case "Green":
+                                int _id = int.Parse(name.Substring(name.Length - 1, 1));
+                                if (this.InvokeRequired)
+                                {
+                                    this.Invoke(new MethodInvoker(() =>
+                                    { Controls[i].Location = HC.listGreenHorse[_id - 1].location; }
+                                    ));
+                                }
+                                break;
+                            case "Blue":
+                                int __id = int.Parse(name.Substring(name.Length - 1, 1));
+                                if (this.InvokeRequired)
+                                {
+                                    this.Invoke(new MethodInvoker(() =>
+                                    { Controls[i].Location = HC.listBlueHorse[__id - 1].location; }
+                                    ));
+                                }
+                                break;
+                            case "Yellow":
+                                int ___id = int.Parse(name.Substring(name.Length - 1, 1));
+                                if (this.InvokeRequired)
+                                {
+                                    this.Invoke(new MethodInvoker(() =>
+                                    { Controls[i].Location = HC.listyellowHorse[___id - 1].location; }
+                                    ));
+                                }
+                                break;
+                        }
+                    }
+                }
             }
         }
         public void updateHorse (HorseControl HC, Point a, int t, string color)
@@ -530,11 +589,11 @@ namespace Client
                                 {
                                     Horse.Location = Map[0];
                                     HC.listRedHorse[id].location = Map[0] ;
-                                }
+                                    _connect.Sendmsg(ClientSocket, "Next", roomID.ToString(), HC);
+                            }
                                 else
                                 {
-                                    MessageBox.Show("Ko đi đc");
-                                    _connect.Sendmsg(ClientSocket, HC);
+                                    MessageBox.Show("Không thể ra quân");
                                 }
                             }                            
                                 
@@ -544,11 +603,11 @@ namespace Client
                                 {
                                     Horse.Location = Map[14];
                                     HC.listBlueHorse[id].location = Map[14];
-                                }
+                                    _connect.Sendmsg(ClientSocket, "Next", roomID.ToString(), HC);
+                            }
                                 else
                                 {
-                                    MessageBox.Show("Ko đi đc");
-                                    _connect.Sendmsg(ClientSocket, HC);
+                                    MessageBox.Show("Không thể ra quân");
                                 }
                             }
 
@@ -558,11 +617,11 @@ namespace Client
                                 {
                                     Horse.Location = Map[42];
                                     HC.listGreenHorse[id].location = Map[42];
-                                }
-                                else
+                                    _connect.Sendmsg(ClientSocket, "Next", roomID.ToString(), HC);
+                            }
+                                else // Không thể ra quân
                                 {
-                                    MessageBox.Show("Ko đi đc");
-                                    _connect.Sendmsg(ClientSocket, HC);
+                                    MessageBox.Show("Không thể ra quân");
                                 }
                             }
                             else // Yellow
@@ -571,13 +630,17 @@ namespace Client
                                 {
                                     Horse.Location = Map[28];
                                     HC.listyellowHorse[id].location = Map[28];
+                                    _connect.Sendmsg(ClientSocket, "Next", roomID.ToString(), HC);
                                 }
                                 else
                                 {
-                                    MessageBox.Show("Ko đi đc");
-                                    _connect.Sendmsg(ClientSocket, HC);
+                                    MessageBox.Show("Không thể ra quân");
                                 }
                             };
+                    }
+                    else
+                    {
+                        MessageBox.Show("Phải xoay ra 1 hoặc 6 mới được phép ra quân");
                     }
                 }
             }
@@ -635,12 +698,33 @@ namespace Client
                     string color = name.Substring(0, name.Length - 1);
                     string color_index = name.Substring(name.Length - 1, name.Length);
 
-                    if (color == "Red") Controls[i].Location = Ready[int.Parse(color_index) - 1];
-                    else if (color == "Green") Controls[i].Location = Ready[4 + int.Parse(color_index) - 1];
-                    else if (color == "Blue") Controls[i].Location = Ready[8 + int.Parse(color_index) - 1];
-                    else if (color == "Yellow") Controls[i].Location = Ready[12 + int.Parse(color_index) - 1];
+                    if (color == "Red")
+                    {
+                        int index = int.Parse(color_index) - 1;
+                        Controls[i].Location = Ready[index];
+                        HC.listRedHorse[index].location = Ready[index];
+                    }
+                    else if (color == "Green")
+                    {
+                        int index = int.Parse(color_index) - 1;
+                        Controls[i].Location = Ready[index];
+                        HC.listGreenHorse[index].location = Ready[index];
+                    }
+                    else if (color == "Blue")
+                    {
+                        int index = int.Parse(color_index) - 1;
+                        Controls[i].Location = Ready[index];
+                        HC.listBlueHorse[index].location = Ready[index];
+                    }
+                    else if (color == "Yellow")
+                    {
+                        int index = int.Parse(color_index) - 1;
+                        Controls[i].Location = Ready[index];
+                        HC.listyellowHorse[index].location = Ready[index];
+                    }
                 }
             }
+            _connect.Sendmsg(ClientSocket,"Next",roomID.ToString(),HC);
         }
 
         public int RollNumber=6;

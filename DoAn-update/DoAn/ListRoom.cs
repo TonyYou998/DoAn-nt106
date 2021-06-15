@@ -45,7 +45,7 @@ namespace Client
             HorseControl HC = acceptJoin();
             if (HC != null)
             {
-                Player_Join PJ = new Player_Join(HC,p,ClientSocket);
+                Player_Join PJ = new Player_Join(HC,p,ClientSocket,int.Parse(id));
                 PJ.Disposed += delegate
                 {
                     this.Dispose();
