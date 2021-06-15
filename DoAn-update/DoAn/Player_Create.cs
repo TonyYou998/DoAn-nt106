@@ -331,6 +331,14 @@ namespace Client
                     t.Start();
                     continue;
                 }
+
+                if (Jsonmsg.msgtype == "Join" && Jsonmsg.HC != null)
+                {
+                    HC = Jsonmsg.HC;
+                    InitBC();
+                    continue;
+                }
+
                 if (Jsonmsg.msgtype == "Update" && Jsonmsg.HC != null)
                 {
                     HC = Jsonmsg.HC;

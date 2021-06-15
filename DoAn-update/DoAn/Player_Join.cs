@@ -299,13 +299,19 @@ namespace Client
                     continue;
                 }
 
+                if (Jsonmsg.msgtype == "Join" && Jsonmsg.HC != null)
+                {
+                    HC = Jsonmsg.HC;
+                    InitBC();
+                    continue;
+                }
+
                 if (Jsonmsg.msgtype == "Update" && Jsonmsg.HC != null)
                 {
                     HC = Jsonmsg.HC;
                     updateBC();
                     continue;
                 }
-
             }
         }
 

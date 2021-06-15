@@ -200,8 +200,7 @@ namespace Server
                     sql.SetRoomID(Data[0], int.Parse(Data[1]));
                     MSG = new ManagePacket
                     {
-                        msgtype = "Action",
-                        msgcontent = "Join",
+                        msgtype = "Join",
                         roomID = int.Parse(RoomID),
                         HC = HC[int.Parse(RoomID) - 1]
                     };
