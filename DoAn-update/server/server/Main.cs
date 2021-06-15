@@ -234,7 +234,7 @@ namespace Server
 
         private void sendPacketToRoom(ManagePacket MSG, int roomID)
         {
-            List<string> user_in_room = sql.GetListUserInRoom(roomID);
+            List<string> user_in_room = sql.GetListUserInRoom(roomID+1);
             foreach(var u in user_in_room)
             {
                 Socket temp;
