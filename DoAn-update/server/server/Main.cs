@@ -17,7 +17,7 @@ namespace Server
         private readonly byte[] buffer = new byte[2048];
         private Socket serverSockets = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
        
-        private IPAddress serverIP = IPAddress.Parse("127.0.0.1");
+        private IPAddress serverIP = IPAddress.Parse("26.104.250.120");
         private int serverPort = 8000;
 
         Sqlite_control sql;
