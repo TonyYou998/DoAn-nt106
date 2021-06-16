@@ -58,6 +58,11 @@ namespace Client
                     PJ.Show();
                     this.Hide();
                 }
+
+                else
+                {
+                    MessageBox.Show("không thể vào phòng đang chơi");
+                }
             }
             
               
