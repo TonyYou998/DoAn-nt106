@@ -431,12 +431,12 @@ namespace Client
 
                             else if (calc == 55)
                             {
-                                UpdateHorseLocation(Horse, Map[(pos + RollNumber) % 56]);
+                                UpdateHorseLocation(Horse, Map[(DoLechDiDoi + pos + RollNumber) % 56]);
                                 alert.Text = "Win";
                             }
                             else
                             {
-                                UpdateHorseLocation(Horse, Map[(pos + RollNumber) % 56]);
+                                UpdateHorseLocation(Horse, Map[(DoLechDiDoi + pos + RollNumber) % 56]);
                             }
                         }
                     }
