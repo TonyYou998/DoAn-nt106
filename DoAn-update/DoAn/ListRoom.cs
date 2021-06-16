@@ -46,8 +46,9 @@ namespace Client
             //  _connect.Sendmsg(ClientSocket, "JoinRoom", "null");
             if (realJoin(int.Parse(numberOfPlayer), ID_select))
             {
-                HorseControl HC = acceptJoin();
-                if (HC != null)
+                ManagePacket mngPackage = acceptJoin();
+                HorseControl HC = mngPackage.HC;
+                if (HC != null && mngPackage.msgcontent!= "Isplaying")
                 {
                     Player_Join PJ = new Player_Join(HC, p, ClientSocket, int.Parse(id));
                     PJ.Disposed += delegate
@@ -56,6 +57,11 @@ namespace Client
                     };
                     PJ.Show();
                     this.Hide();
+                }
+
+                else
+                {
+                    MessageBox.Show("không thể vào phòng đang chơi");
                 }
             }
             
@@ -115,7 +121,7 @@ namespace Client
             lstHorse.Add(h4);
             return lstHorse;
         }
-        private HorseControl acceptJoin()
+        private ManagePacket acceptJoin()
         {
             byte[] bytes = new byte[2048];
 
@@ -124,7 +130,7 @@ namespace Client
             //nhận resp từ server
             var Jsonmsg = JsonConvert.DeserializeObject<ManagePacket>(ListHorseAvailable);
         //    trả về lstHorse của tất cả người chơi đã join
-            return Jsonmsg.HC;
+            return Jsonmsg;
         }
         private void listView1_SelectedIndexChanged(object sender, System.EventArgs e)
         {
