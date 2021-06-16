@@ -99,7 +99,7 @@ namespace Client
                 {
                     Player_Create create = new Player_Create(p, ClientSocket, Jsonmsg.roomID, Jsonmsg.HC);
                     create.Disposed += delegate {
-                        this.Dispose();
+                        this.Show();
                     };
                     create.Show();
                     this.Hide();

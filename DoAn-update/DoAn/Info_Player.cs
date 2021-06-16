@@ -1,14 +1,10 @@
 ﻿using Client.Modal;
 using System;
 using System.Drawing;
-using System.Net;
 using System.Windows.Forms;
 using System.Net.Sockets;
-using System.Threading;
 using System.Text;
-using System.Globalization;
 using Newtonsoft.Json;
-using System.Collections.Generic;
 
 namespace Client
 {
@@ -89,14 +85,6 @@ namespace Client
                 MessageBox.Show("Tên đã tồn tại, vui lòng đặt tên khác");
                 return;
             }
-
-
-
-
-
-
-
-
         }
 
      

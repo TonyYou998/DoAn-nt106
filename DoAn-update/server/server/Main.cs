@@ -108,14 +108,14 @@ namespace Server
                     {
                         if(data[0] == "connect")
                         {
-                            if (!sql.checkUserExist(data[1]) || !sql.IsUserOnline(data[1])) 
+                            if (!sql.IsUserOnline(data[1])) 
                             {
                                 MSG = new ManagePacket("User", "Success");
                                 sendPacketToClient(current, MSG);
-                                sql.Adduser(data[1]);
+                                if(!sql.checkUserExist(data[1]))  sql.Adduser(data[1]);
                                 sql.SetUserOnline(data[1], 1);
 
-                                if (!clientSockets.ContainsValue(current))
+                                if (!clientSockets.ContainsKey(data[1]))
                                 {
                                     clientSockets.Add(data[1], current);
                                 };
@@ -238,8 +238,7 @@ namespace Server
                             sendPacketToRoom(MSG);
                             break;
 
-                        case "Next":
-                            packet.msgtype = "Update";
+                        case "Update":
                             sendPacketToRoom(packet);
                             break;
                     }
