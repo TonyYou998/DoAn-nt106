@@ -77,7 +77,7 @@ namespace Client
                   ManagePacket mngPackage = acceptJoin();
                   HorseList HL = mngPackage.HL;
                  
-                    Join PJ = new Join(Jsonmsg.HL, p, ClientSocket, int.Parse(id));
+                    Join PJ = new Join(HL, p, ClientSocket, int.Parse(id));
                     PJ.Disposed += delegate
                     {
                         this.Dispose();
