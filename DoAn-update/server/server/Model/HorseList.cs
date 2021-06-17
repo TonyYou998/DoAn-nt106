@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Server
 {
-    class HorseControl
+    class HorseList
     {
         public List<Horse> listRedHorse=new List<Horse>();
         public List<Horse> listyellowHorse=new List<Horse>();

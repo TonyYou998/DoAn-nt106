@@ -23,7 +23,7 @@ namespace Server
         Sqlite_control sql;
         int number_room = 0;
 
-        HorseControl [] HC = new HorseControl[50];
+        HorseList [] HL = new HorseList[50];
         public Server()
         {
             InitializeComponent();
@@ -151,12 +151,12 @@ namespace Server
                     sql.SetHost(roomData[1], 1);
                     sql.SetRoomID(roomData[1], number_room + 1);
 
-                    HC[number_room] = new HorseControl();
-                    HC[number_room].listRedHorse = packet.msgHorse;
+                    HL[number_room] = new HorseList();
+                    HL[number_room].listRedHorse = packet.msgHorse;
                     
                     //roomID:username:lisHorse:
                     string  userName = roomData[1];
-                    MSG = new ManagePacket(HC[number_room], userName, number_room+1);
+                    MSG = new ManagePacket(HL[number_room], userName, number_room+1);
                     //phản hồi cho cli nếu đã tạo phòng thành công
                     sendPacketToClient(current, MSG);
                  //   number_room++;
@@ -180,13 +180,13 @@ namespace Server
                     {
                         case "Green":
 
-                            HC[int.Parse(RoomID)-1].listGreenHorse = packet.msgHorse;
+                            HL[int.Parse(RoomID)-1].listGreenHorse = packet.msgHorse;
                             break;
                         case "Blue":
-                            HC[int.Parse(RoomID)-1].listBlueHorse = packet.msgHorse;
+                            HL[int.Parse(RoomID)-1].listBlueHorse = packet.msgHorse;
                             break;
                         case "Yellow":
-                            HC[int.Parse(RoomID)-1].listyellowHorse = packet.msgHorse;
+                            HL[int.Parse(RoomID)-1].listyellowHorse = packet.msgHorse;
                             break;
                     }
                     //nếu đã start thì không join vào dc nữa
@@ -204,7 +204,7 @@ namespace Server
                     {
                         msgtype = "Join",
                         roomID = int.Parse(RoomID),
-                        HC = HC[int.Parse(RoomID) - 1]
+                        HL = HL[int.Parse(RoomID) - 1]
                     };
                     sendPacketToRoom(MSG);
 

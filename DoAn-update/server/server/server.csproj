@@ -82,7 +82,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Model\Horse.cs" />
-    <Compile Include="Model\HorseControl.cs" />
+    <Compile Include="Model\HorseList.cs" />
     <Compile Include="Control\ManagePacket.cs" />
     <Compile Include="Form\RoomList.cs">
       <SubType>Form</SubType>

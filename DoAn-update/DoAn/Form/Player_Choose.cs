@@ -62,7 +62,7 @@ namespace Client
         {
             //khỏi tạo vị trí của các quân cờ khi create
             Room r = new Room();
-           Point p1 = new Point(150,80);
+            Point p1 = new Point(150,80);
             Point p2 = new Point(240, 85);
             Point p3 = new Point(150, 170);
             Point p4 = new Point(240, 170);
@@ -76,6 +76,7 @@ namespace Client
             listHorse.Add(h2);
             listHorse.Add(h3);
             listHorse.Add(h4);
+
             if (r.setRoomName(RoomName))
             {
                 if(ClientSocket.Connected)

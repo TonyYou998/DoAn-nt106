@@ -6,6 +6,8 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
+using System.Text.RegularExpressions;
+using System.Collections.Generic;
 
 namespace Client
 {
@@ -234,27 +236,7 @@ namespace Client
 
                     else if (s[0] == "Roll")
                     {
-                        switch (Jsonmsg.rollNumber)
-                        {
-                            case 1:
-                                Roll_number.BackgroundImage = Properties.Resources._1;
-                                break;
-                            case 2:
-                                Roll_number.BackgroundImage = Properties.Resources._2;
-                                break;
-                            case 3:
-                                Roll_number.BackgroundImage = Properties.Resources._3;
-                                break;
-                            case 4:
-                                Roll_number.BackgroundImage = Properties.Resources._4;
-                                break;
-                            case 5:
-                                Roll_number.BackgroundImage = Properties.Resources._5;
-                                break;
-                            case 6:
-                                Roll_number.BackgroundImage = Properties.Resources._6;
-                                break;
-                        }
+                        UpdateRollImage(Jsonmsg.rollNumber);
 
                         RollNumber = Jsonmsg.rollNumber;
                         if (s[1] == p.userName) // Nếu lượt đi bằng với tên người chơi 
@@ -321,41 +303,21 @@ namespace Client
         }
         private void UpdateBC()
         {
-            if (HL != null)
+            for (int i = 0; i < Controls.Count; i++)
             {
-                for (int i = 0; i < Controls.Count; i++)
+                bool IsHorse = Regex.IsMatch(Controls[i].Name, "Red|Green|Blue|Yellow");
+
+                if (Controls[i].GetType().Name == "PictureBox" && IsHorse)
                 {
-                    if (Controls[i].GetType().Name == "PictureBox")
+                    string name = Controls[i].Name;
+                    string color = name.Substring(0, name.Length - 1);
+                    int id = int.Parse(name.Substring(name.Length - 1, 1));
+                    id = (id - 1) % 4;
+
+
+                    if (this.InvokeRequired)
                     {
-                        string name = Controls[i].Name;
-                        string color = name.Substring(0, name.Length - 1);
-                        int id = int.Parse(name.Substring(name.Length - 1, 1));
-                        id = (id - 1) % 4;
-
-
-                        if (this.InvokeRequired)
-                        {
-                            this.Invoke(new MethodInvoker(() =>
-                            {
-                                switch (color)
-                                {
-                                    case "Red":
-                                        Controls[i].Location = HL.listRedHorse[id].location;
-                                        break;
-                                    case "Green":
-                                        Controls[i].Location = HL.listGreenHorse[id].location;
-                                        break;
-                                    case "Blue":
-                                        Controls[i].Location = HL.listBlueHorse[id].location;
-                                        break;
-                                    case "Yellow":
-                                        Controls[i].Location = HL.listyellowHorse[id].location;
-                                        break;
-                                }
-                            }
-                            ));
-                        }
-                        else
+                        this.Invoke(new MethodInvoker(() =>
                         {
                             switch (color)
                             {
@@ -373,9 +335,29 @@ namespace Client
                                     break;
                             }
                         }
+                        ));
+                    }
+                    else
+                    {
+                        switch (color)
+                        {
+                            case "Red":
+                                Controls[i].Location = HL.listRedHorse[id].location;
+                                break;
+                            case "Green":
+                                Controls[i].Location = HL.listGreenHorse[id].location;
+                                break;
+                            case "Blue":
+                                Controls[i].Location = HL.listBlueHorse[id].location;
+                                break;
+                            case "Yellow":
+                                Controls[i].Location = HL.listyellowHorse[id].location;
+                                break;
+                        }
                     }
                 }
             }
+
         }
         private void UpdateHorse (HorseList HL, Point a, int t, string color)
         {
@@ -392,6 +374,30 @@ namespace Client
                     break;
                 case "Blue":
                     HL.listBlueHorse[t].location = a;
+                    break;
+            }
+        }
+        private void UpdateRollImage(int index)
+        {
+            switch (index)
+            {
+                case 1:
+                    Roll_number.BackgroundImage = Properties.Resources._1;
+                    break;
+                case 2:
+                    Roll_number.BackgroundImage = Properties.Resources._2;
+                    break;
+                case 3:
+                    Roll_number.BackgroundImage = Properties.Resources._3;
+                    break;
+                case 4:
+                    Roll_number.BackgroundImage = Properties.Resources._4;
+                    break;
+                case 5:
+                    Roll_number.BackgroundImage = Properties.Resources._5;
+                    break;
+                case 6:
+                    Roll_number.BackgroundImage = Properties.Resources._6;
                     break;
             }
         }
@@ -424,24 +430,70 @@ namespace Client
             }
             return false;
         }
-        private string GetColorHorse(int _index)
+        private bool isWinning(string color)
         {
+            int start = 0, end = 0;
+            List<Horse> Total = new List<Horse>();
+            List<Horse> ListHorse = new List<Horse>();
+
+            if (color == "Red")
+            {
+                ListHorse = HL.listRedHorse;
+                start = 2;
+                end = 6;
+            }
+            else if (color == "Green")
+            {
+                ListHorse = HL.listGreenHorse;
+                start = 8;
+                end = 12;
+            }
+            else if (color == "Blue")
+            {
+                ListHorse = HL.listBlueHorse;
+                start = 14;
+                end = 18;
+            }
+            else if (color == "Yellow")
+            {
+                ListHorse = HL.listyellowHorse;
+                start = 20;
+                end = 24;
+            }
+
+
+            foreach (var x in ListHorse)
+            {
+                for (int i = start; i < end; i++)
+                {
+                    if (x.location == OnTop[i])
+                        if (!Total.Contains(x)) Total.Add(x);
+                }
+            }
+
+            if(Total.Count < 4) return false;
+            return true;
+        }
+
+        private string GetColorHorse(int _index, Point [] ListPoint)
+        {
+            Point[] tmp = ListPoint;
             if (_index > 55) _index = _index % 56;
             foreach (var j in HL.listRedHorse)
             {
-                if (Map[_index] == j.location) return j.color;
+                if (tmp[_index] == j.location) return j.color;
             }
             foreach (var j in HL.listGreenHorse)
             {
-                if (Map[_index] == j.location) return j.color;
+                if (tmp[_index] == j.location) return j.color;
             }
             foreach (var j in HL.listBlueHorse)
             {
-                if (Map[_index] == j.location) return j.color;
+                if (tmp[_index] == j.location) return j.color;
             }
             foreach (var j in HL.listyellowHorse)
             {
-                if (Map[_index] == j.location) return j.color;
+                if (tmp[_index] == j.location) return j.color;
             }
             return "";
         }
@@ -496,17 +548,56 @@ namespace Client
             string color = name.Substring(0, name.Length - 1 );
 
             Random random = new Random();
-            int RollNumber = random.Next(1, 6);
-
-            alert.Text = $"Bạn xoay ra quân {RollNumber}";
+            int RollNumber = random.Next(1, 7);
+            UpdateRollImage(RollNumber);
             //_connect.Sendmsg(ClientSocket, "Action", $"Roll:{roomID}:{RollNumber}:{p.userName}");
+            int pos = ConvertLocationToIndex(Horse.Location, Map);
+            int isOnTop = ConvertLocationToIndex(Horse.Location, OnTop);
 
             if (true)
             {
-                if (!Is_in_readyArea(Horse.Location)) // Nếu không có trong chuồng
+                if (pos == 55) // Trường hợp chuẩn bị leo top
+                {
+                    bool collusion = false;
+                    for(int i = 0; i < RollNumber; i++)
+                    {
+                        // Kiểm tra trên đường đi có bị chắn đường hay ko?
+                        if(GetColorHorse(i, OnTop) != "")
+                        collusion = true;
+                    }
+
+                    if (!collusion) UpdateHorseLocation(Horse, OnTop[RollNumber - 1]);
+                    else alert.Text = "Không đi được";
+                }
+                else if (isOnTop != -1 && pos == -1) // Đang nằm trên top
+                {
+                    if (isWinning(color))
+                    {
+                        MessageBox.Show("You WIN !!!");
+                        return;
+                    }
+                    if (isOnTop >= (RollNumber - 1)  || isOnTop == 5)
+                    {
+                        _connect.Sendmsg(ClientSocket, "Update", roomID.ToString(), HL);
+                        alert.Text = "Không đi được";
+                        return;
+                    }
+
+                    bool collusion = false;
+                    for (int i = isOnTop + 1; i < RollNumber; i++)
+                    {
+                        // Kiểm tra trên đường đi có bị chắn đường hay ko?
+                        if (GetColorHorse(i, OnTop) != "")
+                            collusion = true;
+                    }
+                    
+                    if (!collusion) 
+                        UpdateHorseLocation(Horse, OnTop[RollNumber - 1]);
+
+                }
+                else if (!Is_in_readyArea(Horse.Location)) // Nếu không có trong chuồng
                 {
                     bool move = true;
-                    int pos = ConvertLocationToIndex(Horse.Location, Map);
 
                     for (var i = 1; i < RollNumber; i++) // kiểm tra dọc đường có quân nào cản đường hay không
                     {
@@ -517,11 +608,11 @@ namespace Client
 
                     if (move)
                     {
-                        if (GetColorHorse(RollNumber + pos) != color && GetColorHorse(RollNumber + pos) != "")
+                        if (GetColorHorse(RollNumber + pos, Map) != color && GetColorHorse(RollNumber + pos, Map) != "")
                         {
                             kickAssHorse(RollNumber + pos, Horse);
                         }
-                        else if (GetColorHorse(RollNumber + pos) == color)
+                        else if (GetColorHorse(RollNumber + pos, Map) == color)
                         {
                             alert.Text = "Không đi được";
                         }
@@ -529,11 +620,6 @@ namespace Client
                         {
                             int calc = pos + RollNumber;
                             if (calc > 55) alert.Text = "Không đi được";
-                            else if (calc == 55)
-                            {
-                                UpdateHorseLocation(Horse, Map[calc]);
-                                MessageBox.Show("WIN");
-                            }
                             else
                             {
                                 UpdateHorseLocation(Horse, Map[calc]);
@@ -548,9 +634,9 @@ namespace Client
                 {
                     if (RollNumber == 1 || RollNumber == 6) // quay được 1 hoặc 6
                     {
-                        if (GetColorHorse(0) == "") UpdateHorseLocation(Horse, Map[0]);
+                        if (GetColorHorse(0, Map) == "") UpdateHorseLocation(Horse, Map[0]);
                         // Có quân nào tồn tại ở ngay chỗ xuất quân hay không?
-                        else if (GetColorHorse(0) != color) kickAssHorse(0, Horse);
+                        else if (GetColorHorse(0, Map) != color) kickAssHorse(0, Horse);
                         // Màu của quân đó có phải quân địch hay không
                         else
                         {
@@ -576,7 +662,7 @@ namespace Client
             {
                 Rolled = true;
                 Random random = new Random();
-                RollNumber = random.Next(1, 6);
+                RollNumber = random.Next(1, 7);
                 _connect.Sendmsg(ClientSocket, "Action", $"Roll:{roomID}:{RollNumber}:{p.userName}");
             }
         }
