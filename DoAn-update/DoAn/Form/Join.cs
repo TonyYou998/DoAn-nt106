@@ -509,14 +509,12 @@ namespace Client
         {
             PictureBox Horse = (PictureBox)sender;
             string name = Horse.Name.ToString();
-       
 
             var r = Regex.Matches(name, "(.*?)[0-9]+");
             string color = r[0].Groups[1].ToString();
 
             Random random = new Random();
             int RollNumber = random.Next(1, 7);
-            
 
             alert.Text = $"Bạn xoay ra số {RollNumber}";
             UpdateRollImage(RollNumber);
