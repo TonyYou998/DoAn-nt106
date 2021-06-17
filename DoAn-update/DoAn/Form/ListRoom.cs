@@ -44,6 +44,7 @@ namespace Client
 
             ID_select = int.Parse(id);
             //  _connect.Sendmsg(ClientSocket, "JoinRoom", "null");
+            ifNumberPlayerUpToDate(ID_select);
             if (realJoin(int.Parse(numberOfPlayer), ID_select))
             {
                 ManagePacket mngPackage = acceptJoin();
@@ -132,8 +133,14 @@ namespace Client
         //    trả về lstHorse của tất cả người chơi đã join
             return Jsonmsg;
         }
-        private void listView1_SelectedIndexChanged(object sender, System.EventArgs e)
+        private void ifNumberPlayerUpToDate(int roomID)
         {
+            _connect.Sendmsg(ClientSocket, "checkNumber",roomID.ToString());
+            byte[] bytes = new byte[256];
+          /* ClientSocket.Receive(bytes);
+            string numberPlayer = Encoding.UTF8.GetString(bytes);
+            var Jsonmsg = JsonConvert.DeserializeObject<ManagePacket>(numberPlayer);
+            return int.Parse(Jsonmsg.msgcontent);*/
 
         }
     }

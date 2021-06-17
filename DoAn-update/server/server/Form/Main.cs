@@ -209,7 +209,9 @@ namespace Server
                     sendPacketToRoom(MSG);
 
                     break;
-
+                case "checkNumber":
+                    string numberToCheck = packet.msgcontent;
+                    break;
                 case "Action":
                     data = packet.msgcontent.Split(':');
                     packet.roomID = int.Parse(data[1]);
