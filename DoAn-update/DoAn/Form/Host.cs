@@ -9,14 +9,14 @@ using System.Windows.Forms;
 
 namespace Client
 {
-    public partial class Player_Create : Form
+    public partial class Host : Form
     {
         private HorseControl HC = new HorseControl();
         private readonly NguoiChoi p;
         private readonly Socket ClientSocket;
         private Connection _connect = new Connection();
         private int roomID { get; set; }
-        public Player_Create(NguoiChoi p, Socket S,int roomID, HorseControl HC)
+        public Host(NguoiChoi p, Socket S,int roomID, HorseControl HC)
         {
             InitializeComponent();
             //nhận thông tin user,clientsocket và room id từ form choose

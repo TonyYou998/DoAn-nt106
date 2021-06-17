@@ -81,40 +81,40 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Horse.cs" />
-    <Compile Include="HorseControl.cs" />
-    <Compile Include="ManagePacket.cs" />
-    <Compile Include="Room_control.cs">
+    <Compile Include="Model\Horse.cs" />
+    <Compile Include="Model\HorseControl.cs" />
+    <Compile Include="Control\ManagePacket.cs" />
+    <Compile Include="Form\RoomList.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Room_control.Designer.cs">
-      <DependentUpon>Room_control.cs</DependentUpon>
+    <Compile Include="Form\RoomList.Designer.cs">
+      <DependentUpon>RoomList.cs</DependentUpon>
     </Compile>
-    <Compile Include="SQLite_Manage.cs" />
-    <Compile Include="RoomModel.cs" />
-    <Compile Include="UserModel.cs" />
-    <Compile Include="Main.cs">
+    <Compile Include="Control\SQLite_Manage.cs" />
+    <Compile Include="Model\RoomModel.cs" />
+    <Compile Include="Model\UserModel.cs" />
+    <Compile Include="Form\Main.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Main.Designer.cs">
+    <Compile Include="Form\Main.Designer.cs">
       <DependentUpon>Main.cs</DependentUpon>
     </Compile>
-    <Compile Include="User_control.cs">
+    <Compile Include="Form\UserList.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="User_control.Designer.cs">
-      <DependentUpon>User_control.cs</DependentUpon>
+    <Compile Include="Form\UserList.Designer.cs">
+      <DependentUpon>UserList.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Main.resx">
+    <EmbeddedResource Include="Form\Main.resx">
       <DependentUpon>Main.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Room_control.resx">
-      <DependentUpon>Room_control.cs</DependentUpon>
+    <EmbeddedResource Include="Form\RoomList.resx">
+      <DependentUpon>RoomList.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="User_control.resx">
-      <DependentUpon>User_control.cs</DependentUpon>
+    <EmbeddedResource Include="Form\UserList.resx">
+      <DependentUpon>UserList.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

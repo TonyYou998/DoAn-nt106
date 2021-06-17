@@ -1,7 +1,7 @@
 ﻿
 namespace Client
 {
-    partial class Player_Create
+    partial class Host
     {
         /// <summary>
         /// Required designer variable.
