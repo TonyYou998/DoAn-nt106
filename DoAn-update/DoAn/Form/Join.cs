@@ -434,6 +434,12 @@ namespace Client
             }
             return "";
         }
+
+        private void Join_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            _connect.Sendmsg(ClientSocket, "Disconnect", p.userName);
+        }
+
         private bool isWinning(string color)
         {
             int start = 0, end = 0;
