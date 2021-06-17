@@ -214,9 +214,11 @@ namespace Client
                 if (Controls[i].GetType().Name == "PictureBox" && IsHorse)
                 {
                     string name = Controls[i].Name;
-                    string color = name.Substring(0, name.Length - 1);
-                    int id = int.Parse(name.Substring(name.Length - 1, 1));
+                    var r = Regex.Matches(name, "(.*?)([0-9]+)");
+                    string color = r[0].Groups[1].ToString();
+                    int id = int.Parse(r[0].Groups[2].ToString());
                     id = (id - 1) % 4;
+
 
 
                     if (this.InvokeRequired)
@@ -386,10 +388,10 @@ namespace Client
         private void UpdateHorseLocation(PictureBox myHorse, Point LocationToUpdate)
         {
             string name = myHorse.Name;
-            string color = name.Substring(0, name.Length - 1);
-            int id = int.Parse(name.Substring(name.Length - 1, 1));
-            id = id - 1;
-            id = id % 4;
+            var r = Regex.Matches(name, "(.*?)([0-9]+)");
+            string color = r[0].Groups[1].ToString();
+            int id = int.Parse(r[0].Groups[2].ToString());
+            id = (id - 1) % 4;
 
             myHorse.Location = LocationToUpdate;
             if (color == "Red") HL.listRedHorse[id].location = LocationToUpdate;
@@ -635,7 +637,8 @@ namespace Client
                         else if (color == "Blue") PosXuatquan = 14;
                         else if (color == "Yellow") PosXuatquan = 28;
 
-                        if (GetColorHorse(PosXuatquan, Map) == "") UpdateHorseLocation(Horse, Map[PosXuatquan]);
+                        if (GetColorHorse(PosXuatquan, Map) == "") 
+                            UpdateHorseLocation(Horse, Map[PosXuatquan]);
                         // Có quân nào tồn tại ở ngay chỗ xuất quân hay không?
                         else if (GetColorHorse(PosXuatquan, Map) != color) kickAssHorse(PosXuatquan, Horse);
                         // Màu của quân đó có phải quân địch hay không

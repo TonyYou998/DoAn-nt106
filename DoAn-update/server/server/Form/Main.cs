@@ -180,7 +180,6 @@ namespace Server
                     switch(Color)
                     {
                         case "Green":
-
                             HL[int.Parse(RoomID)-1].listGreenHorse = packet.msgHorse;
                             break;
                         case "Blue":
@@ -238,9 +237,8 @@ namespace Server
                                 msgtype = "Action",
                                 rollNumber = int.Parse(data[2]),
                                 msgcontent = $"Roll:{nextplayer}",
-
-                                    roomID = packet.roomID
-                                };
+                                roomID = packet.roomID
+                            };
                             sendPacketToRoom(MSG);
                             break;
 
