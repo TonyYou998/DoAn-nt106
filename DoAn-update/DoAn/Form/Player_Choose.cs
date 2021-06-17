@@ -97,7 +97,7 @@ namespace Client
                 var Jsonmsg = JsonConvert.DeserializeObject<ManagePacket>(MSG);
                 if (Jsonmsg != null)
                 {
-                    Host create = new Host(p, ClientSocket, Jsonmsg.roomID, Jsonmsg.HC);
+                    Host create = new Host(p, ClientSocket, Jsonmsg.roomID, Jsonmsg.HL);
                     create.Disposed += delegate {
                         this.Show();
                     };
