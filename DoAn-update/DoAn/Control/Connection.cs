@@ -23,7 +23,7 @@ namespace Client
             s.Send(buffer, 0, buffer.Length, SocketFlags.None);
         }
 
-        public void Sendmsg(Socket s, string content,string RoomID,  HorseControl HC)
+        public void Sendmsg(Socket s, string content,string RoomID,  HorseList HC)
         {
             var MSG = new ManagePacket { msgtype="Action", msgcontent=$"{content}:{RoomID}",  HC = HC };
             string json = JsonConvert.SerializeObject(MSG);

@@ -47,10 +47,10 @@ namespace Client
             if (realJoin(int.Parse(numberOfPlayer), ID_select))
             {
                 ManagePacket mngPackage = acceptJoin();
-                HorseControl HC = mngPackage.HC;
+                HorseList HC = mngPackage.HC;
                 if (HC != null && mngPackage.msgcontent!= "Isplaying")
                 {
-                    Player_Join PJ = new Player_Join(HC, p, ClientSocket, int.Parse(id));
+                    Join PJ = new Join(HC, p, ClientSocket, int.Parse(id));
                     PJ.Disposed += delegate
                     {
                         this.Dispose();

@@ -1,7 +1,7 @@
 ﻿
 namespace Client
 {
-    partial class Player_Join
+    partial class Join
     {
         /// <summary>
         /// Required designer variable.

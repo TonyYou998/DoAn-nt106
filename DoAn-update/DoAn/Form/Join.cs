@@ -9,10 +9,10 @@ using System.Windows.Forms;
 
 namespace Client
 {
-    public partial class Player_Join : Form
+    public partial class Join : Form
     {
         private Socket ClientSocket;
-        private HorseControl HC;
+        private HorseList HC;
         private NguoiChoi p;
         private Connection _connect = new Connection();
         private int roomID;
@@ -21,7 +21,7 @@ namespace Client
         Point[] OnTop = new MapTable().OnTop;
         Point[] Map = new MapTable().Map;
 
-        public Player_Join(HorseControl HC,NguoiChoi p, Socket S, int roomID)
+        public Join(HorseList HC,NguoiChoi p, Socket S, int roomID)
         {
             InitializeComponent();
             this.HC = HC;

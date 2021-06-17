@@ -1,13 +1,9 @@
 ﻿using Client.Modal;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Client
 {
-  public  class HorseControl
+    public  class HorseList
     {
         public List<Horse> listRedHorse = new List<Horse>();
         public List<Horse> listyellowHorse = new List<Horse>();
