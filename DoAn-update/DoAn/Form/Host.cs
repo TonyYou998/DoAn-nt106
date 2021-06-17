@@ -15,7 +15,9 @@ namespace Client
         private readonly NguoiChoi p;
         private readonly Socket ClientSocket;
         private Connection _connect = new Connection();
-        private int roomID { get; set; }
+        private int roomID, RollNumber = -1;
+        public bool Started = false, Rolled = true, MyTurn = true;
+
         public Host(NguoiChoi p, Socket S,int roomID, HorseList HL)
         {
             InitializeComponent();
@@ -61,19 +63,11 @@ namespace Client
 
             Roll_number.BackgroundImageLayout = ImageLayout.Stretch;
 
-            updateBC();
+            UpdateBC();
             Thread a = new Thread(Player_Join_Receive);
             a.Start();
         }
         //Các biến sử dụng
-        public Soldier Red1, Red2, Red3, Red4, Green1, Green2, Green3, Green4, Yellow1, Yellow2, Yellow3, Yellow4, Blue1, Blue2, Blue3, Blue4;
-        public struct Soldier
-        {
-            public string color;
-            public int ID;
-            public bool MySoldier;
-            public Point Location;
-        }
         public struct listCreated
         {
             public bool RED;
@@ -82,6 +76,10 @@ namespace Client
             public bool BLUE;
         }
         public listCreated ListCreatedHorse;
+
+        Point[] Ready = new MapTable().Ready;
+        Point[] OnTop = new MapTable().OnTop;
+        Point[] Map = new MapTable().Map;
         public void updateListCreate(string color)
         {
             switch (color)
@@ -101,9 +99,6 @@ namespace Client
 
             }
         }
-
-      
-
         private void AddControlSafe(PictureBox picture)
         {
             this.Controls.Add(picture);
@@ -151,57 +146,6 @@ namespace Client
 
         }
 
-        Point[] Map = new Point[]
-        {
-            new Point {X = 330, Y = 25 }, new Point {X = 330, Y = 55 }, new Point {X = 330, Y = 90 }, new Point {X = 330, Y = 120 },
-            new Point {X = 330, Y = 150 }, new Point {X = 330, Y = 185 }, new Point {X = 330, Y = 235 }, new Point {X = 290, Y = 235 },
-            new Point {X = 250, Y = 235 }, new Point {X = 215, Y = 235 }, new Point {X = 180, Y = 235 }, new Point {X = 145, Y = 235 },
-            new Point {X = 105, Y = 235 }, new Point {X = 105, Y = 280 }, new Point {X = 105, Y = 330 }, new Point {X = 145, Y = 330 },
-            new Point {X = 180, Y = 330 }, new Point {X = 215, Y = 330 }, new Point {X = 250, Y = 330 }, new Point {X = 290, Y = 330 },
-            new Point {X = 330, Y = 330 }, new Point {X = 330, Y = 370 }, new Point {X = 330, Y = 400 }, new Point {X = 330, Y = 430 },
-            new Point {X = 330, Y = 465 }, new Point {X = 330, Y = 495 }, new Point {X = 330, Y = 530 }, new Point {X = 380, Y = 530 },
-            new Point {X = 430, Y = 530 }, new Point {X = 430, Y = 495 }, new Point {X = 430, Y = 465 }, new Point {X = 430, Y = 430 },
-            new Point {X = 430, Y = 400 }, new Point {X = 430, Y = 370 }, new Point {X = 430, Y = 330 }, new Point {X = 475, Y = 330 },
-            new Point {X = 510, Y = 330 }, new Point {X = 545, Y = 330 }, new Point {X = 585, Y = 330 }, new Point {X = 620, Y = 330 },
-            new Point {X = 655, Y = 330 }, new Point {X = 655, Y = 285 }, new Point {X = 650, Y = 235 }, new Point {X = 615, Y = 235 },
-            new Point {X = 580, Y = 235 }, new Point {X = 545, Y = 235 }, new Point {X = 510, Y = 235 }, new Point {X = 475, Y = 235 },
-            new Point {X = 440, Y = 235 }, new Point {X = 435, Y = 185 }, new Point {X = 435, Y = 150 }, new Point {X = 435, Y = 120 },
-            new Point {X = 435, Y = 90 }, new Point {X = 435, Y = 55 }, new Point {X = 435, Y = 25 }, new Point {X = 385, Y = 25 }
-        };
-
-        Point[] RedTop = new Point[]
-       {
-            new Point { X = 385, Y = 55},
-            new Point { X = 385, Y = 90},
-            new Point { X = 385, Y = 120 },
-            new Point { X = 385, Y = 150 },
-            new Point { X = 385, Y = 185 },
-            new Point { X = 385, Y = 225 }
-        };
-
-        Point[] Ready = new Point[]
-        {
-            new Point { X = 150, Y = 80},
-            new Point { X = 240, Y = 85},
-            new Point { X = 150, Y = 170 },
-            new Point { X = 240, Y = 170 },
-            new Point { X = 515, Y = 85},
-            new Point { X = 600, Y = 85},
-            new Point { X = 515, Y = 170 },
-            new Point { X = 600, Y = 170 },
-            new Point { X = 150, Y = 440},
-            new Point { X = 230, Y = 440},
-            new Point { X = 150, Y = 530 },
-            new Point { X = 230, Y = 530 },
-            new Point { X = 515, Y = 440},
-            new Point { X = 600, Y = 440},
-            new Point { X = 515, Y = 530 },
-            new Point { X = 600, Y = 530 }
-        };
-
-
-        public bool Started = false, Rolled = true, MyTurn = true;
-       
         public bool CheckMyHorse(string p, string UserNameTest)
         {
             return (p == UserNameTest);
@@ -264,7 +208,7 @@ namespace Client
             // Client không làm j cả sẽ gởi lượt đi tiếp theo đến đối thủ
             _connect.Sendmsg(ClientSocket,"Update",roomID.ToString(),HL);
         }
-        public void Player_Join_Receive()
+        private void Player_Join_Receive()
         {
             while (ClientSocket.Connected)
             {
@@ -334,7 +278,7 @@ namespace Client
                     else if(s[0] == "Update")
                     {
                         HL = Jsonmsg.HL;
-                        updateBC();
+                        UpdateBC();
                     }
                     continue;
                 }
@@ -350,7 +294,7 @@ namespace Client
                 if (Jsonmsg.msgtype == "Update" && Jsonmsg.HL != null)
                 {
                     HL = Jsonmsg.HL;
-                    updateBC();
+                    UpdateBC();
                     continue;
                 }
 
@@ -375,7 +319,7 @@ namespace Client
                 btn_Start.Dispose();
             }
         }
-        public void updateBC()
+        private void UpdateBC()
         {
             if (HL != null)
             {
@@ -385,68 +329,55 @@ namespace Client
                     {
                         string name = Controls[i].Name;
                         string color = name.Substring(0, name.Length - 1);
-                        switch (color)
+                        int id = int.Parse(name.Substring(name.Length - 1, 1));
+                        id = (id - 1) % 4;
+
+
+                        if (this.InvokeRequired)
                         {
-                            case "Red":
-                                int id = int.Parse(name.Substring(name.Length - 1, 1));
-
-                                if (this.InvokeRequired)
+                            this.Invoke(new MethodInvoker(() =>
+                            {
+                                switch (color)
                                 {
-                                    this.Invoke(new MethodInvoker(() =>
-                                    { Controls[i].Location = HL.listRedHorse[id - 1].location; }
-                                    ));
+                                    case "Red":
+                                        Controls[i].Location = HL.listRedHorse[id].location;
+                                        break;
+                                    case "Green":
+                                        Controls[i].Location = HL.listGreenHorse[id].location;
+                                        break;
+                                    case "Blue":
+                                        Controls[i].Location = HL.listBlueHorse[id].location;
+                                        break;
+                                    case "Yellow":
+                                        Controls[i].Location = HL.listyellowHorse[id].location;
+                                        break;
                                 }
-                                else
-                                {
-                                    Controls[i].Location = HL.listRedHorse[id - 1].location;
-                                }
-
-                                break;
-                            case "Green":
-                                int _id = int.Parse(name.Substring(name.Length - 1, 1));
-                                if (this.InvokeRequired)
-                                {
-                                    this.Invoke(new MethodInvoker(() =>
-                                    { Controls[i].Location = HL.listGreenHorse[(_id - 1) % 4].location; }
-                                    ));
-                                }
-                                else
-                                {
-                                    Controls[i].Location = HL.listGreenHorse[(_id - 1) % 4].location;
-                                }
-                                break;
-                            case "Blue":
-                                int __id = int.Parse(name.Substring(name.Length - 1, 1));
-                                if (this.InvokeRequired)
-                                {
-                                    this.Invoke(new MethodInvoker(() =>
-                                    { Controls[i].Location = HL.listBlueHorse[(__id - 1) % 4].location; }
-                                    ));
-                                }
-                                else
-                                {
-                                    Controls[i].Location = HL.listBlueHorse[(__id - 1) % 4].location;
-                                }
-                                break;
-                            case "Yellow":
-                                int ___id = int.Parse(name.Substring(name.Length - 1, 1));
-                                if (this.InvokeRequired)
-                                {
-                                    this.Invoke(new MethodInvoker(() =>
-                                    { Controls[i].Location = HL.listyellowHorse[(___id - 1) % 4].location; }
-                                    ));
-                                }
-                                else
-                                {
-                                    Controls[i].Location = HL.listyellowHorse[(___id - 1) % 4].location;
-                                }
-                                break;
+                            }
+                            ));
+                        }
+                        else
+                        {
+                            switch (color)
+                            {
+                                case "Red":
+                                    Controls[i].Location = HL.listRedHorse[id].location;
+                                    break;
+                                case "Green":
+                                    Controls[i].Location = HL.listGreenHorse[id].location;
+                                    break;
+                                case "Blue":
+                                    Controls[i].Location = HL.listBlueHorse[id].location;
+                                    break;
+                                case "Yellow":
+                                    Controls[i].Location = HL.listyellowHorse[id].location;
+                                    break;
+                            }
                         }
                     }
                 }
             }
         }
-        public void updateHorse (HorseList HL, Point a, int t, string color)
+        private void UpdateHorse (HorseList HL, Point a, int t, string color)
         {
             switch (color)
             {
@@ -464,6 +395,89 @@ namespace Client
                     break;
             }
         }
+        private bool AcceptMoving(int _index)
+        {
+            if (_index > 55) _index = _index % 56;
+            foreach (var j in HL.listRedHorse)
+            {
+                if (Map[_index] == j.location) return false;
+            }
+            foreach (var j in HL.listGreenHorse)
+            {
+                if (Map[_index] == j.location) return false;
+            }
+            foreach (var j in HL.listBlueHorse)
+            {
+                if (Map[_index] == j.location) return false;
+            }
+            foreach (var j in HL.listyellowHorse)
+            {
+                if (Map[_index] == j.location) return false;
+            }
+            return true;
+        }
+        private bool Is_in_readyArea(Point A)
+        {
+            for (int i = 0; i < 4; i++)
+            {
+                if (A == Ready[i]) return true;
+            }
+            return false;
+        }
+        private string GetColorHorse(int _index)
+        {
+            if (_index > 55) _index = _index % 56;
+            foreach (var j in HL.listRedHorse)
+            {
+                if (Map[_index] == j.location) return j.color;
+            }
+            foreach (var j in HL.listGreenHorse)
+            {
+                if (Map[_index] == j.location) return j.color;
+            }
+            foreach (var j in HL.listBlueHorse)
+            {
+                if (Map[_index] == j.location) return j.color;
+            }
+            foreach (var j in HL.listyellowHorse)
+            {
+                if (Map[_index] == j.location) return j.color;
+            }
+            return "";
+        }
+        private void UpdateHorseLocation(PictureBox myHorse, Point LocationToUpdate)
+        {
+            string name = myHorse.Name;
+            string color = name.Substring(0, name.Length - 1);
+            int id = int.Parse(name.Substring(name.Length - 1, 1));
+            id = id - 1;
+            id = id % 4;
+
+            myHorse.Location = LocationToUpdate;
+            if (color == "Red") HL.listRedHorse[id].location = LocationToUpdate;
+            else if (color == "Green") HL.listGreenHorse[id].location = LocationToUpdate;
+            else if (color == "Blue") HL.listBlueHorse[id].location = LocationToUpdate;
+            else if (color == "Yellow") HL.listyellowHorse[id].location = LocationToUpdate;
+        }
+        private void kickAssHorse(int competitor_index, PictureBox myHorse)
+        {
+            if (competitor_index > 55) competitor_index = competitor_index % 56;
+            for (var i = 0; i < Controls.Count; i++)
+            {
+                if (Controls[i].Location == Map[competitor_index])
+                {
+                    string name = Controls[i].Name; // Tên của quân cờ sẽ bị đá
+                    string color = name.Substring(0, name.Length - 1); // Màu của quân cờ sẽ bị đá
+                    int id = int.Parse(name.Substring(name.Length - 1, 1)); // Id của quân cờ sẽ bị đá
+                    id = id - 1;
+
+                    UpdateHorseLocation((PictureBox)Controls[i], Ready[id]);
+                    UpdateHorseLocation(myHorse, Map[competitor_index]);
+                    break;
+                }
+            }
+            _connect.Sendmsg(ClientSocket, "Update", roomID.ToString(), HL);
+        }
 
         public int ConvertLocationToIndex (Point a,Point[] b)
         {
@@ -475,66 +489,6 @@ namespace Client
             return -1;
         }
 
-        public bool checkBehindThisHorese(Point a, HorseList HL, int temp)
-        {
-            for (int j = 1; j <= temp; j++)
-            {
-                Point k = Map[ConvertLocationToIndex(a, Map)+j];
-                for (int i = 0; i < 4; i++)
-                {
-                    if (HL.listBlueHorse.Count > 0)
-                    {
-                        if (HL.listBlueHorse[i].location == k)
-                        {
-                            return true;
-                        }
-                    }
-                    if (HL.listGreenHorse.Count > 0)
-                    {
-                        if (HL.listGreenHorse[i].location == k)
-                        {
-                            return true;
-                        }
-                    }
-                    if (HL.listRedHorse.Count > 0)
-                    {
-                        if (HL.listRedHorse[i].location == k)
-                        {
-                            return true;
-                        }
-                    }
-                    if (HL.listyellowHorse.Count > 0)
-                    {
-                        if (HL.listyellowHorse[i].location == k)
-                        {
-                            return true;
-                        }
-                    }
-                }
-            }
-            return false;
-        }
-
-        public int checkActionMoving;
-        public bool Not_On_Top (string color, Point[] t, Point a)
-        {
-            for(int i= 0; i < 6; i++)
-            {
-                if (a == t[i]) 
-                {
-                    return false;
-                }
-            }
-            return true;
-        }
-        public bool Is_in_readyArea (Point A)
-        {
-            for (int i =0; i < 4; i++)
-            {
-                if (A == Ready[i]) return true;
-            }
-            return false;
-        }
         public void Moving(object sender, EventArgs e)
         {
             PictureBox Horse = (PictureBox)sender;
@@ -616,85 +570,6 @@ namespace Client
             _connect.Sendmsg(ClientSocket, "Update", roomID.ToString(), HL);
         }
 
-        private bool AcceptMoving(int _index)
-        {
-            if (_index > 55) _index = _index % 56;
-            foreach (var j in HL.listRedHorse)
-            {
-                if (Map[_index] == j.location) return false;
-            }
-            foreach (var j in HL.listGreenHorse)
-            {
-                if (Map[_index] == j.location) return false;
-            }
-            foreach (var j in HL.listBlueHorse)
-            {
-                if (Map[_index] == j.location) return false;
-            }
-            foreach (var j in HL.listyellowHorse)
-            {
-                if (Map[_index] == j.location) return false;
-            }
-            return true;
-        }
-
-        private string GetColorHorse(int _index)
-        {
-            if (_index > 55) _index = _index % 56;
-            foreach (var j in HL.listRedHorse)
-            {
-                if (Map[_index] == j.location) return j.color;
-            }
-            foreach (var j in HL.listGreenHorse)
-            {
-                if (Map[_index] == j.location) return j.color;
-            }
-            foreach (var j in HL.listBlueHorse)
-            {
-                if (Map[_index] == j.location) return j.color;
-            }
-            foreach (var j in HL.listyellowHorse)
-            {
-                if (Map[_index] == j.location) return j.color;
-            }
-            return "";
-        }
-
-        private void UpdateHorseLocation(PictureBox myHorse, Point LocationToUpdate)
-        {
-            string name = myHorse.Name;
-            string color = name.Substring(0, name.Length - 1);
-            int id = int.Parse(name.Substring(name.Length - 1, 1));
-            id = id - 1;
-            id = id % 4;
-
-            myHorse.Location = LocationToUpdate;
-            if (color == "Red") HL.listRedHorse[id].location = LocationToUpdate;
-            else if (color == "Green") HL.listGreenHorse[id].location = LocationToUpdate;
-            else if (color == "Blue") HL.listBlueHorse[id].location = LocationToUpdate;
-            else if (color == "Yellow") HL.listyellowHorse[id].location = LocationToUpdate;
-        }
-        private void kickAssHorse(int competitor_index, PictureBox myHorse)
-        {
-            if (competitor_index > 55) competitor_index = competitor_index % 56;
-            for (var i = 0; i < Controls.Count; i++)
-            {
-                if (Controls[i].Location == Map[competitor_index])
-                {
-                    string name = Controls[i].Name; // Tên của quân cờ sẽ bị đá
-                    string color = name.Substring(0, name.Length - 1); // Màu của quân cờ sẽ bị đá
-                    int id = int.Parse(name.Substring(name.Length - 1, 1)); // Id của quân cờ sẽ bị đá
-                    id = id - 1;
-
-                    UpdateHorseLocation((PictureBox)Controls[i], Ready[id]);
-                    UpdateHorseLocation(myHorse, Map[competitor_index]);
-                    break;
-                }
-            }
-            _connect.Sendmsg(ClientSocket, "Update", roomID.ToString(), HL);
-        }
-
-        public int RollNumber=6;
         private void btn_roll_Click(object sender, EventArgs e)
         {
             if (!Rolled && MyTurn)

@@ -90,7 +90,7 @@
     <Compile Include="Form\RoomList.Designer.cs">
       <DependentUpon>RoomList.cs</DependentUpon>
     </Compile>
-    <Compile Include="Control\SQLite_Manage.cs" />
+    <Compile Include="Control\Sqlite_control.cs" />
     <Compile Include="Model\RoomModel.cs" />
     <Compile Include="Model\UserModel.cs" />
     <Compile Include="Form\Main.cs">
