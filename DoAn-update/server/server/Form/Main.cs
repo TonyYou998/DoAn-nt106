@@ -259,6 +259,9 @@ namespace Server
                     };
                     sendPacketToRoom(MSG);
                     break;
+
+                case "Disconnect":
+                    break;
             }
                 
         }
