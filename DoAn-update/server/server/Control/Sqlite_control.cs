@@ -217,7 +217,7 @@ namespace Server
                     var room = new RoomModel();
                     room.RoomID = int.Parse(reader["RoomID"].ToString());
                     room.RoomName = reader["Roomname"].ToString();
-
+                    room.isPlaying = int.Parse(reader["isPlaying"].ToString()==""?"0":"1");
                     sql2.CommandText = $"SELECT COUNT(Username) from Users where RoomID = {room.RoomID }";
 
                     using (var read2 = sql2.ExecuteReader())

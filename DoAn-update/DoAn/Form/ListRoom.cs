@@ -43,31 +43,54 @@ namespace Client
             var numberOfPlayer = listView1.SelectedItems[0].SubItems[2].Text;
 
             ID_select = int.Parse(id);
+            _connect.Sendmsg(ClientSocket, "ListRoom", "null");
+            byte[] bytes = new byte[1024];
+
+            //nhận lại list room
+            ClientSocket.Receive(bytes);
+            string listRoom = Encoding.UTF8.GetString(bytes);
+            var Jsonmsg = JsonConvert.DeserializeObject<ManagePacket>(listRoom);
             //  _connect.Sendmsg(ClientSocket, "JoinRoom", "null");
-            ifNumberPlayerUpToDate(ID_select);
-            if (realJoin(int.Parse(numberOfPlayer), ID_select))
+            //  ifNumberPlayerUpToDate(ID_select);
+            listView1.Items.Clear();
+            var i = new RoomModel();
+
+            foreach( var x in Jsonmsg.msgRoom)
             {
-                ManagePacket mngPackage = acceptJoin();
-                HorseList HL = mngPackage.HL;
-                if (HL != null && mngPackage.msgcontent!= "Isplaying")
+                if (x.RoomID == int.Parse(id))
                 {
-                    Join PJ = new Join(HL, p, ClientSocket, int.Parse(id));
+                    if (x.isPlaying == 1 || x.Members_num == 4)
+                    {
+                        drawListRoom(Jsonmsg.msgRoom);
+                        MessageBox.Show("không thể vào phòng đang chơi");
+                        return;
+                    }
+                    i = x;
+                    break;
+                }
+            }
+           
+           
+
+             if (realJoin(i.Members_num, ID_select))
+              {
+                  ManagePacket mngPackage = acceptJoin();
+                  HorseList HL = mngPackage.HL;
+                 
+                    Join PJ = new Join(Jsonmsg.HL, p, ClientSocket, int.Parse(id));
                     PJ.Disposed += delegate
                     {
                         this.Dispose();
                     };
                     PJ.Show();
                     this.Hide();
-                }
+                    
 
-                else
-                {
-                    MessageBox.Show("không thể vào phòng đang chơi");
-                }
-            }
-            
-              
-           
+                
+              }
+
+
+          
         }
         private bool realJoin(int numberOfPlayer, int roomID)
         {

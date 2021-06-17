@@ -95,7 +95,7 @@ namespace Client
             this.IpServer.Name = "IpServer";
             this.IpServer.Size = new System.Drawing.Size(371, 49);
             this.IpServer.TabIndex = 5;
-            this.IpServer.Text = "26.104.250.120";
+            this.IpServer.Text = "127.0.0.1";
             this.IpServer.TextChanged += new System.EventHandler(this.IpServer_TextChanged);
             // 
             // Info_Player

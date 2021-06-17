@@ -12,5 +12,6 @@ namespace Client
         public int RoomID { get; set; }
         public string StartTime { get; set; }
         public int Members_num { get; set; }
+        public int isPlaying { get; set; }
     }
 }

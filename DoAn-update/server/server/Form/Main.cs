@@ -159,7 +159,7 @@ namespace Server
                     MSG = new ManagePacket(HL[number_room], userName, number_room+1);
                     //phản hồi cho cli nếu đã tạo phòng thành công
                     sendPacketToClient(current, MSG);
-                 //   number_room++;
+                    number_room++;
                     break;
 
 
@@ -210,7 +210,10 @@ namespace Server
 
                     break;
                 case "checkNumber":
-                    string numberToCheck = packet.msgcontent;
+                    string roomIDToCheck = packet.msgcontent;
+
+                    //Hàm sql kiểm tra số  player trong phòng kiểu int theo roomID
+
                     break;
                 case "Action":
                     data = packet.msgcontent.Split(':');
