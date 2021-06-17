@@ -315,8 +315,9 @@ namespace Client
                 if (Controls[i].GetType().Name == "PictureBox" && IsHorse)
                 {
                     string name = Controls[i].Name;
-                    string color = name.Substring(0, name.Length - 1);
-                    int id = int.Parse(name.Substring(name.Length - 1, 1));
+                    var r = Regex.Matches(name, "(.*?)([0-9]+)");
+                    string color = r[0].Groups[1].ToString();
+                    int id = int.Parse(r[0].Groups[2].ToString());
                     id = (id - 1) % 4;
 
 
@@ -505,10 +506,10 @@ namespace Client
         private void UpdateHorseLocation(PictureBox myHorse, Point LocationToUpdate)
         {
             string name = myHorse.Name;
-            string color = name.Substring(0, name.Length - 1);
-            int id = int.Parse(name.Substring(name.Length - 1, 1));
-            id = id - 1;
-            id = id % 4;
+            var r = Regex.Matches(name, "(.*?)([0-9]+)");
+            string color = r[0].Groups[1].ToString();
+            int id = int.Parse(r[0].Groups[2].ToString());
+            id = (id - 1) % 4;
 
             myHorse.Location = LocationToUpdate;
             if (color == "Red") HL.listRedHorse[id].location = LocationToUpdate;
