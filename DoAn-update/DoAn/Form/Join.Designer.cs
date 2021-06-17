@@ -106,7 +106,6 @@ namespace Client
             this.DoubleBuffered = true;
             this.Name = "Join";
             this.Text = "Player_Join";
-            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Join_FormClosed);
             ((System.ComponentModel.ISupportInitialize)(this.Roll_number)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.btn_exit)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.btn_Roll)).EndInit();

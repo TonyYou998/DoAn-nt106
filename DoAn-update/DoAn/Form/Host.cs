@@ -68,6 +68,11 @@ namespace Client
             UpdateBC();
             Thread a = new Thread(Player_Join_Receive);
             a.Start();
+            this.Disposed += delegate
+            {
+                if (ClientSocket.Connected)
+                    _connect.Sendmsg(ClientSocket, "User", $"disconnect:{p.userName}");
+            };
         }
         //Các biến sử dụng
         public struct listCreated

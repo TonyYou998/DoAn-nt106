@@ -63,6 +63,12 @@ namespace Client
 
             Thread a = new Thread(Player_Join_Receive);
             a.Start();
+
+            this.Disposed += delegate
+            {
+                if (ClientSocket.Connected)
+                    _connect.Sendmsg(ClientSocket, "User", $"disconnect:{p.userName}");
+            };
         }
         public struct listCreated
         {
@@ -433,11 +439,6 @@ namespace Client
                 if (tmp[_index] == j.location) return j.color;
             }
             return "";
-        }
-
-        private void Join_FormClosed(object sender, FormClosedEventArgs e)
-        {
-            _connect.Sendmsg(ClientSocket, "Disconnect", p.userName);
         }
 
         private bool isWinning(string color)

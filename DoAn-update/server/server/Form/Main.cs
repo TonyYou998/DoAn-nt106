@@ -135,9 +135,10 @@ namespace Server
                             sql.SetUserOnline(data[1], 0);
                             logs.BeginInvoke((Action)(() =>
                             { logs.AppendText($"\r\nĐã ngắt kết nối với {data[1]}"); }));
-
+                            
                             MSG = new ManagePacket("User", "Host Disconnect");
                             sendPacketToClient(current, MSG);
+                            //sendPacketToRoom()
 
                         }
                     }
@@ -259,9 +260,7 @@ namespace Server
                     };
                     sendPacketToRoom(MSG);
                     break;
-
-                case "Disconnect":
-                    break;
+              
             }
                 
         }
