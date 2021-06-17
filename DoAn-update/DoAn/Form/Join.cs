@@ -509,7 +509,10 @@ namespace Client
         {
             PictureBox Horse = (PictureBox)sender;
             string name = Horse.Name.ToString();
-            string color = name.Substring(0, name.Length - 1);
+       
+
+            var r = Regex.Matches(name, "(.*?)[0-9]+");
+            string color = r[0].Groups[1].ToString();
 
             Random random = new Random();
             int RollNumber = random.Next(1, 7);
