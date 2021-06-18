@@ -21,10 +21,13 @@ namespace Client
             this.Name = name;
             this.roomID = roomID;
         }
-        public ManagePacket(int rollNumber)
+        public ManagePacket(string msgType, string msgCntent, int roomID)
         {
-            this.roomID = rollNumber;
+            this.msgtype = msgtype;
+            this.msgcontent = msgcontent;
+            this.roomID = roomID;
         }
+      
         public ManagePacket(string type,string msgRoom,List<Horse> listHorse)
         {
             this.msgtype = type;

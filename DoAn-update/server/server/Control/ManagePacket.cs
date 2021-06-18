@@ -7,29 +7,34 @@ namespace Server
     {
         public string msgtype { get; set; }// user room action 
         public string msgcontent { get; set; }
-        public List<RoomModel> msgRoom { get; set; }
         public List<Horse> msgHorse { get; set; }
-
-        public HorseList HL = new HorseList();
+        public HorseList HL { get; set; }
         public string Name { get; set; }
-        public int roomID { get; set; }
         public int rollNumber { get; set; }
-        public ManagePacket() {
-            msgcontent = "";
-            msgtype = "";
-            msgRoom = null;
-        }
-        public ManagePacket(int rollNumber)
-        {
-            this.rollNumber= rollNumber;
-        }
-        public ManagePacket(HorseList HL,string name,int roomID)
+        public int roomID { get; set; }
+        public List<RoomModel> msgRoom { get; set; }
+
+        public ManagePacket() { }
+        public ManagePacket(HorseList HL, string name, int roomID)
         {
             this.HL = HL;
             this.Name = name;
             this.roomID = roomID;
         }
-        public ManagePacket(string type,string msg)
+        public ManagePacket(string msgType, string msgCntent, int roomID)
+        {
+            this.msgtype = msgtype;
+            this.msgcontent = msgcontent;
+            this.roomID = roomID;
+        }
+
+        public ManagePacket(string type, string msgRoom, List<Horse> listHorse)
+        {
+            this.msgtype = type;
+            this.msgHorse = listHorse;
+            this.msgcontent = msgRoom;
+        }
+        public ManagePacket(string type, string msg)
         {
             this.msgtype = type;
             this.msgcontent = msg;
@@ -40,7 +45,6 @@ namespace Server
             this.msgtype = "Room";
             this.msgcontent = null;
             this.msgRoom = Arr;
-
         }
     }
 }

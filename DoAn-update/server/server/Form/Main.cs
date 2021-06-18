@@ -137,6 +137,7 @@ namespace Server
                             { logs.AppendText($"\r\nĐã ngắt kết nối với {data[1]}"); }));
                             
                             sendPacketToRoom(packet);
+                            sql.SetRoomID(data[1], 0);
                             sql.DelRoom(packet.roomID);
                         }
                     }
