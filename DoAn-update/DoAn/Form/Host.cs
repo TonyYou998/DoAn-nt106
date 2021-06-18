@@ -68,11 +68,7 @@ namespace Client
             UpdateBC();
             Thread a = new Thread(Player_Join_Receive);
             a.Start();
-            this.Disposed += delegate
-            {
-                if (ClientSocket.Connected)
-                    _connect.sendDisconnect(ClientSocket, $"disconnect:{p.userName}", roomID);
-            };
+
         }
         //Các biến sử dụng
         public struct listCreated
@@ -214,7 +210,8 @@ namespace Client
                 progressBar1.Value = 0;
             }));
             // Client không làm j cả sẽ gởi lượt đi tiếp theo đến đối thủ
-            _connect.Sendmsg(ClientSocket, "Update", roomID, HL);
+            //tấn cmt
+           // _connect.Sendmsg(ClientSocket, "Update", roomID, HL);
         }
         private void Player_Join_Receive()
         {
@@ -496,7 +493,8 @@ namespace Client
 
         private void sendUpdate()
         {
-            _connect.Sendmsg(ClientSocket, "Update", roomID, HL);
+            //tấn cmt
+           // _connect.Sendmsg(ClientSocket, "Update", roomID, HL);
         }
         private void UpdateHorseLocation(PictureBox myHorse, Point LocationToUpdate)
         {
@@ -697,7 +695,8 @@ namespace Client
                 Rolled = true;
                 Random random = new Random();
                 RollNumber = random.Next(1, 7);
-                _connect.SendRoll(ClientSocket, "Action", $"Roll:{p.userName}", RollNumber , roomID);
+                //tấn cmt
+             //   _connect.SendRoll(ClientSocket, "Action", $"Roll:{p.userName}", RollNumber , roomID);
             }
         }
     }

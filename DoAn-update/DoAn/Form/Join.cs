@@ -64,11 +64,7 @@ namespace Client
             Thread a = new Thread(Player_Join_Receive);
             a.Start();
 
-            this.Disposed += delegate
-            {
-                if (ClientSocket.Connected)
-                    _connect.sendDisconnect(ClientSocket, $"disconnect:{p.userName}",roomID);
-            };
+           
         }
         public struct listCreated
         {
@@ -184,7 +180,8 @@ namespace Client
                 progressBar1.Value = 0;
             }));
             // Client không làm j cả sẽ gởi lượt đi tiếp theo đến đối thủ
-            _connect.Sendmsg(ClientSocket, "Next", roomID, HL);
+            //tấn cmt
+            //_connect.Sendmsg(ClientSocket, "Next", roomID, HL);
         }
         public void InitBC()
         {
@@ -680,7 +677,8 @@ namespace Client
 
         private void sendUpdate()
         {
-            _connect.Sendmsg(ClientSocket, "Update", roomID, HL);
+            //tấn cmt
+            //_connect.Sendmsg(ClientSocket, "Update", roomID, HL);
         }
         private void btn_roll_Click(object sender, EventArgs e)
         {

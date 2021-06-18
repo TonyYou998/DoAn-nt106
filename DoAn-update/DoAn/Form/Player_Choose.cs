@@ -101,6 +101,11 @@ namespace Client
                     Host create = new Host(p, ClientSocket, Jsonmsg.roomID, Jsonmsg.HL);
                     create.Disposed += delegate {
                         this.Show();
+                        this.Disposed += delegate
+                        {
+                            if (ClientSocket.Connected)
+                                _connect.sendDisconnect(ClientSocket, $"disconnect:{p.userName}",Jsonmsg.roomID);
+                        };
                     };
                     create.Show();
                     this.Hide();
@@ -136,6 +141,12 @@ namespace Client
                 {
                     ID_select = ls.ID_select;
                     this.Show();
+
+
+                    if (ClientSocket.Connected)
+                        _connect.sendDisconnect(ClientSocket, $"disconnect:{p.userName}", Jsonmsg.roomID);
+
+                    
                 };
             }
            
