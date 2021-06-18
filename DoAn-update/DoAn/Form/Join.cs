@@ -67,7 +67,7 @@ namespace Client
             this.Disposed += delegate
             {
                 if (ClientSocket.Connected)
-                    _connect.Sendmsg(ClientSocket, "User", $"disconnect:{p.userName}");
+                    _connect.sendDisconnect(ClientSocket, $"disconnect:{p.userName}",roomID);
             };
         }
         public struct listCreated
@@ -184,7 +184,7 @@ namespace Client
                 progressBar1.Value = 0;
             }));
             // Client không làm j cả sẽ gởi lượt đi tiếp theo đến đối thủ
-            _connect.Sendmsg(ClientSocket, "Next", roomID.ToString(), HL);
+            _connect.Sendmsg(ClientSocket, "Next", roomID, HL);
         }
         public void InitBC()
         {
@@ -337,7 +337,10 @@ namespace Client
                         HL = Jsonmsg.HL;
                         UpdateBC();
                     }
-
+                    else if (s[0] == "Winner")
+                    {
+                        MessageBox.Show($"Player {s[1]}, color {s[2]} is winner !!!");
+                    }
                     continue;
                 }
 
@@ -355,13 +358,6 @@ namespace Client
                     UpdateBC();
                     continue;
                 }
-
-                //if (Jsonmsg.msgtype == "ProgressBar")
-                //{
-                //    progressBar1.BeginInvoke((Action)(() => {
-                //        progressBar1.Value = int.Parse(Jsonmsg.msgcontent);
-                //    }));
-                //}
 
             }
         }
@@ -398,6 +394,8 @@ namespace Client
             else if (color == "Green") HL.listGreenHorse[id].location = LocationToUpdate;
             else if (color == "Blue") HL.listBlueHorse[id].location = LocationToUpdate;
             else if (color == "Yellow") HL.listyellowHorse[id].location = LocationToUpdate;
+
+            sendUpdate();
         }
         private bool AcceptMoving(int _index)
         {
@@ -505,7 +503,6 @@ namespace Client
                     break;
                 }
             }
-            _connect.Sendmsg(ClientSocket, "Update", roomID.ToString(), HL);
         }
         public void Moving(object sender, EventArgs e)
         {
@@ -564,14 +561,9 @@ namespace Client
                 }
                 else if (isOnTop != -1 && pos == -1) // Đang nằm trên top
                 {
-                    if (isWinning(color))
-                    {
-                        MessageBox.Show("You WIN !!!");
-                        return;
-                    }
+              
                     if ((isOnTop % 6) >= (RollNumber - 1) || isOnTop == Index_Ontop + 5)
                     {
-                        _connect.Sendmsg(ClientSocket, "Update", roomID.ToString(), HL);
                         alert.Text = "Không đi được";
                         return;
                     }
@@ -585,7 +577,14 @@ namespace Client
                     }
 
                     if (!collusion)
+                    {
+                        if (isWinning(color))
+                        {
+                            _connect.Sendmsg(ClientSocket, "Action", $"Winner:{p.userName}:{color}:{roomID.ToString()}");
+                            return;
+                        }
                         UpdateHorseLocation(Horse, OnTop[Index_Ontop + RollNumber - 1]);
+                    }
                     else alert.Text = "Không đi được";
 
                 }
@@ -651,14 +650,38 @@ namespace Client
                     else
                     {
                         alert.Text = "Phải xoay ra mặt 1 hoặc 6 thì mới xuất quân được";
+                        if (Check4HorseInReady(color)) sendUpdate();
                     }
                 }
                  
-                _connect.Sendmsg(ClientSocket, "Update", roomID.ToString(), HL);
                 
             }
         }
 
+        private bool Check4HorseInReady(string color)
+        {
+
+            List<Horse> tmp = new List<Horse>();
+            if (color == "Red") tmp = HL.listRedHorse;
+            else if (color == "Blue") tmp = HL.listBlueHorse;
+            else if (color == "Green") tmp = HL.listGreenHorse;
+            else if (color == "Yellow") tmp = HL.listyellowHorse;
+
+            foreach (var i in tmp)
+            {
+                if (!Is_in_readyArea(i.location))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        private void sendUpdate()
+        {
+            _connect.Sendmsg(ClientSocket, "Update", roomID, HL);
+        }
         private void btn_roll_Click(object sender, EventArgs e)
         {
             if (!Rolled && MyTurn)
@@ -666,7 +689,7 @@ namespace Client
                 Rolled = true;
                 Random random = new Random();
                 RollNumber = random.Next(1, 7);
-                _connect.Sendmsg(ClientSocket, "Action", $"Roll:{roomID}:{RollNumber}:{p.userName}");
+                _connect.SendRoll(ClientSocket, "Action", $"Roll:{p.userName}", RollNumber, roomID, HL);
             }
         }
        

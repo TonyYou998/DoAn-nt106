@@ -136,10 +136,8 @@ namespace Server
                             logs.BeginInvoke((Action)(() =>
                             { logs.AppendText($"\r\nĐã ngắt kết nối với {data[1]}"); }));
                             
-                            MSG = new ManagePacket("User", "Host Disconnect");
-                            sendPacketToClient(current, MSG);
-                            //sendPacketToRoom()
-
+                            sendPacketToRoom(packet);
+                            sql.DelRoom(packet.roomID);
                         }
                     }
 
@@ -209,40 +207,35 @@ namespace Server
                     sendPacketToRoom(MSG);
 
                     break;
-                case "checkNumber":
-                    string roomIDToCheck = packet.msgcontent;
-
-                    //Hàm sql kiểm tra số  player trong phòng kiểu int theo roomID
 
                     break;
                 case "Action":
                     data = packet.msgcontent.Split(':');
-                    packet.roomID = int.Parse(data[1]);
-                    // data[1] = roomID, data[2] = rollnumber, data[3] = username;
+
                     switch (data[0])
                     {
                         case "Start": 
-                            sql.SetRoomStart(data[1], 1);
+                            sql.SetRoomStart(packet.roomID, 1);
                             sendPacketToRoom(packet);
                             break;
                         case "Roll":
                             string nextplayer = "";
-                            if (int.Parse(data[2]) == 1 || int.Parse(data[2]) == 6)
-                                nextplayer = data[3];
-                            else
-                                nextplayer = getNextPlayer(data[3], data[1]);
 
-                            MSG = new ManagePacket
-                            {
-                                msgtype = "Action",
-                                rollNumber = int.Parse(data[2]),
-                                msgcontent = $"Roll:{nextplayer}",
-                                roomID = packet.roomID
-                            };
-                            sendPacketToRoom(MSG);
+                            if (packet.rollNumber == 1 || packet.rollNumber == 6)
+                                nextplayer = data[1];
+                            else
+                                nextplayer = getNextPlayer(data[1], packet.roomID);
+
+                            packet.msgcontent = $"Roll:{nextplayer}";
+
+                            sendPacketToRoom(packet);
                             break;
 
                         case "Update":
+                            sendPacketToRoom(packet);
+                            break;
+
+                        case "Winner":
                             sendPacketToRoom(packet);
                             break;
                     }
@@ -263,9 +256,9 @@ namespace Server
                 
         }
 
-        private string getNextPlayer(string current_player, string roomID)
+        private string getNextPlayer(string current_player, int roomID)
         {
-            List<string> user_in_room = sql.GetListUserInRoom(int.Parse(roomID));
+            List<string> user_in_room = sql.GetListUserInRoom(roomID);
 
             int index = user_in_room.IndexOf(current_player);
             return user_in_room[(index + 1) % user_in_room.Count];
