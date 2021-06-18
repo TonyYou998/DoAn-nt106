@@ -122,17 +122,23 @@ namespace Client
             ClientSocket.Receive(bytes);
             string listRoom = Encoding.UTF8.GetString(bytes);
             var Jsonmsg = JsonConvert.DeserializeObject<ManagePacket>(listRoom);
-           
-
-            this.Hide();
-            int ID_select = 0;
-            ListRoom ls = new ListRoom(Jsonmsg.msgRoom,ClientSocket,p);
-            ls.Show();
-            ls.Disposed += delegate
+            if (Jsonmsg.msgRoom.Count < 1)
             {
-                ID_select = ls.ID_select;
-                this.Show();
-            };
+                MessageBox.Show("Hiện chưa có phòng nào. Vui lòng tạo phòng!");
+            }
+            else
+            {
+                this.Hide();
+                int ID_select = 0;
+                ListRoom ls = new ListRoom(Jsonmsg.msgRoom, ClientSocket, p);
+                ls.Show();
+                ls.Disposed += delegate
+                {
+                    ID_select = ls.ID_select;
+                    this.Show();
+                };
+            }
+           
             
         }
 
