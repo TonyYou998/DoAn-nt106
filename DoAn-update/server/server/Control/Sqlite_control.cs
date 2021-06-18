@@ -70,7 +70,7 @@ namespace Server
             sqlite_cmd.ExecuteNonQuery();
         }
 
-        public void SetRoomStart(string roomID, int mode = 0) // mode = 0 : nonstart, = 1 : isplaying
+        public void SetRoomStart(int roomID, int mode = 0) // mode = 0 : nonstart, = 1 : isplaying
         {
             SQLiteCommand sqlite_cmd;
             sqlite_cmd = sqlite_conn.CreateCommand();
@@ -171,6 +171,14 @@ namespace Server
             sqlite_cmd = sqlite_conn.CreateCommand();
             sqlite_cmd.CommandText = "INSERT INTO Room " +
                 $"(Roomname) VALUES('{Title}'); ";
+            sqlite_cmd.ExecuteNonQuery();
+        }
+
+        public void DelRoom(int roomID)
+        {
+            SQLiteCommand sqlite_cmd;
+            sqlite_cmd = sqlite_conn.CreateCommand();
+            sqlite_cmd.CommandText = $"DELETE FROM Room WHERE roomId={roomID};";
             sqlite_cmd.ExecuteNonQuery();
         }
 

@@ -20,7 +20,7 @@ namespace Client
         private int roomID, RollNumber = -1;
         public bool Started = false, Rolled = true, MyTurn = true;
 
-        public Host(NguoiChoi p, Socket S,int roomID, HorseList HL)
+        public Host(NguoiChoi p, Socket S, int roomID, HorseList HL)
         {
             InitializeComponent();
             //nhận thông tin user,clientsocket và room id từ form choose
@@ -60,7 +60,7 @@ namespace Client
             Roll_number.BackColor = Color.Transparent;
             //LABLE
             alert.Text = ""; //59, 25
-            alert.Location = new Point(59,25);
+            alert.Location = new Point(59, 25);
             alert.BackColor = Color.Transparent;
 
             Roll_number.BackgroundImageLayout = ImageLayout.Stretch;
@@ -71,7 +71,7 @@ namespace Client
             this.Disposed += delegate
             {
                 if (ClientSocket.Connected)
-                    _connect.Sendmsg(ClientSocket, "User", $"disconnect:{p.userName}");
+                    _connect.sendDisconnect(ClientSocket, $"disconnect:{p.userName}", roomID);
             };
         }
         //Các biến sử dụng
@@ -198,22 +198,23 @@ namespace Client
                 checkForCreateHorse(HL.listRedHorse[1].color, p.userName, HL.listRedHorse[1].owner);
             }
         }
+
         private void timeout()
         {
-            for(int i =0; i < 20; i++)
+            for (int i = 0; i < 20; i++)
             {
-                progressBar1.BeginInvoke((Action)(() => { 
-                    progressBar1.Value = progressBar1.Value + 5; 
+                progressBar1.BeginInvoke((Action)(() => {
+                    progressBar1.Value = progressBar1.Value + 5;
                 }));
 
-                if (progressBar1.Value == 0) break;
+                if (!MyTurn) break;
                 Thread.Sleep(1000);
             }
             progressBar1.BeginInvoke((Action)(() => {
                 progressBar1.Value = 0;
             }));
             // Client không làm j cả sẽ gởi lượt đi tiếp theo đến đối thủ
-            _connect.Sendmsg(ClientSocket,"Update",roomID.ToString(),HL);
+            _connect.Sendmsg(ClientSocket, "Update", roomID, HL);
         }
         private void Player_Join_Receive()
         {
@@ -229,14 +230,14 @@ namespace Client
                     string[] s = Jsonmsg.msgcontent.Split(':');
                     if (s[0] == "Start")
                     {
-                        alert.BeginInvoke((Action)(() => { 
-                            alert.Text = $"Trận đấu bắt đầu, lượt chơi của {s[2]}"; 
+                        alert.BeginInvoke((Action)(() => {
+                            alert.Text = $"Trận đấu bắt đầu, lượt chơi của {s[2]}";
                         }));
 
                         MyTurn = true;
                         Rolled = false;
-                        //Thread t = new Thread(timeout);
-                        //t.Start();  
+                        Thread t = new Thread(timeout);
+                        t.Start();
                     }
 
                     else if (s[0] == "Roll")
@@ -247,8 +248,7 @@ namespace Client
                         if (s[1] == p.userName) // Nếu lượt đi bằng với tên người chơi 
                         {
                             MyTurn = true;
-                            //Thread t = new Thread(timeout);
-                            //t.Start();
+
                         }
                         else
                         {
@@ -262,26 +262,23 @@ namespace Client
 
                     }
 
-                    else if(s[0] == "Update")
+                    else if (s[0] == "Update")
                     {
                         HL = Jsonmsg.HL;
                         UpdateBC();
                     }
+
+                    else if (s[0] == "Winner")
+                    {
+                        MessageBox.Show($"Player {s[1]}, color {s[2]} is winner !!!");
+                    }
                     continue;
                 }
-                
 
                 if (Jsonmsg.msgtype == "Join" && Jsonmsg.HL != null)
                 {
                     HL = Jsonmsg.HL;
                     InitBC();
-                    continue;
-                }
-
-                if (Jsonmsg.msgtype == "Update" && Jsonmsg.HL != null)
-                {
-                    HL = Jsonmsg.HL;
-                    UpdateBC();
                     continue;
                 }
 
@@ -296,15 +293,8 @@ namespace Client
         }
         private void btn_Start_Click(object sender, EventArgs e)
         {
-            if (Started == false)
-            {
-                //send gói bắt đầu để nhận gọi next
-                //nhận về gói có listHorse, Username được đi
-
-                _connect.Sendmsg(ClientSocket, "Action", $"Start:{roomID}:{p.userName}");
-                Started = true;
-                btn_Start.Dispose();
-            }
+            _connect.Sendmsg(ClientSocket, "Action", $"Start:{roomID}:{p.userName}");
+            btn_Start.Dispose();
         }
         private void UpdateBC()
         {
@@ -365,7 +355,7 @@ namespace Client
             }
 
         }
-        private void UpdateHorse (HorseList HL, Point a, int t, string color)
+        private void UpdateHorse(HorseList HL, Point a, int t, string color)
         {
             switch (color)
             {
@@ -477,11 +467,11 @@ namespace Client
                 }
             }
 
-            if(Total.Count < 4) return false;
+            if (Total.Count < 4) return false;
             return true;
         }
 
-        private string GetColorHorse(int _index, Point [] ListPoint)
+        private string GetColorHorse(int _index, Point[] ListPoint)
         {
             Point[] tmp = ListPoint;
             if (_index > 55) _index = _index % 56;
@@ -503,6 +493,11 @@ namespace Client
             }
             return "";
         }
+
+        private void sendUpdate()
+        {
+            _connect.Sendmsg(ClientSocket, "Update", roomID, HL);
+        }
         private void UpdateHorseLocation(PictureBox myHorse, Point LocationToUpdate)
         {
             string name = myHorse.Name;
@@ -516,6 +511,7 @@ namespace Client
             else if (color == "Green") HL.listGreenHorse[id].location = LocationToUpdate;
             else if (color == "Blue") HL.listBlueHorse[id].location = LocationToUpdate;
             else if (color == "Yellow") HL.listyellowHorse[id].location = LocationToUpdate;
+
         }
         private void kickAssHorse(int competitor_index, PictureBox myHorse)
         {
@@ -534,12 +530,12 @@ namespace Client
                     break;
                 }
             }
-            _connect.Sendmsg(ClientSocket, "Update", roomID.ToString(), HL);
+            sendUpdate();
         }
 
-        public int ConvertLocationToIndex (Point a,Point[] b)
+        public int ConvertLocationToIndex(Point a, Point[] b)
         {
-            for(int i = 0; i < b.Length; i++)
+            for (int i = 0; i < b.Length; i++)
             {
                 if (a == b[i])
                     return i;
@@ -551,12 +547,11 @@ namespace Client
         {
             PictureBox Horse = (PictureBox)sender;
             string name = Horse.Name.ToString();
-            string color = name.Substring(0, name.Length - 1 );
+            string color = name.Substring(0, name.Length - 1);
 
             Random random = new Random();
             int RollNumber = random.Next(1, 7);
-            UpdateRollImage(RollNumber);
-            //_connect.Sendmsg(ClientSocket, "Action", $"Roll:{roomID}:{RollNumber}:{p.userName}");
+
             int pos = ConvertLocationToIndex(Horse.Location, Map);
             int isOnTop = ConvertLocationToIndex(Horse.Location, OnTop);
 
@@ -565,26 +560,25 @@ namespace Client
                 if (pos == 55) // Trường hợp chuẩn bị leo top
                 {
                     bool collusion = false;
-                    for(int i = 0; i < RollNumber; i++)
+                    for (int i = 0; i < RollNumber; i++)
                     {
                         // Kiểm tra trên đường đi có bị chắn đường hay ko?
-                        if(GetColorHorse(i, OnTop) != "")
-                        collusion = true;
+                        if (GetColorHorse(i, OnTop) != "")
+                            collusion = true;
                     }
 
-                    if (!collusion) UpdateHorseLocation(Horse, OnTop[RollNumber - 1]);
+                    if (!collusion)
+                    {
+                        UpdateHorseLocation(Horse, OnTop[RollNumber - 1]);
+                        sendUpdate();
+                    }
                     else alert.Text = "Không đi được";
                 }
                 else if (isOnTop != -1 && pos == -1) // Đang nằm trên top
                 {
-                    if (isWinning(color))
+
+                    if (isOnTop >= (RollNumber - 1) || isOnTop == 5)
                     {
-                        MessageBox.Show("You WIN !!!");
-                        return;
-                    }
-                    if (isOnTop >= (RollNumber - 1)  || isOnTop == 5)
-                    {
-                        _connect.Sendmsg(ClientSocket, "Update", roomID.ToString(), HL);
                         alert.Text = "Không đi được";
                         return;
                     }
@@ -596,9 +590,17 @@ namespace Client
                         if (GetColorHorse(i, OnTop) != "")
                             collusion = true;
                     }
-                    
-                    if (!collusion) 
+
+                    if (!collusion)
+                    {
                         UpdateHorseLocation(Horse, OnTop[RollNumber - 1]);
+                        sendUpdate();
+                        if (isWinning(color))
+                        {
+                            _connect.Sendmsg(ClientSocket, "Action", $"Winner:{p.userName}:{color}:{roomID.ToString()}");
+                            return;
+                        }
+                    }
 
                 }
                 else if (!Is_in_readyArea(Horse.Location)) // Nếu không có trong chuồng
@@ -629,6 +631,7 @@ namespace Client
                             else
                             {
                                 UpdateHorseLocation(Horse, Map[calc]);
+                                sendUpdate();
                             }
                         }
                     }
@@ -640,7 +643,11 @@ namespace Client
                 {
                     if (RollNumber == 1 || RollNumber == 6) // quay được 1 hoặc 6
                     {
-                        if (GetColorHorse(0, Map) == "") UpdateHorseLocation(Horse, Map[0]);
+                        if (GetColorHorse(0, Map) == "")
+                        {
+                            UpdateHorseLocation(Horse, Map[0]);
+                            sendUpdate();
+                        }
                         // Có quân nào tồn tại ở ngay chỗ xuất quân hay không?
                         else if (GetColorHorse(0, Map) != color) kickAssHorse(0, Horse);
                         // Màu của quân đó có phải quân địch hay không
@@ -654,13 +661,34 @@ namespace Client
                     else
                     {
                         alert.Text = "Phải xoay ra mặt 1 hoặc 6 thì mới xuất quân được";
+                        if (Check4HorseInReady(color)) sendUpdate();
                     }
                 }
-       
+
             }
-            
-            _connect.Sendmsg(ClientSocket, "Update", roomID.ToString(), HL);
+
+
         }
+
+        private bool Check4HorseInReady (string color) {
+
+            List<Horse> tmp = new List<Horse>();
+            if (color == "Red") tmp = HL.listRedHorse;
+            else if(color == "Blue") tmp = HL.listBlueHorse;
+            else if (color == "Green") tmp = HL.listGreenHorse;
+            else if (color == "Yellow") tmp = HL.listyellowHorse;
+
+            foreach (var i in tmp)
+            {
+                if (!Is_in_readyArea(i.location))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
 
         private void btn_roll_Click(object sender, EventArgs e)
         {
@@ -669,7 +697,7 @@ namespace Client
                 Rolled = true;
                 Random random = new Random();
                 RollNumber = random.Next(1, 7);
-                _connect.Sendmsg(ClientSocket, "Action", $"Roll:{roomID}:{RollNumber}:{p.userName}");
+                _connect.SendRoll(ClientSocket, "Action", $"Roll:{p.userName}", RollNumber , roomID);
             }
         }
     }

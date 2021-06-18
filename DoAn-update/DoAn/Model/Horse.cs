@@ -19,7 +19,6 @@ namespace Client.Modal
             this.color = color;
             this.id = id;
             this.owner = owner;
-            
         }
     }
 }
