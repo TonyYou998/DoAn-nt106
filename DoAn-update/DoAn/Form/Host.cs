@@ -95,13 +95,27 @@ namespace Client
 
         private void OnTimedEvent(object source, ElapsedEventArgs e)
         {
-            progressBar1.BeginInvoke((Action)(() => {
-                if (progressBar1.Value == progressBar1.Maximum && MyTurn)
-                {
-                    sendUpdate();
-                }
-                progressBar1.PerformStep();
-            }));
+            if (progressBar1.InvokeRequired)
+            {
+                progressBar1.BeginInvoke((Action)(() => {
+                    if (progressBar1.Value == progressBar1.Maximum && MyTurn)
+                    {
+                        sendUpdate();
+                    }
+                    progressBar1.PerformStep();
+                }));
+            }
+            else
+            {
+               
+                    if (progressBar1.Value == progressBar1.Maximum && MyTurn)
+                    {
+                        sendUpdate();
+                    }
+                    progressBar1.PerformStep();
+               
+            }
+           
         }
         public void updateListCreate(string color)
         {
@@ -317,7 +331,10 @@ namespace Client
 
                 if (Jsonmsg.msgtype == "User") // Disconnect
                 {
-                    this.Dispose();
+                   
+                    this.BeginInvoke((Action)(() => {
+                        this.Dispose();
+                    }));
                 }
 
             }
