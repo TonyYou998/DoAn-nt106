@@ -365,7 +365,10 @@ namespace Client
                     }
                     else if (s[0] == "Winner")
                     {
-                        MessageBox.Show($"Player {s[1]}, color {s[2]} is winner !!!");
+                        MessageBox.Show(new Form() { TopMost = true }, $"Player {s[1]}, color {s[2]} is winner !!!");
+                        this.BeginInvoke((Action)(() => {
+                            this.Dispose();
+                        }));
                     }
                     continue;
                 }
@@ -582,7 +585,15 @@ namespace Client
                             collusion = true;
                     }
 
-                    if (!collusion) UpdateHorseLocation(Horse, OnTop[Index_Ontop + RollNumber - 1]);
+                    if (!collusion)
+                    {
+                        if (isWinning(color))
+                        {
+                            _connect.Sendmsg(ClientSocket, "Action", $"Winner:{p.userName}:{color}:{roomID.ToString()}");
+                            return;
+                        }
+                        UpdateHorseLocation(Horse, OnTop[Index_Ontop + RollNumber - 1]);
+                    }
                     else alert.Text = "Không đi được";
                 }
                 else if (isOnTop != -1 && pos == -1) // Đang nằm trên top
@@ -717,6 +728,7 @@ namespace Client
                 Random random = new Random();
                 RollNumber = random.Next(1, 7);
                 _connect.SendRoll(ClientSocket, "Action", $"Roll:{p.userName}", RollNumber, roomID);
+
             }
         }
        

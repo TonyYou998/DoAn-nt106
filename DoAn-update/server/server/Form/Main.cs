@@ -255,6 +255,7 @@ namespace Server
                             break;
 
                         case "Winner":
+                            packet.roomID = int.Parse(data[3]);
                             sendPacketToRoom(packet);
                             break;
                     }

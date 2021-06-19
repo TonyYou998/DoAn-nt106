@@ -68,7 +68,7 @@ namespace Client
             Roll_number.BackgroundImageLayout = ImageLayout.Stretch;
 
             //progressbar
-            progressBar1.Step = 5;
+            progressBar1.Step = 10;
             //Timer
             aTimer.Elapsed += new ElapsedEventHandler(OnTimedEvent);
             aTimer.Interval = 1000;
@@ -315,7 +315,10 @@ namespace Client
 
                     else if (s[0] == "Winner")
                     {
-                        MessageBox.Show($"Player {s[1]}, color {s[2]} is winner !!!");
+                        MessageBox.Show(new Form() { TopMost = true }, $"Player {s[1]}, color {s[2]} is winner !!!");
+                        this.BeginInvoke((Action)(() => {
+                            this.Dispose();
+                        }));
                     }
 
 
@@ -618,6 +621,11 @@ namespace Client
                     {
                         UpdateHorseLocation(Horse, OnTop[RollNumber - 1]);
                         sendUpdate();
+                        if (isWinning(color))
+                        {
+                            _connect.Sendmsg(ClientSocket, "Action", $"Winner:{p.userName}:{color}:{roomID.ToString()}");
+                            return;
+                        }
                     }
                     else alert.Text = "Không đi được";
                 }
