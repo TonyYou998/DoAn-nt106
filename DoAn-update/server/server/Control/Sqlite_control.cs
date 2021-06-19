@@ -30,7 +30,6 @@ namespace Server
             }
             return sqlite_conn;
         }
-
         private void CreateTable()
         {
             SQLiteCommand sqlite_cmd;
@@ -78,7 +77,7 @@ namespace Server
             sqlite_cmd.ExecuteNonQuery();
         }
 
-        public bool IsPlaying(string roomID) // mode = 0 : nonstart, = 1 : isplaying
+        public bool IsPlaying(int roomID) // mode = 0 : nonstart, = 1 : isplaying
         {
             SQLiteCommand sqlite_cmd;
             sqlite_cmd = sqlite_conn.CreateCommand();
@@ -97,7 +96,7 @@ namespace Server
             }
             return false;
         }
-
+        
         public void SetUserOnline(string username, int mode=0) // mode = 0 : offline, = 1 : online
         {
             SQLiteCommand sqlite_cmd;

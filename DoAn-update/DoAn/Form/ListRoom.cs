@@ -95,25 +95,31 @@ namespace Client
         private bool realJoin(int numberOfPlayer, int roomID)
         {
             //phân chia màu và list horse cho người chơi join vào theo số người chơi hiện có trong phòng
+            var MSG = new ManagePacket { msgtype = "JoinRoom", roomID = roomID};
             switch (numberOfPlayer)
             {
                 case 1:
                     List<Horse> listGreenHorse = new List<Horse>();
                     createListHorse(listGreenHorse, 515, 600, 85, 170, "Green");
-
-                    _connect.Sendmsg(ClientSocket, "JoinRoom", $"{p.userName}:{roomID}:Green",listGreenHorse);
+                    MSG.msgHorse = listGreenHorse;
+                    MSG.msgcontent = $"{p.userName}:Green";
+                    _connect.Sendmsg(ClientSocket, MSG);
                     return true;
                 case 2:
                     List<Horse> listBlueHorse = new List<Horse>();
                     createListHorse(listBlueHorse, 150, 230, 440, 530, "Blue");
 
-                    _connect.Sendmsg(ClientSocket, "JoinRoom", $"{p.userName}:{roomID}:Blue:{listBlueHorse}",listBlueHorse);
-                    return true;
+                    MSG.msgHorse = listBlueHorse;
+                    MSG.msgcontent = $"{p.userName}:Blue";
+                    _connect.Sendmsg(ClientSocket, MSG); return true;
                 case 3:
                     List<Horse> listYellowHorse = new List<Horse>();
                     createListHorse(listYellowHorse, 515, 600, 440, 530, "Yellow");
 
-                    _connect.Sendmsg(ClientSocket, "JoinRoom", $"{p.userName}:{roomID}:Yellow:{listYellowHorse}",listYellowHorse);
+                    MSG.msgHorse = listYellowHorse;
+                    MSG.msgcontent = $"{p.userName}:Yellow";
+                    _connect.Sendmsg(ClientSocket, MSG); 
+
                     return true;
 
                 case 4:

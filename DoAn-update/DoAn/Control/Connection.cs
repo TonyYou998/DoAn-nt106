@@ -48,5 +48,12 @@ namespace Client
             s.Send(buffer, 0, buffer.Length, SocketFlags.None);
         }
 
+        public void Sendmsg(Socket s, ManagePacket MSG)
+        {
+            string json = JsonConvert.SerializeObject(MSG);
+            byte[] buffer = Encoding.UTF8.GetBytes(json);
+            s.Send(buffer, 0, buffer.Length, SocketFlags.None);
+        }
+
     }
 }

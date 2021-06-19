@@ -314,8 +314,6 @@ namespace Client
                         {
                             MyTurn = true;
                             Rolled = false;
-                            //Thread t = new Thread(timeout);
-                            //t.Start();
                         }
                         else
                         {
@@ -326,6 +324,7 @@ namespace Client
                         alert.BeginInvoke((Action)(() => {
                             alert.Text = $"Lượt chơi của {Jsonmsg.msgcontent}";
                         }));
+
 
                     }
 
@@ -341,19 +340,16 @@ namespace Client
                     continue;
                 }
 
-
-                if (Jsonmsg.msgtype == "Join" && Jsonmsg.HL != null)
+                else if (Jsonmsg.msgtype == "Join" && Jsonmsg.HL != null)
                 {
                     HL = Jsonmsg.HL;
                     InitBC();
                     continue;
                 }
 
-                if (Jsonmsg.msgtype == "Update" && Jsonmsg.HL != null)
+                else if (Jsonmsg.msgtype == "User") // Disconnect
                 {
-                    HL = Jsonmsg.HL;
-                    UpdateBC();
-                    continue;
+                    this.Dispose();
                 }
 
             }

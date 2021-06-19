@@ -138,7 +138,12 @@ namespace Server
                             
                             sendPacketToRoom(packet);
                             sql.SetRoomID(data[1], 0);
-                            sql.DelRoom(packet.roomID);
+                            if (sql.IsPlaying(packet.roomID))
+                            {
+                                sql.DelRoom(packet.roomID);
+                                logs.BeginInvoke((Action)(() =>
+                                { logs.AppendText($"\r\nĐã xoá phòng có ID {packet.roomID}"); }));
+                            }
                         }
                     }
 
@@ -157,6 +162,8 @@ namespace Server
                     //roomID:username:lisHorse:
                     string  userName = roomData[1];
                     MSG = new ManagePacket(HL[number_room], userName, number_room+1);
+                    logs.BeginInvoke((Action)(() =>
+                    { logs.AppendText($"\r\n{roomData[1]} tạo phòng {roomData[0]}"); }));
                     //phản hồi cho cli nếu đã tạo phòng thành công
                     sendPacketToClient(current, MSG);
                     number_room++;
@@ -171,52 +178,51 @@ namespace Server
 
                 case "JoinRoom":
                     string[] Data = packet.msgcontent.Split(':');
-
-                    string name = Data[0];
-                    string RoomID = Data[1];
-                    string Color = Data[2];
-                    //add clie vào listRoom theo màu
-                    switch(Color)
+                    string username = Data[0];
+                    string color = Data[1];
+                    int ID = packet.roomID;
+                    //add client vào listRoom theo màu
+                    switch (color)
                     {
                         case "Green":
-                            HL[int.Parse(RoomID)-1].listGreenHorse = packet.msgHorse;
+                            HL[ID - 1].listGreenHorse = packet.msgHorse;
                             break;
                         case "Blue":
-                            HL[int.Parse(RoomID)-1].listBlueHorse = packet.msgHorse;
+                            HL[ID - 1].listBlueHorse = packet.msgHorse;
                             break;
                         case "Yellow":
-                            HL[int.Parse(RoomID)-1].listyellowHorse = packet.msgHorse;
+                            HL[ID - 1].listyellowHorse = packet.msgHorse;
                             break;
                     }
                     //nếu đã start thì không join vào dc nữa
-                    if (sql.IsPlaying(RoomID))
+                    if (sql.IsPlaying(ID))
                     {
                         MSG = new ManagePacket("JoinRoom", "Isplaying");
                         sendPacketToClient(current, MSG);
                         break;
                     }
 
+                    sql.SetHost(username, 0);
+                    sql.SetRoomID(username, ID);
 
-                    sql.SetHost(Data[0],0);
-                    sql.SetRoomID(Data[0], int.Parse(Data[1]));
                     MSG = new ManagePacket
                     {
                         msgtype = "Join",
-                        roomID = int.Parse(RoomID),
-                        HL = HL[int.Parse(RoomID) - 1]
+                        roomID = ID,
+                        HL = HL[ID - 1]
                     };
                     sendPacketToRoom(MSG);
 
                     break;
 
-                    break;
                 case "Action":
                     data = packet.msgcontent.Split(':');
-
-                    switch (data[0])
+                    string type = data[0];
+                    ID = packet.roomID;
+                    switch (type)
                     {
                         case "Start": 
-                            sql.SetRoomStart(packet.roomID, 1);
+                            sql.SetRoomStart(ID, 1);
                             sendPacketToRoom(packet);
                             break;
                         case "Roll":
@@ -225,7 +231,7 @@ namespace Server
                             if (packet.rollNumber == 1 || packet.rollNumber == 6)
                                 nextplayer = data[1];
                             else
-                                nextplayer = getNextPlayer(data[1], packet.roomID);
+                                nextplayer = getNextPlayer(data[1], ID);
 
                             packet.msgcontent = $"Roll:{nextplayer}";
 

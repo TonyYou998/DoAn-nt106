@@ -262,6 +262,7 @@ namespace Client
                     else if (s[0] == "Update")
                     {
                         HL = Jsonmsg.HL;
+                        
                         UpdateBC();
                     }
 
@@ -269,6 +270,8 @@ namespace Client
                     {
                         MessageBox.Show($"Player {s[1]}, color {s[2]} is winner !!!");
                     }
+
+
                     continue;
                 }
 
@@ -279,12 +282,10 @@ namespace Client
                     continue;
                 }
 
-                //if(Jsonmsg.msgtype == "ProgressBar")
-                //{
-                //    progressBar1.BeginInvoke((Action)(() => {
-                //        progressBar1.Value = int.Parse(Jsonmsg.msgcontent);
-                //    }));
-                //}
+                if (Jsonmsg.msgtype == "User") // Disconnect
+                {
+                    this.Dispose();
+                }
 
             }
         }
@@ -494,7 +495,7 @@ namespace Client
         private void sendUpdate()
         {
             //tấn cmt
-           // _connect.Sendmsg(ClientSocket, "Update", roomID, HL);
+           _connect.Sendmsg(ClientSocket, "Update", $"{p.userName}:{RollNumber}" ,roomID, HL);
         }
         private void UpdateHorseLocation(PictureBox myHorse, Point LocationToUpdate)
         {

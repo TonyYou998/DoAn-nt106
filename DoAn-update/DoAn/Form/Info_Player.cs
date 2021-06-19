@@ -39,12 +39,6 @@ namespace Client
             IpServer.Size = new Size(325, 38);
             IpServer.Font = new Font("Arial", 22, FontStyle.Bold);
             IpServer.Location = new Point(578, 301);
-
-            this.Disposed += delegate
-            {
-                if (ClientSocket.Connected)
-                    _connect.Sendmsg(ClientSocket, "User", $"disconnect:{p.userName}");
-            };
         }
 
         private void btn_Connect_Click(object sender, EventArgs e)
