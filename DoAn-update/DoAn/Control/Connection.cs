@@ -16,9 +16,9 @@ namespace Client
             s.Send(buffer, 0, buffer.Length, SocketFlags.None);
         }
 
-        public void SendRoll(Socket s, string type, string content,int rollnumber, int roomID, HorseList HL)
+        public void SendRoll(Socket s, string type, string content,int rollnumber, int roomID)
         {
-            var MSG = new ManagePacket { msgtype = type, rollNumber = rollnumber, msgcontent = content, roomID =  roomID, HL = HL  };
+            var MSG = new ManagePacket { msgtype = type, rollNumber = rollnumber, msgcontent = content, roomID =  roomID};
             string json = JsonConvert.SerializeObject(MSG);
             byte[] buffer = Encoding.UTF8.GetBytes(json);
             s.Send(buffer, 0, buffer.Length, SocketFlags.None);

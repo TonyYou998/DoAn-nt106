@@ -88,7 +88,7 @@ namespace Client
             this.progressBar1.Location = new System.Drawing.Point(913, 9);
             this.progressBar1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(297, 30);
+            this.progressBar1.Size = new System.Drawing.Size(201, 34);
             this.progressBar1.TabIndex = 25;
             // 
             // Join

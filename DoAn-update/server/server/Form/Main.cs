@@ -8,6 +8,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Windows.Forms;
+using System.Threading;
 
 namespace Server
 {
@@ -242,6 +243,14 @@ namespace Server
                             break;
 
                         case "Update":
+                            nextplayer = "";
+
+                            if (packet.rollNumber == 1 || packet.rollNumber == 6)
+                                nextplayer = username;
+                            else
+                                nextplayer = getNextPlayer(username, ID);
+
+                            packet.msgcontent = $"Update:{nextplayer}";
                             sendPacketToRoom(packet);
                             break;
 
@@ -251,30 +260,40 @@ namespace Server
                     }
                     break;
 
-                //case "ProgressBar":
-                //    data = packet.msgcontent.Split(':');
-                //    MSG = new ManagePacket
-                //    {
-                //        msgtype = "ProgressBar",
-                //        roomID = int.Parse(data[0]),
-                //        msgcontent = data[1]
-                //    };
-                //    sendPacketToRoom(MSG);
-                //    break;
-              
             }
                 
         }
 
         private string getNextPlayer(string current_player, int roomID)
         {
-            List<string> user_in_room = sql.GetListUserInRoom(roomID);
+            roomID = roomID - 1;
+            if (HL[roomID].listRedHorse[0].owner == current_player)
+            {
+                if (HL[roomID].listGreenHorse.Count != 0)
+                    return HL[roomID].listGreenHorse[0].owner;
+                else
+                    return current_player; // Phòng chỉ có 1 người chơi
+            }
 
-            int index = user_in_room.IndexOf(current_player);
-            return user_in_room[(index + 1) % user_in_room.Count];
+            else if (HL[roomID].listGreenHorse[0].owner == current_player)
+            {
+                if (HL[roomID].listBlueHorse.Count != 0)
+                    return HL[roomID].listBlueHorse[0].owner;
+            }
+
+            else if (HL[roomID].listBlueHorse[0].owner == current_player)
+            {
+                if (HL[roomID].listyellowHorse.Count != 0)
+                    return HL[roomID].listyellowHorse[0].owner;
+
+            }
+
+            // Trường hợp còn lại là màu vàng
+            // Next player sẽ là màu đỏ
+            return HL[roomID].listRedHorse[0].owner;
         }
 
-        private void sendPacketToRoom(ManagePacket MSG)
+            private void sendPacketToRoom(ManagePacket MSG)
         {
             List<string> user_in_room = sql.GetListUserInRoom(MSG.roomID);
             foreach(var u in user_in_room)

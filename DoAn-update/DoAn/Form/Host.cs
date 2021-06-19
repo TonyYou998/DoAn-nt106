@@ -8,6 +8,7 @@ using System.Threading;
 using System.Windows.Forms;
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
+using System.Timers;
 
 namespace Client
 {
@@ -19,7 +20,8 @@ namespace Client
         private Connection _connect = new Connection();
         private int roomID, RollNumber = -1;
         public bool Started = false, Rolled = true, MyTurn = true;
-
+        System.Timers.Timer aTimer = new System.Timers.Timer();
+      
         public Host(NguoiChoi p, Socket S, int roomID, HorseList HL)
         {
             InitializeComponent();
@@ -47,6 +49,7 @@ namespace Client
             btn_Roll.BackgroundImageLayout = ImageLayout.Stretch;
             btn_Roll.Location = new Point(980, 480);
             btn_Roll.BackColor = Color.Transparent;
+            btn_Roll.Enabled = false;
             //BTN_EXIT GIAO DIEN
             btn_exit.Size = new Size(150, 75);
             btn_exit.BackgroundImage = Properties.Resources.exit;
@@ -62,15 +65,21 @@ namespace Client
             alert.Text = ""; //59, 25
             alert.Location = new Point(59, 25);
             alert.BackColor = Color.Transparent;
-
             Roll_number.BackgroundImageLayout = ImageLayout.Stretch;
+
+            //progressbar
+            progressBar1.Step = 5;
+            //Timer
+            aTimer.Elapsed += new ElapsedEventHandler(OnTimedEvent);
+            aTimer.Interval = 1000;
+
 
             UpdateBC();
             Thread a = new Thread(Player_Join_Receive);
             a.Start();
-
         }
         //Các biến sử dụng
+
         public struct listCreated
         {
             public bool RED;
@@ -83,6 +92,17 @@ namespace Client
         Point[] Ready = new MapTable().Ready;
         Point[] OnTop = new MapTable().OnTop;
         Point[] Map = new MapTable().Map;
+
+        private void OnTimedEvent(object source, ElapsedEventArgs e)
+        {
+            progressBar1.BeginInvoke((Action)(() => {
+                if (progressBar1.Value == progressBar1.Maximum && MyTurn)
+                {
+                    sendUpdate();
+                }
+                progressBar1.PerformStep();
+            }));
+        }
         public void updateListCreate(string color)
         {
             switch (color)
@@ -209,9 +229,10 @@ namespace Client
             progressBar1.BeginInvoke((Action)(() => {
                 progressBar1.Value = 0;
             }));
+            MessageBox.Show(Thread.CurrentThread.ManagedThreadId.ToString());
             // Client không làm j cả sẽ gởi lượt đi tiếp theo đến đối thủ
             //tấn cmt
-           // _connect.Sendmsg(ClientSocket, "Update", roomID, HL);
+            // _connect.Sendmsg(ClientSocket, "Update", roomID, HL);
         }
         private void Player_Join_Receive()
         {
@@ -228,42 +249,54 @@ namespace Client
                     if (s[0] == "Start")
                     {
                         alert.BeginInvoke((Action)(() => {
-                            alert.Text = $"Trận đấu bắt đầu, lượt chơi của {s[2]}";
+                            alert.Text = $"Trận đấu bắt đầu, lượt chơi của {s[1]}";
                         }));
 
                         MyTurn = true;
                         Rolled = false;
-                        Thread t = new Thread(timeout);
-                        t.Start();
+
+                        aTimer.Enabled = true;
+                        btn_Roll.BeginInvoke((Action)(() => {
+                            btn_Roll.Enabled = MyTurn;
+                        }));
                     }
 
                     else if (s[0] == "Roll")
                     {
                         UpdateRollImage(Jsonmsg.rollNumber);
 
-                        RollNumber = Jsonmsg.rollNumber;
-                        if (s[1] == p.userName) // Nếu lượt đi bằng với tên người chơi 
-                        {
-                            MyTurn = true;
-
-                        }
-                        else
-                        {
-                            MyTurn = false;
-                            Rolled = false;
-                        }
-
-                        alert.BeginInvoke((Action)(() => {
-                            alert.Text = $"Lượt chơi của {s[1]}";
-                        }));
+                        if (s[1] == p.userName)
+                            RollNumber = Jsonmsg.rollNumber;
 
                     }
 
                     else if (s[0] == "Update")
                     {
                         HL = Jsonmsg.HL;
-                        
                         UpdateBC();
+
+                        if (s[1] == p.userName) // Nếu lượt đi bằng với tên người chơi 
+                        {
+                            MyTurn = true;
+                            Rolled = false;
+                        }
+                        else
+                        {
+                            MyTurn = false;
+                            Rolled = true;
+                        }
+                        progressBar1.BeginInvoke((Action)(() => {
+                            progressBar1.Value = 0 ;
+                        }));
+                        aTimer.Enabled = true;
+
+                        btn_Roll.BeginInvoke((Action)(() => {
+                            btn_Roll.Enabled = MyTurn;
+                        }));
+
+                        alert.BeginInvoke((Action)(() => {
+                            alert.Text = $"Lượt chơi của {s[1]}";
+                        }));
                     }
 
                     else if (s[0] == "Winner")
@@ -291,7 +324,8 @@ namespace Client
         }
         private void btn_Start_Click(object sender, EventArgs e)
         {
-            _connect.Sendmsg(ClientSocket, "Action", $"Start:{roomID}:{p.userName}");
+            var MSG = new ManagePacket { msgtype = "Action", msgcontent=$"Start:{p.userName}", roomID = roomID };
+            _connect.Sendmsg(ClientSocket, MSG);
             btn_Start.Dispose();
         }
         private void UpdateBC()
@@ -491,12 +525,6 @@ namespace Client
             }
             return "";
         }
-
-        private void sendUpdate()
-        {
-            //tấn cmt
-           _connect.Sendmsg(ClientSocket, "Update", $"{p.userName}:{RollNumber}" ,roomID, HL);
-        }
         private void UpdateHorseLocation(PictureBox myHorse, Point LocationToUpdate)
         {
             string name = myHorse.Name;
@@ -542,19 +570,22 @@ namespace Client
             return -1;
         }
 
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+               progressBar1.PerformStep();
+        }
+
         public void Moving(object sender, EventArgs e)
         {
             PictureBox Horse = (PictureBox)sender;
             string name = Horse.Name.ToString();
             string color = name.Substring(0, name.Length - 1);
 
-            Random random = new Random();
-            int RollNumber = random.Next(1, 7);
-
             int pos = ConvertLocationToIndex(Horse.Location, Map);
             int isOnTop = ConvertLocationToIndex(Horse.Location, OnTop);
 
-            if (true)
+            if (!Rolled && MyTurn) alert.Text = "Nhấn nút roll xúc xắc trước khi thao tác";
+            else if (Rolled && MyTurn)
             {
                 if (pos == 55) // Trường hợp chuẩn bị leo top
                 {
@@ -689,6 +720,12 @@ namespace Client
         }
 
 
+        private void sendUpdate()
+        {
+            var MSG = new ManagePacket { msgtype = "Action", msgcontent = $"Update:{p.userName}", rollNumber = RollNumber, roomID = roomID, HL = HL };
+            _connect.Sendmsg(ClientSocket, MSG);
+        }
+
         private void btn_roll_Click(object sender, EventArgs e)
         {
             if (!Rolled && MyTurn)
@@ -696,8 +733,7 @@ namespace Client
                 Rolled = true;
                 Random random = new Random();
                 RollNumber = random.Next(1, 7);
-                //tấn cmt
-             //   _connect.SendRoll(ClientSocket, "Action", $"Roll:{p.userName}", RollNumber , roomID);
+                _connect.SendRoll(ClientSocket, "Action", $"Roll:{p.userName}", RollNumber , roomID);
             }
         }
     }

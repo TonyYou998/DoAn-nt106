@@ -8,7 +8,7 @@ namespace Client
         public Point[] Ready = new Point[]
         {
             //--------- RED Pos -----------
-            new Point { X = 150, Y = 85},
+            new Point { X = 150, Y = 80},
             new Point { X = 240, Y = 85},
             new Point { X = 150, Y = 170 },
             new Point { X = 240, Y = 170 },
