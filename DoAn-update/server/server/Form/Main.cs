@@ -104,47 +104,48 @@ namespace Server
             {
                 case "User":
                     string[] data = packet.msgcontent.Split(':'); // VD: connect:Duy
-                    if (data.Length == 2)
+                    string type = data[0];
+                    string username = data[1];
+
+                    if (data[0] == "connect")
                     {
-                        if(data[0] == "connect")
+                        if (!sql.IsUserOnline(username))
                         {
-                            if (!sql.IsUserOnline(data[1])) 
-                            {
-                                MSG = new ManagePacket("User", "Success");
-                                sendPacketToClient(current, MSG);
-                                if(!sql.checkUserExist(data[1]))  sql.Adduser(data[1]);
-                                sql.SetUserOnline(data[1], 1);
+                            MSG = new ManagePacket("User", "Success");
+                            sendPacketToClient(current, MSG);
+                            if (!sql.checkUserExist(username)) sql.Adduser(username);
+                            sql.SetUserOnline(username, 1);
 
-                                if (!clientSockets.ContainsKey(data[1]))
-                                {
-                                    clientSockets.Add(data[1], current);
-                                };
-                                //sendPacketToClient(current, MSG);
-                                logs.BeginInvoke((Action)(() =>
-                                { logs.AppendText($"\r\nĐã kết nối với {data[1]}"); }));
-                            }
-                            else
+                            if (!clientSockets.ContainsKey(username))
                             {
-                                MSG =  new ManagePacket("User","Exist");
-                               sendPacketToClient(current, MSG);
-                            }
-
-                        }
-                        else if(data[0] == "disconnect")
-                        {
-                            sql.SetUserOnline(data[1], 0);
+                                clientSockets.Add(username, current);
+                            };
+                            //sendPacketToClient(current, MSG);
                             logs.BeginInvoke((Action)(() =>
-                            { logs.AppendText($"\r\nĐã ngắt kết nối với {data[1]}"); }));
-                            
-                            sendPacketToRoom(packet);
-                            sql.SetRoomID(data[1], 0);
-                            if (sql.IsPlaying(packet.roomID))
-                            {
-                                sql.DelRoom(packet.roomID);
-                                logs.BeginInvoke((Action)(() =>
-                                { logs.AppendText($"\r\nĐã xoá phòng có ID {packet.roomID}"); }));
-                            }
+                            { logs.AppendText($"\r\nĐã kết nối với {username}"); }));
                         }
+                        else
+                        {
+                            MSG = new ManagePacket("User", "Exist");
+                            sendPacketToClient(current, MSG);
+                        }
+
+                    }
+                    else if (data[0] == "disconnect")
+                    {
+                        sql.SetUserOnline(username, 0);
+                        logs.BeginInvoke((Action)(() =>
+                        { logs.AppendText($"\r\nĐã ngắt kết nối với {username}"); }));
+
+                        sendPacketToRoom(packet);
+                        sql.SetRoomID(username, 0);
+                        if (sql.IsPlaying(packet.roomID))
+                        {
+                            sql.DelRoom(packet.roomID);
+                            logs.BeginInvoke((Action)(() =>
+                            { logs.AppendText($"\r\nĐã xoá phòng có ID {packet.roomID}"); }));
+                        }
+
                     }
 
                     break;
@@ -177,9 +178,9 @@ namespace Server
                     break;
 
                 case "JoinRoom":
-                    string[] Data = packet.msgcontent.Split(':');
-                    string username = Data[0];
-                    string color = Data[1];
+                    data = packet.msgcontent.Split(':');
+                    username = data[0];
+                    string color = data[1];
                     int ID = packet.roomID;
                     //add client vào listRoom theo màu
                     switch (color)
@@ -217,8 +218,10 @@ namespace Server
 
                 case "Action":
                     data = packet.msgcontent.Split(':');
-                    string type = data[0];
+                    type = data[0];
+                    username = data[1];
                     ID = packet.roomID;
+
                     switch (type)
                     {
                         case "Start": 
@@ -229,9 +232,9 @@ namespace Server
                             string nextplayer = "";
 
                             if (packet.rollNumber == 1 || packet.rollNumber == 6)
-                                nextplayer = data[1];
+                                nextplayer = username;
                             else
-                                nextplayer = getNextPlayer(data[1], ID);
+                                nextplayer = getNextPlayer(username, ID);
 
                             packet.msgcontent = $"Roll:{nextplayer}";
 
@@ -248,16 +251,16 @@ namespace Server
                     }
                     break;
 
-                case "ProgressBar":
-                    data = packet.msgcontent.Split(':');
-                    MSG = new ManagePacket
-                    {
-                        msgtype = "ProgressBar",
-                        roomID = int.Parse(data[0]),
-                        msgcontent = data[1]
-                    };
-                    sendPacketToRoom(MSG);
-                    break;
+                //case "ProgressBar":
+                //    data = packet.msgcontent.Split(':');
+                //    MSG = new ManagePacket
+                //    {
+                //        msgtype = "ProgressBar",
+                //        roomID = int.Parse(data[0]),
+                //        msgcontent = data[1]
+                //    };
+                //    sendPacketToRoom(MSG);
+                //    break;
               
             }
                 
